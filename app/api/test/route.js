@@ -5,17 +5,26 @@ import Products from "@/models/Products";
 import Requests from "@/models/Requests";
 import ProductDistributors from "@/models/ProductDistributors";
 import Transactions from "@/models/Transactions";
+import Storages from "@/models/Storages";
 import { NextResponse } from "next/server";
 
 export async function POST(request) {
-    const { username, name } = await request.json();
+    const { username, password, role, profile, active } = await request.json();
     await connectMongoDB();
-    await Users.create({username, name});
-    return NextResponse.json({message: "User berhasil ditambahkan"});
+    
+    try
+    {
+        await Users.create({username, password, role, profile, active});
+        return NextResponse.json(error);
+    }
+    catch(err)
+    {
+        return NextResponse.json(err);
+    }
 }
 
 export async function GET() {
     await connectMongoDB();
-    const users = await ProductDistributors.find();
+    const users = await Storages.find();
     return NextResponse.json({users});
 }

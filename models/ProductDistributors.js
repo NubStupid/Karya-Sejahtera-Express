@@ -1,8 +1,12 @@
 import mongoose, { Schema } from "mongoose";
 
 const productDistributorSchema = new Schema({
-    username: {type: String, required: true},
-    nama: {type: String}
+    productDId: {type: String, required: true, unique: true},
+    productName: {type: String, required: true},
+    desc: {type: String, required: true, maxLength: 200},
+    price: {type: Number, required: true},
+    img: {type: String, required: true},
+    deletedAt: {type: Date}
 })
 
 const ProductDistributors = mongoose.models.ProductDistributors || mongoose.model("ProductDistributors", productDistributorSchema)
