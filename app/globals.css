@@ -1,3 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.bg-blue-primary{
+    background-color: #39BCFE;
+}
+.bg-blue-secondary{
+    background-color: #90D0F0;
+}
+.bg-blue-ternary{
+    background-color: #B7E6FD;
+}
+
+.bg-orange-primary{
+    background-color: #FF914D;
+}
+.bg-orange-secondary{
+    background-color: #FEB283;
+}
+.bg-orange-ternary{
+    background-color: #FFD0B3;
+}
