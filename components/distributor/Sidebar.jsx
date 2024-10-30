@@ -1,12 +1,17 @@
-export default function Sidebar({route})
+"use client"
+import { usePathname } from "next/navigation";
+import Link from "next/link";
+
+export default function Sidebar()
 {
+    const path = usePathname();
     return (
         <>
             <div className="bg-sky-300 w-60 p-4 text-white text-xl font-semibold">
-                <h3 className={route == "Dashboard" && "text-black"}>Dashboard</h3>
-                <h3 className={route == "Catalog" && "text-black"}>Catalog</h3>
-                <h3 className={route == "Transaction" && "text-black"}>Transaction</h3>
-                <h3 className={route == "Chat" && "text-black"}>Chat</h3>
+                <h3><Link href="/distributor/dashboard" className={path.startsWith("/distributor/dashboard") ? "text-black" : ""}>Dashboard</Link></h3>
+                <h3><Link href="/distributor/products" className={path.startsWith("/distributor/products") ? "text-black" : ""}>Products</Link></h3>
+                <h3><Link href="/distributor/transaction" className={path.startsWith("/distributor/transaction") ? "text-black" : ""}>Transaction</Link></h3>
+                <h3><Link href="/distributor/chat" className={path.startsWith("/distributor/chat") ? "text-black" : ""}>Chat</Link></h3>
             </div>
         </>
     )
