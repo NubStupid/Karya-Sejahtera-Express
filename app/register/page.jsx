@@ -20,7 +20,6 @@ export default function Register() {
                     alignItems: "center",
                 }}
             >
-                {/* Logo */}
                 <Box sx={{ width: 300, height: 120, position: "relative" }}>
                     <Image src="/logo/KSXpress.png" alt="..." layout="fill" />
                 </Box>
@@ -33,7 +32,6 @@ export default function Register() {
                         id="username"
                         label="Username"
                         name="username"
-                        autoComplete="username"
                         autoFocus
                     />
                     <TextField
@@ -43,7 +41,6 @@ export default function Register() {
                         id="name"
                         label="Name"
                         name="name"
-                        autoComplete="name"
                     />
                     <TextField
                         margin="normal"
@@ -52,7 +49,6 @@ export default function Register() {
                         id="email"
                         label="Email"
                         name="email"
-                        autoComplete="email"
                     />
                     <TextField
                         margin="normal"
@@ -61,7 +57,6 @@ export default function Register() {
                         id="phone"
                         label="Phone"
                         name="phone"
-                        autoComplete="phone"
                     />
                     <TextField
                         margin="normal"
@@ -70,7 +65,6 @@ export default function Register() {
                         id="address"
                         label="Address"
                         name="address"
-                        autoComplete="address"
                     />
                     <TextField
                         margin="normal"
@@ -80,7 +74,6 @@ export default function Register() {
                         label="Password"
                         type="password"
                         id="password"
-                        autoComplete="new-password"
                     />
                     <TextField
                         margin="normal"
@@ -90,7 +83,6 @@ export default function Register() {
                         label="Confirm Password"
                         type="password"
                         id="confirmPassword"
-                        autoComplete="new-password"
                     />
 
                     <Button
