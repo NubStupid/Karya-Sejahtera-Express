@@ -1,5 +1,5 @@
 'use client'
-import React from "react";
+import React, { useState } from "react";
 import {
     TextField,
     Button,
@@ -9,8 +9,50 @@ import {
     Container,
 } from "@mui/material";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
+    const [formData, setFormData] = useState({
+        username: "",
+        password: ""
+    });
+
+    const router = useRouter();
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await fetch("http://localhost:3000/api/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    username: formData.username,
+                    password: formData.password,
+                }),
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                alert("Login berhasil!");
+                router.push("/dashboard");
+            } else {
+                alert(`Error: ${result.message}`);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Login gagal. Silakan coba lagi.");
+        }
+    };
+
     return (
         <Container component="main" maxWidth="xs">
             <Box
@@ -22,9 +64,9 @@ export default function Login() {
                 }}
             >
                 <Box sx={{ width: 300, height: 120, position: "relative" }}>
-                    <Image src="/logo/KSXpress.png" alt="..." layout="fill" />
+                    <Image src="/logo/KSXpress.png" alt="Logo" layout="fill" />
                 </Box>
-                <Box component="form" noValidate sx={{ mt: 3 }}>
+                <Box component="form" noValidate sx={{ mt: 3 }} onSubmit={handleSubmit}>
                     <TextField
                         margin="normal"
                         required
@@ -32,8 +74,9 @@ export default function Login() {
                         id="username"
                         label="Username"
                         name="username"
-                        autoComplete="username"
                         autoFocus
+                        value={formData.username}
+                        onChange={handleChange}
                     />
                     <TextField
                         margin="normal"
@@ -43,7 +86,8 @@ export default function Login() {
                         label="Password"
                         type="password"
                         id="password"
-                        autoComplete="current-password"
+                        value={formData.password}
+                        onChange={handleChange}
                     />
 
                     <Button

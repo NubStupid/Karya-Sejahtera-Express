@@ -49,7 +49,7 @@ export default function Register() {
                     role: "user",
                     profile: {
                         name: formData.name,
-                        profpic: 'y',
+                        profpic: 'user',
                         email: formData.email,
                         phone: formData.phone,
                         address: formData.address,
