@@ -1,0 +1,116 @@
+[
+    {
+      "transId": "TR100120243821",
+      "username": "john_doe",
+      "products": [
+        {
+          "productId": "PR001",
+          "qty": 2,
+          "price": 250000,
+          "basePrice": 200000,
+          "subtotal": 500000
+        },
+        {
+          "productId": "PR003",
+          "qty": 1,
+          "price": 300000,
+          "basePrice": 280000,
+          "subtotal": 300000
+        }
+      ],
+      "grandTotal": 800000,
+      "payment": "credit_card",
+      "createdAt": "2024-10-01T10:30:00Z",
+      "status": "Success"
+    },
+    {
+      "transId": "TR100220241749",
+      "username": "jane_smith",
+      "products": [
+        {
+          "productId": "PR002",
+          "qty": 1,
+          "price": 300000,
+          "basePrice": 250000,
+          "subtotal": 300000
+        }
+      ],
+      "grandTotal": 300000,
+      "payment": "paypal",
+      "createdAt": "2024-10-02T11:00:00Z",
+      "status": "Pending"
+    },
+    {
+      "transId": "TR100320245983",
+      "username": "michael_scott",
+      "products": [
+        {
+          "productId": "PR003",
+          "qty": 3,
+          "price": 300000,
+          "basePrice": 270000,
+          "subtotal": 900000
+        },
+        {
+          "productId": "PR001",
+          "qty": 1,
+          "price": 250000,
+          "basePrice": 200000,
+          "subtotal": 250000
+        }
+      ],
+      "grandTotal": 1150000,
+      "payment": "cash",
+      "createdAt": "2024-10-03T12:00:00Z",
+      "status": "Success"
+    },
+    {
+      "transId": "TR100420248031",
+      "username": "pam_beesly",
+      "products": [
+        {
+          "productId": "PR004",
+          "qty": 1,
+          "price": 1000000,
+          "basePrice": 950000,
+          "subtotal": 1000000
+        },
+        {
+          "productId": "PR002",
+          "qty": 2,
+          "price": 300000,
+          "basePrice": 280000,
+          "subtotal": 600000
+        }
+      ],
+      "grandTotal": 1600000,
+      "payment": "bank_transfer",
+      "createdAt": "2024-10-04T13:00:00Z",
+      "status": "Success"
+    },
+    {
+      "transId": "TR100520242910",
+      "username": "john_doe",
+      "products": [
+        {
+          "productId": "PR002",
+          "qty": 1,
+          "price": 300000,
+          "basePrice": 250000,
+          "subtotal": 300000
+        },
+        {
+          "productId": "PR005",
+          "qty": 1,
+          "price": 5000000,
+          "basePrice": 4500000,
+          "subtotal": 5000000
+        }
+      ],
+      "grandTotal": 5300000,
+      "payment": "credit_card",
+      "createdAt": "2024-10-05T14:00:00Z",
+      "status": "Failed"
+    }
+  ]
+  
