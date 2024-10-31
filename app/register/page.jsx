@@ -1,4 +1,5 @@
-import React from "react";
+'use client'
+import React, { useState } from "react";
 import {
     TextField,
     Button,
@@ -8,8 +9,68 @@ import {
     Container,
 } from "@mui/material";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function Register() {
+    const router = useRouter();
+    const [formData, setFormData] = useState({
+        username: "",
+        name: "",
+        email: "",
+        phone: "",
+        address: "",
+        password: "",
+        confirmPassword: "",
+    });
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (formData.password !== formData.confirmPassword) {
+            alert("Password dan Confirm Password tidak sama");
+            return;
+        }
+
+        try {
+            const response = await fetch("http://localhost:3000/api/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    username: formData.username,
+                    password: formData.password,
+                    role: "user",
+                    profile: {
+                        name: formData.name,
+                        profpic: 'y',
+                        email: formData.email,
+                        phone: formData.phone,
+                        address: formData.address,
+                    },
+                    active: true,
+                }),
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                alert("Registrasi berhasil!");
+                router.push("/login");
+            } else {
+                alert(`Error: ${result.message}`);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Registrasi gagal. Silakan coba lagi.");
+        }
+    };
+
     return (
         <Container component="main" maxWidth="xs">
             <Box
@@ -20,12 +81,11 @@ export default function Register() {
                     alignItems: "center",
                 }}
             >
-                {/* Logo */}
                 <Box sx={{ width: 300, height: 120, position: "relative" }}>
-                    <Image src="/logo/KSXpress.png" alt="..." layout="fill" />
+                    <Image src="/logo/KSXpress.png" alt="Logo" layout="fill" />
                 </Box>
 
-                <Box component="form" noValidate sx={{ mt: 3 }}>
+                <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                     <TextField
                         margin="normal"
                         required
@@ -33,8 +93,9 @@ export default function Register() {
                         id="username"
                         label="Username"
                         name="username"
-                        autoComplete="username"
                         autoFocus
+                        onChange={handleChange}
+                        value={formData.username}
                     />
                     <TextField
                         margin="normal"
@@ -43,7 +104,8 @@ export default function Register() {
                         id="name"
                         label="Name"
                         name="name"
-                        autoComplete="name"
+                        onChange={handleChange}
+                        value={formData.name}
                     />
                     <TextField
                         margin="normal"
@@ -52,7 +114,8 @@ export default function Register() {
                         id="email"
                         label="Email"
                         name="email"
-                        autoComplete="email"
+                        onChange={handleChange}
+                        value={formData.email}
                     />
                     <TextField
                         margin="normal"
@@ -61,7 +124,8 @@ export default function Register() {
                         id="phone"
                         label="Phone"
                         name="phone"
-                        autoComplete="phone"
+                        onChange={handleChange}
+                        value={formData.phone}
                     />
                     <TextField
                         margin="normal"
@@ -70,7 +134,8 @@ export default function Register() {
                         id="address"
                         label="Address"
                         name="address"
-                        autoComplete="address"
+                        onChange={handleChange}
+                        value={formData.address}
                     />
                     <TextField
                         margin="normal"
@@ -80,7 +145,8 @@ export default function Register() {
                         label="Password"
                         type="password"
                         id="password"
-                        autoComplete="new-password"
+                        onChange={handleChange}
+                        value={formData.password}
                     />
                     <TextField
                         margin="normal"
@@ -90,7 +156,8 @@ export default function Register() {
                         label="Confirm Password"
                         type="password"
                         id="confirmPassword"
-                        autoComplete="new-password"
+                        onChange={handleChange}
+                        value={formData.confirmPassword}
                     />
 
                     <Button
