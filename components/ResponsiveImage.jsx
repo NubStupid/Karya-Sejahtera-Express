@@ -28,7 +28,7 @@ const ResponsiveImage = ({ src, alt }) => {
       <Image
         src={src}
         alt={alt}
-        layout="fill" // This makes the image fill the box
+        fill // This makes the image fill the box
         objectFit="contain" // Ensures the image fits within the box
       />
     </Box>
