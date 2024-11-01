@@ -1,0 +1,83 @@
+[
+    {
+      "reqId": "RQ001",
+      "username": "john_doe",
+      "products": [
+        {
+          "productId": "PR001",
+          "qty": 10,
+          "price": 14000000,
+          "subtotal": 140000000
+        }
+      ],
+      "grandTotal": 140000000,
+      "status": "Accepted",
+      "createdAt": "2024-10-05T09:00:00Z",
+      "notes": ""
+    },
+    {
+      "reqId": "RQ002",
+      "username": "john_doe",
+      "products": [
+        {
+          "productId": "PR002",
+          "qty": 5,
+          "price": 9500000,
+          "subtotal": 47500000
+        }
+      ],
+      "grandTotal": 47500000,
+      "status": "Pending",
+      "createdAt": "2024-10-05T10:30:00Z",
+      "notes": ""
+    },
+    {
+      "reqId": "RQ003",
+      "username": "jane_smith",
+      "products": [
+        {
+          "productId": "PR003",
+          "qty": 8,
+          "price": 2800000,
+          "subtotal": 22400000
+        }
+      ],
+      "grandTotal": 22400000,
+      "status": "Declined",
+      "createdAt": "2024-10-05T11:00:00Z",
+      "notes": "Stok barang habis."
+    },
+    {
+      "reqId": "RQ004",
+      "username": "john_doe",
+      "products": [
+        {
+          "productId": "PR004",
+          "qty": 12,
+          "price": 4800000,
+          "subtotal": 57600000
+        }
+      ],
+      "grandTotal": 57600000,
+      "status": "Accepted",
+      "createdAt": "2024-10-06T09:45:00Z",
+      "notes": ""
+    },
+    {
+      "reqId": "RQ005",
+      "username": "jane_smith",
+      "products": [
+        {
+          "productId": "PR005",
+          "qty": 3,
+          "price": 11500000,
+          "subtotal": 34500000
+        }
+      ],
+      "grandTotal": 34500000,
+      "status": "Declined",
+      "createdAt": "2024-10-06T10:15:00Z",
+      "notes": "Barang tidak tersedia untuk saat ini."
+    }
+  ]
+  
