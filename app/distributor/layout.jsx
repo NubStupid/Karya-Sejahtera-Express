@@ -9,11 +9,11 @@ export default function DistributorLayout({ children }) {
       <>
         <div className="h-screen">
           {path == "/distributor/chat" ? children :
-            <div className="h-screen">
+            <div className="h-screen overflow-hidden">
                 <Navbar />
                 <div className="h-full flex">
                     <Sidebar />
-                    <div className="w-full p-14">
+                    <div className="w-full p-14 overflow-auto">
                         {children}
                     </div>
                 </div>
