@@ -1,0 +1,48 @@
+[
+    {
+      "productDId": "PD001",
+      "username": "jane_smith",
+      "productName": "Smartphone A",
+      "desc": "Latest smartphone with high-resolution display.",
+      "price": 4500000,
+      "img": "dist_product_img_1",
+      "deletedAt": null
+    },
+    {
+      "productDId": "PD002",
+      "username": "john_doe",
+      "productName": "Tablet B",
+      "desc": "Lightweight tablet with large screen.",
+      "price": 3500000,
+      "img": "dist_product_img_2",
+      "deletedAt": null
+    },
+    {
+      "productDId": "PD003",
+      "username": "jane_smith",
+      "productName": "Smartwatch C",
+      "desc": "Advanced smartwatch with fitness tracking.",
+      "price": 1200000,
+      "img": "dist_product_img_3",
+      "deletedAt": null
+    },
+    {
+      "productDId": "PD004",
+      "username": "jane_smith",
+      "productName": "Laptop D",
+      "desc": "High-end laptop with powerful performance.",
+      "price": 15000000,
+      "img": "dist_product_img_4",
+      "deletedAt": null
+    },
+    {
+      "productDId": "PD005",
+      "username": "john_doe",
+      "productName": "Bluetooth Speaker E",
+      "desc": "Portable speaker with powerful bass.",
+      "price": 800000,
+      "img": "dist_product_img_5",
+      "deletedAt": null
+    }
+  ]
+  

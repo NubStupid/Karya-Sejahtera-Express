@@ -1,0 +1,48 @@
+[
+    {
+      "productId": "PR001",
+      "productName": "Laptop Gaming",
+      "desc": "Laptop gaming dengan prosesor terbaru dan kartu grafis unggulan.",
+      "price": 15000000,
+      "img": "laptop_gaming.jpg",
+      "stock": 10,
+      "deletedAt": null
+    },
+    {
+      "productId": "PR002",
+      "productName": "Smartphone Flagship",
+      "desc": "Smartphone dengan kamera terbaik dan performa tinggi.",
+      "price": 10000000,
+      "img": "smartphone_flagship.jpg",
+      "stock": 25,
+      "deletedAt": null
+    },
+    {
+      "productId": "PR003",
+      "productName": "Headphone Noise Cancelling",
+      "desc": "Headphone dengan fitur noise cancelling aktif.",
+      "price": 3000000,
+      "img": "headphone_noise_cancelling.jpg",
+      "stock": 50,
+      "deletedAt": null
+    },
+    {
+      "productId": "PR004",
+      "productName": "Smartwatch",
+      "desc": "Smartwatch dengan fitur pelacak kesehatan dan tahan air.",
+      "price": 5000000,
+      "img": "smartwatch.jpg",
+      "stock": 30,
+      "deletedAt": null
+    },
+    {
+      "productId": "PR005",
+      "productName": "Tablet Pro",
+      "desc": "Tablet dengan layar besar dan performa yang mendukung produktivitas.",
+      "price": 12000000,
+      "img": "tablet_pro.jpg",
+      "stock": 15,
+      "deletedAt": null
+    }
+  ]
+  
