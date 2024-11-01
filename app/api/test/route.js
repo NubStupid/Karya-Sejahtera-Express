@@ -25,6 +25,6 @@ export async function POST(request) {
 
 export async function GET() {
     await connectMongoDB();
-    const users = await Storages.find();
+    const users = await Users.find();
     return NextResponse.json({users});
 }
