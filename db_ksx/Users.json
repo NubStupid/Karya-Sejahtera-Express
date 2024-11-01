@@ -1,0 +1,92 @@
+[
+    {
+        "username": "admin_user",
+        "password": "123",
+        "role": "admin",
+        "profile": {
+            "name": "Admin User",
+            "propic": "profile_pic_url_3",
+            "email": "admin@example.com",
+            "phone": "081212341234",
+            "address": "789 Oak St, City, Country"
+        },
+        "cart": [],
+        "totalPrice": 0,
+        "active": true
+    },
+    {
+    "username": "john_doe",
+    "password": "123",
+    "role": "distributor",
+    "profile": {
+    "name": "John Doe",
+    "propic": "profile_pic_url_1",
+    "email": "johndoe@example.com",
+    "phone": "08123456789",
+    "address": "123 Main St, City, Country"
+    },
+    "cart": [
+    {
+        "productId": "PR001",
+        "qty": 2
+    }
+    ],
+    "totalPrice": 500000,
+    "active": true
+    },
+    {
+    "username": "jane_smith",
+    "password": "123",
+    "role": "distributor",
+    "profile": {
+        "name": "Jane Smith",
+        "propic": "profile_pic_url_2",
+        "email": "janesmith@example.com",
+        "phone": "08129876543",
+        "address": "456 Maple Ave, City, Country"
+    },
+    "cart": [
+        {
+        "productId": "PR002",
+        "qty": 1
+        }
+    ],
+    "totalPrice": 300000,
+    "active": true
+    },
+    {
+    "username": "michael_scott",
+    "password": "123",
+    "role": "customer",
+    "profile": {
+        "name": "Michael Scott",
+        "propic": "profile_pic_url_4",
+        "email": "michael.scott@example.com",
+        "phone": "081210001111",
+        "address": "101 Paper St, City, Country"
+    },
+    "cart": [
+        {
+        "productId": "PR002",
+        "qty": 3
+        }
+    ],
+    "totalPrice": 900000,
+    "active": false
+    },
+    {
+    "username": "pam_beesly",
+    "password": "123",
+    "role": "customer",
+    "profile": {
+        "name": "Pam Beesly",
+        "propic": "profile_pic_url_5",
+        "email": "pam.beesly@example.com",
+        "phone": "08123334444",
+        "address": "555 Art St, City, Country"
+    },
+    "cart": [],
+    "totalPrice": 1000000,
+    "active": true
+    }
+]

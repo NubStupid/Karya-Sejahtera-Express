@@ -1,0 +1,112 @@
+[
+    {
+      "username": "john_doe",
+      "messages": [
+        {
+          "sender": "user",
+          "message": "Halo, saya ingin menanyakan tentang produk.",
+          "timestamp": "2024-10-01T08:30:00Z",
+          "read": true
+        },
+        {
+          "sender": "admin",
+          "message": "Tentu, produk apa yang Anda maksud?",
+          "timestamp": "2024-10-01T08:32:00Z",
+          "read": true
+        },
+        {
+          "sender": "user",
+          "message": "Produk PR001 apakah masih tersedia?",
+          "timestamp": "2024-10-01T08:35:00Z",
+          "read": false
+        }
+      ]
+    },
+    {
+      "username": "jane_smith",
+      "messages": [
+        {
+          "sender": "user",
+          "message": "Halo, saya ada masalah dengan pembayaran.",
+          "timestamp": "2024-10-02T09:10:00Z",
+          "read": true
+        },
+        {
+          "sender": "admin",
+          "message": "Apa yang bisa kami bantu?",
+          "timestamp": "2024-10-02T09:12:00Z",
+          "read": true
+        },
+        {
+          "sender": "admin",
+          "message": "Apakah Anda sudah mencoba metode pembayaran lainnya?",
+          "timestamp": "2024-10-02T09:14:00Z",
+          "read": true
+        },
+        {
+          "sender": "user",
+          "message": "Ya, saya sudah mencoba tapi tetap gagal.",
+          "timestamp": "2024-10-02T09:20:00Z",
+          "read": false
+        }
+      ]
+    },
+    {
+      "username": "michael_scott",
+      "messages": [
+        {
+          "sender": "user",
+          "message": "Saya ingin membatalkan pesanan saya.",
+          "timestamp": "2024-10-03T10:00:00Z",
+          "read": true
+        },
+        {
+          "sender": "admin",
+          "message": "Tentu, kami akan membantu Anda membatalkan pesanan.",
+          "timestamp": "2024-10-03T10:05:00Z",
+          "read": false
+        }
+      ]
+    },
+    {
+      "username": "pam_beesly",
+      "messages": [
+        {
+          "sender": "user",
+          "message": "Berapa lama waktu pengiriman untuk produk PR004?",
+          "timestamp": "2024-10-04T11:00:00Z",
+          "read": true
+        },
+        {
+          "sender": "admin",
+          "message": "Pengiriman biasanya memakan waktu 2-3 hari kerja.",
+          "timestamp": "2024-10-04T11:05:00Z",
+          "read": false
+        }
+      ]
+    },
+    {
+      "username": "john_doe",
+      "messages": [
+        {
+          "sender": "admin",
+          "message": "Pesanan Anda telah diproses.",
+          "timestamp": "2024-10-05T14:00:00Z",
+          "read": true
+        },
+        {
+          "sender": "admin",
+          "message": "Apakah ada hal lain yang bisa kami bantu?",
+          "timestamp": "2024-10-05T14:02:00Z",
+          "read": true
+        },
+        {
+          "sender": "user",
+          "message": "Tidak, terima kasih.",
+          "timestamp": "2024-10-05T14:05:00Z",
+          "read": false
+        }
+      ]
+    }
+  ]
+  
