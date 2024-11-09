@@ -1,7 +1,38 @@
+"use client"
+
 import HistoryCard from "@/components/distributor/HistoryCard"
 import ResponsiveLinedButton from "@/components/ResponsiveLinedButton"
+import { useEffect, useState } from "react"
 
 const page = () => {
+  const [data,setData] = useState()
+  const fetchRequest = async () =>{
+    const response = await fetch("http://localhost:3000/api/distributor/transaction/?username="+"john_doe")
+    if(response.ok){
+      const data = await response.json()
+      const formatedData = await Promise.all(data.products.map(async (item)=>{
+        console.log(JSON.stringify(item));
+        const updatedProducts = await Promise.all(item.products.map(async (p)=>{
+          const productData = await fetch("http://localhost:3000/api/distributor/transaction/products/?productId=" + p.productId)
+          let up = await productData.json()
+          up.status = p.status
+          return up
+        }))
+        item.products = updatedProducts
+        return item
+      }))
+      const filteredData = formatedData.filter(Boolean)
+      setData(filteredData)
+      console.log(filteredData);
+      
+    }else{
+      throw new Error("Failed to fetch data!")
+    }
+  }
+  useEffect(()=>{
+    fetchRequest()
+  },[])
+
   return (
     <>
     

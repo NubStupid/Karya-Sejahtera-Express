@@ -8,7 +8,7 @@ export async function POST(request) {
     const count = await ProductDistributors.countDocuments();
     const id = "PD" + (count + 1).toString().padStart(3, '0')
     try
-    {
+    {   
         await ProductDistributors.create({productDId: id, username, productName, desc, price: parseInt(price), img})
         return NextResponse.json({message: "Produk berhasil ditambahkan", id});
     }
