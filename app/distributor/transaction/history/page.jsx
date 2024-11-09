@@ -1,5 +1,6 @@
 "use client"
 
+import BatchHistoryCard from "@/components/distributor/BatchHistoryCard"
 import HistoryCard from "@/components/distributor/HistoryCard"
 import ResponsiveLinedButton from "@/components/ResponsiveLinedButton"
 import { useEffect, useState } from "react"
@@ -46,8 +47,18 @@ const page = () => {
       </div>
 
       <div className="grid mt-5 gap-10">
-        <HistoryCard bg={"bg-declined"} image={"/dummy/Bobi bobi.png"} productName={"Bobi Bobi"} price={1000} qty={10} status="Declined"/>
-        <HistoryCard bg={"bg-accepted"} image={"/dummy/Bobi bobi.png"} productName={"Bobi tapi keren"} price={1000} qty={5} status="Accepted"/>
+        {/* <HistoryCard bg={"bg-accepted"} image={"/dummy/Bobi bobi.png"} productName={"Bobi tapi keren"} price={1000} qty={5} status="Accepted"/> */}
+        {data && data.map((item,index) => {
+          if(item.products && item.products.length == 1){
+            return <div className="" key={index}>
+              <HistoryCard  bg={item.products[0].status == "Accepted"?"bg-accepted":"bg-declined"} image={"/dummy/Bobi bobi.png"} productName={item.products[0].products[0].productName} price={item.products[0].products[0].price} qty={item.products[0].products[0].stock} status={item.products[0].status} notes={item.notes}/>
+            </div>
+          }else{
+            return <div className="" key={index}>
+              <BatchHistoryCard data={item.products} notes={item.notes}></BatchHistoryCard>
+              </div>
+          }
+        })}
       </div>
     
     </>
