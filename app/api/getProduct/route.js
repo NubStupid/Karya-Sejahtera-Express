@@ -4,8 +4,8 @@ import connectMongoDB from "../../../database/connectDB";
 import Products from "../../../models/Products";
 
 export async function GET(req) {
-    await connectMongoDB();
     try {
+        await connectMongoDB(); 
         const products = await Products.find().exec();
         
         return new Response(JSON.stringify(products), {

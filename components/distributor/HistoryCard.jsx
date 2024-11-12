@@ -36,13 +36,13 @@ const HistoryCard = ({bg,image,productName,qty,price,status,notes}) => {
                     </div>
                 </div>
             </Typography>
-            <Typography
+            {/* <Typography
                 variant="subtitle2"
                 component="div"
                 sx={{ color: 'text.secondary' }}
             >
                 {notes?notes:"No Notes Attached"}
-            </Typography>
+            </Typography> */}
             </CardContent>
         </Box>
             <Box sx={{pl: 1, pb: 1 }} className="ms-auto">
@@ -59,13 +59,22 @@ const HistoryCard = ({bg,image,productName,qty,price,status,notes}) => {
                     >
                         Rp. {qty && price? qty*price:0} 
                     </Typography>
-                    <div className={`mt-2 text-end ${status&&status=="Accepted"?"text-green-500 font-bold text-xl":""} ${status&&status=="Declined"?"text-red-500 font-bold text-xl":""}`}>
+                    <div className={`mt-2 text-end ${status&&status=="Accepted"?"text-green-500 font-bold text-xl":""} ${status&&status=="Declined"?"text-red-500 font-bold text-xl":""} ${status&&status=="Pending"?"text-amber-500 font-bold text-xl":""}`}>
                         {status?status:"Pending"}
                     </div>
                 </CardContent>
             </Box>
         
         </Card>
+            <Typography
+                    variant="subtitle2"
+                    component="div"
+                    sx={{ color: 'text.secondary' }}
+                    className="ps-10 pt-5 mb-10 text-xl font-bold text-black underline decoration-pink-600"
+                >
+                    Notes : {notes?notes:"No Notes Attached"}
+            </Typography>
+            <hr className="mt-2"/>
     
     </>
   )

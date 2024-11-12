@@ -41,14 +41,14 @@ const PendingRequestCard = ({bg,image,productName,price,qty}) => {
             <Box sx={{pl: 1, pb: 1 }} className="ms-auto">
 
                 <CardContent className="">
-                    <Typography component="div" variant="h4" className="lg:ms-32 md:ms-auto">
+                    <Typography component="div" variant="h4" className="text-end">
                         Total
                     </Typography>
                     <Typography
                         variant="subtitle1"
                         component="div"
                         sx={{ color: 'text.secondary' }}
-                        className="lg:ms-32 md:ms-auto"
+                        className="text-end"
                     >
                         Rp. {qty && price? qty*price:0} 
                     </Typography>
