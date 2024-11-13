@@ -10,8 +10,11 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import useAuth from "../../stores/store";
 
 export default function Login() {
+    const auth = useAuth();
+
     const [formData, setFormData] = useState({
         username: "",
         password: ""
@@ -43,7 +46,8 @@ export default function Login() {
             const result = await response.json();
             if (response.ok) {
                 alert("Login berhasil!");
-                router.push("/dashboard");
+                auth.login({username: result.data.username, role: result.data.role});
+                router.push("/");
             } else {
                 alert(`Error: ${result.message}`);
             }

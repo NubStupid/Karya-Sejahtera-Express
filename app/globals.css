@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+    overflow: scroll;
+    overflow-x: hidden;
+}
+::-webkit-scrollbar {
+    width: 0;
+}
+
 .bg-blue-primary{
     background-color: #39BCFE;
 }
@@ -20,4 +28,8 @@
 }
 .bg-orange-ternary{
     background-color: #FFD0B3;
+}
+
+.bg-gray{
+    background-color: #E5E5E5;
 }
