@@ -13,12 +13,11 @@ export async function GET(req){
 }
 
 export async function POST(req) {
-    await connectMongoDB();
     try {
+        await connectMongoDB();
         const data = await req.json();
         console.log("Data received:", data);
-        const { productName, desc, price, img, stock } = data;
-
+        const { productName, desc, price, img, stock } = data
         if (!productName || !desc || !price || !img || !stock) {
             return new Response(JSON.stringify({ error: "All fields are required" }), {
                 status: 400,

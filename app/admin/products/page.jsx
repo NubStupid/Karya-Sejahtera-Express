@@ -41,7 +41,9 @@ export default function Products() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const resp = await fetch("http://localhost:3000/api/admin/products");
+                const resp = await fetch(
+                    "http://localhost:3000/api/admin/products"
+                );
                 const data = await resp.json();
                 setProducts(data);
             } catch (error) {
@@ -49,46 +51,51 @@ export default function Products() {
             }
         };
 
-        fetchData()
-    } ,[]);
-    
+        fetchData();
+    }, []);
+
     const [selectedProduct, setSelectedProduct] = useState();
-    const [mode, setMode] = useState(0)
-    const [name, setName] = useState('')
-    const [price, setPrice] = useState(0)
-    const [stok, setStok] = useState(0)
-    const [desc, setDesc] = useState('')
-    const [img, setImg] = useState('')
+    const [mode, setMode] = useState(0);
+    const [name, setName] = useState("");
+    const [price, setPrice] = useState(0);
+    const [stok, setStok] = useState(0);
+    const [desc, setDesc] = useState("");
+    const [img, setImg] = useState("");
 
     const handleAdd = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
 
-        try{
-            const resp = await fetch('http://localhost:3000/api/admin/products',{
-                method: 'POST',
-                body: {
-                    productName: name,
-                    desc: desc,
-                    price: price,
-                    img: img,
-                    stock: stok
-                },
-            })
+        try {
+            const resp = await fetch(
+                "http://localhost:3000/api/admin/products",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        productName: name,
+                        desc: desc,
+                        price: price,
+                        img: img,
+                        stock: stok,
+                    }),
+                }
+            );
             const data = await resp.json();
-            if(resp.ok){
-                setName('');
-                setDesc('');
-                setPrice('');
-                setImg('');
-                setStok('');
+            if (resp.ok) {
+                setName("");
+                setDesc("");
+                setPrice("");
+                setImg("");
+                setStok("");
+            } else {
+                alert("Error: " + data.error);
             }
-            else{
-                alert("Error")
-            }
-        } catch(e){
-            alert(e)
+        } catch (e) {
+            alert(e);
         }
-    }
+    };
 
     return (
         <Grid container spacing={3} sx={{ padding: 2 }}>
@@ -117,8 +124,8 @@ export default function Products() {
                     <Card
                         key={index}
                         onClick={() => {
-                            setSelectedProduct(product)
-                            setMode(0)
+                            setSelectedProduct(product);
+                            setMode(0);
                         }}
                         sx={{
                             display: "flex",
@@ -135,7 +142,9 @@ export default function Products() {
                             sx={{ width: 64, height: 64, marginLeft: 1 }}
                         />
                         <CardContent>
-                            <Typography variant="h6">{product.productName}</Typography>
+                            <Typography variant="h6">
+                                {product.productName}
+                            </Typography>
                             <Typography>{product.price}</Typography>
                         </CardContent>
                     </Card>
@@ -148,82 +157,103 @@ export default function Products() {
                 xs={7.8}
                 sx={{ backgroundColor: "#b3e0ff", padding: "3px" }}
             >
-                {
-                    selectedProduct && mode == 0 ? (
-                        <div style={{ padding: "10px" }}>
-                            <Typography variant="h3" gutterBottom>
-                                Detail Product
-                            </Typography>
+                {selectedProduct && mode == 0 ? (
+                    <div style={{ padding: "10px" }}>
+                        <Typography variant="h3" gutterBottom>
+                            Detail Product
+                        </Typography>
+                        <Typography sx={{ fontSize: "20px" }}>
+                            <strong>Name:</strong> {selectedProduct.productName}
+                        </Typography>
+                        <Typography sx={{ fontSize: "20px" }}>
+                            <strong>Price:</strong> {selectedProduct.price}
+                        </Typography>
+                        <Typography sx={{ fontSize: "20px" }}>
+                            <strong>Stok:</strong> {selectedProduct.stock}
+                        </Typography>
+                        <Typography sx={{ fontSize: "20px" }}>
+                            <strong>Desc:</strong> {selectedProduct.desc}
+                        </Typography>
+                        <Box sx={{ marginTop: 2 }}>
+                            <img src="" alt="" style={{ width: "150px" }} />
+                        </Box>
+                        <Button
+                            variant="contained"
+                            color="error"
+                            sx={{ marginTop: 2 }}
+                        >
+                            Delete
+                        </Button>
+                    </div>
+                ) : (!selectedProduct || selectedProduct) && mode == 1 ? (
+                    <div style={{ padding: "10px" }}>
+                        <Typography variant="h3" gutterBottom>
+                            Add Product
+                        </Typography>
+                        <form onSubmit={handleAdd}>
                             <Typography sx={{ fontSize: "20px" }}>
-                                <strong>Name:</strong> {selectedProduct.productName}
-                            </Typography>
-                            <Typography sx={{ fontSize: "20px" }}>
-                                <strong>Price:</strong> {selectedProduct.price}
-                            </Typography>
-                            <Typography sx={{ fontSize: "20px" }}>
-                                <strong>Stok:</strong> {selectedProduct.stock}
-                            </Typography>
-                            <Typography sx={{ fontSize: "20px" }}>
-                                <strong>Desc:</strong> {selectedProduct.desc}
-                            </Typography>
-                            <Box sx={{ marginTop: 2 }}>
-                                <img
-                                    src=''
-                                    alt=''
-                                    style={{ width: "150px" }}
+                                <strong>Name:</strong>{" "}
+                                <input
+                                    type="text"
+                                    name=""
+                                    id=""
+                                    onChange={(e) => setName(e.target.value)}
                                 />
-                            </Box>
+                            </Typography>
+                            <br />
+                            <Typography sx={{ fontSize: "20px" }}>
+                                <strong>Price:</strong>{" "}
+                                <input
+                                    type="text"
+                                    name=""
+                                    id=""
+                                    onChange={(e) => setPrice(e.target.value)}
+                                />
+                            </Typography>
+                            <br />
+                            <Typography sx={{ fontSize: "20px" }}>
+                                <strong>Stok:</strong>{" "}
+                                <input
+                                    type="text"
+                                    name=""
+                                    id=""
+                                    onChange={(e) => setStok(e.target.value)}
+                                />
+                            </Typography>
+                            <br />
+                            <Typography sx={{ fontSize: "20px" }}>
+                                <strong>Desc:</strong>{" "}
+                                <input
+                                    type="text"
+                                    name=""
+                                    id=""
+                                    onChange={(e) => setDesc(e.target.value)}
+                                />
+                            </Typography>
+                            <br />
+                            <Typography sx={{ fontSize: "20px" }}>
+                                <strong>Image:</strong>{" "}
+                                <input
+                                    type="text"
+                                    name=""
+                                    id=""
+                                    onChange={(e) => setImg(e.target.value)}
+                                />
+                            </Typography>
+                            <br />
                             <Button
                                 variant="contained"
-                                color="error"
+                                color="success"
                                 sx={{ marginTop: 2 }}
+                                type="submit"
                             >
-                                Delete
+                                Add
                             </Button>
-                        </div>
-                    ) :
-                    (!selectedProduct || selectedProduct) && mode == 1 ?
-                    (
-                        <div style={{ padding: "10px" }}>
-                            <Typography variant="h3" gutterBottom>
-                                Add Product
-                            </Typography>
-                            <form onSubmit={handleAdd}>
-                                <Typography sx={{ fontSize: "20px" }}>
-                                    <strong>Name:</strong> <input type="text" name="" id="" onChange={(e) => setName(e.target.value)}/>
-                                </Typography>
-                                <br />
-                                <Typography sx={{ fontSize: "20px" }}>
-                                    <strong>Price:</strong> <input type="text" name="" id="" onChange={(e) => setPrice(e.target.value)}/>
-                                </Typography>
-                                <br />
-                                <Typography sx={{ fontSize: "20px" }}>
-                                    <strong>Stok:</strong> <input type="text" name="" id="" onChange={(e) => setStok(e.target.value)}/>
-                                </Typography>
-                                <br />
-                                <Typography sx={{ fontSize: "20px" }}>
-                                    <strong>Desc:</strong> <input type="text" name="" id="" onChange={(e) => setDesc(e.target.value)}/>
-                                </Typography>
-                                <br />
-                                <Typography sx={{ fontSize: "20px" }}>
-                                    <strong>Image:</strong> <input type="text" name="" id="" onChange={(e) => setImg(e.target.value)}/>
-                                </Typography>
-                                <br />
-                                <Button
-                                    variant="contained"
-                                    color="success"
-                                    sx={{ marginTop: 2 }}
-                                    type="submit"
-                                >
-                                    Add
-                                </Button>
-                            </form>
-                        </div>
-                    ) :
-                    (
-                        <div></div>
-                    )
-                }
+                        </form>
+                    </div>
+                ) : (
+                    <div></div>
+                )}
             </Grid>
         </Grid>
     );
