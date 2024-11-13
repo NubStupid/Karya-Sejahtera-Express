@@ -8,17 +8,11 @@ import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import InputEmoji from "react-input-emoji";
 import useAuth from "@/stores/store";
-import { useRouter } from "next/navigation";
 
 export default function Chat()
 {
-    const router = useRouter();
     const auth = useAuth();
     const user = {username: auth.user.username, role: auth.user.role};
-    useEffect(() => {
-        if(auth.user.role != "distributor")
-            router.push('/');
-    }, []);
     const [ chat, setChat ] = useState()
     const [ socket, setSocket ] = useState()
     const [ text, setText ] = useState()

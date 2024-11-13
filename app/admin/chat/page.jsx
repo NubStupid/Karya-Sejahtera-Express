@@ -17,7 +17,7 @@ export default function Chat()
     const router = useRouter();
     const auth = useAuth();
     useEffect(() => {
-        if(auth.user.role != "admin")
+        if(!auth.user || auth.user.role != "admin")
             router.push('/');
     }, []);
     
