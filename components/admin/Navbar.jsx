@@ -9,7 +9,7 @@ export default function Navbar()
            <div className="grid grid-cols-7 bg-orange-primary w-[100vw] p-5">
             <div className="texl-xl flex justify-center">
 
-            <ResponsiveImage src="/logo/KDistributor.png" alt="KS Distributor"/>
+            <ResponsiveImage src="/logo/KSXpress_monochrome.png" alt="KS Distributor"/>
 
             </div>
             <div className="texl-xl col-start-6 flex justify-end ms-5">
