@@ -1,10 +1,10 @@
 import { Button } from "@mui/material"
 import Link from "next/link"
 
-const ResponsiveButton = ({placeholder,href}) => {
+const ResponsiveButton = ({placeholder,href,bg}) => {
   return (
     
-        <Button variant="contained" className="bg-blue-primary rounded-lg"
+        <Button variant="contained" className={`${bg?bg:"bg-blue-primary"} rounded-lg`}
                     sx={{
                         fontSize: '8px',
                         padding: '10px 20px',

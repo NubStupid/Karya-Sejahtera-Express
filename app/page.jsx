@@ -20,6 +20,8 @@ const ProductsPage = () => {
                 }
                 const data = await response.json();
                 setProducts(data);
+                console.log(data);
+                
             } catch (err) {
                 console.error(err);
             } finally {

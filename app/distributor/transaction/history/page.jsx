@@ -1,7 +1,39 @@
+"use client"
+
+import BatchHistoryCard from "@/components/distributor/BatchHistoryCard"
 import HistoryCard from "@/components/distributor/HistoryCard"
 import ResponsiveLinedButton from "@/components/ResponsiveLinedButton"
+import { useEffect, useState } from "react"
 
 const page = () => {
+  const [data,setData] = useState()
+  const fetchRequest = async () =>{
+    const response = await fetch("http://localhost:3000/api/distributor/transaction/?username="+"john_doe")
+    if(response.ok){
+      const data = await response.json()
+      const formatedData = await Promise.all(data.products.map(async (item)=>{
+        console.log(JSON.stringify(item));
+        const updatedProducts = await Promise.all(item.products.map(async (p)=>{
+          const productData = await fetch("http://localhost:3000/api/distributor/transaction/products/?productId=" + p.productId)
+          let up = await productData.json()
+          up.status = p.status
+          return up
+        }))
+        item.products = updatedProducts
+        return item
+      }))
+      const filteredData = formatedData.filter(Boolean)
+      setData(filteredData)
+      console.log(filteredData);
+      
+    }else{
+      throw new Error("Failed to fetch data!")
+    }
+  }
+  useEffect(()=>{
+    fetchRequest()
+  },[])
+
   return (
     <>
     
@@ -15,8 +47,18 @@ const page = () => {
       </div>
 
       <div className="grid mt-5 gap-10">
-        <HistoryCard bg={"bg-declined"} image={"/dummy/Bobi bobi.png"} productName={"Bobi Bobi"} price={1000} qty={10} status="Declined"/>
-        <HistoryCard bg={"bg-accepted"} image={"/dummy/Bobi bobi.png"} productName={"Bobi tapi keren"} price={1000} qty={5} status="Accepted"/>
+        {/* <HistoryCard bg={"bg-accepted"} image={"/dummy/Bobi bobi.png"} productName={"Bobi tapi keren"} price={1000} qty={5} status="Accepted"/> */}
+        {data && data.map((item,index) => {
+          if(item.products && item.products.length == 1){
+            return <div className="" key={index}>
+              <HistoryCard  bg={item.products[0].status == "Accepted"?"bg-accepted":"bg-declined"} image={"/dummy/Bobi bobi.png"} productName={item.products[0].products[0].productName} price={item.products[0].products[0].price} qty={item.products[0].products[0].stock} status={item.products[0].status} notes={item.notes}/>
+            </div>
+          }else{
+            return <div className="" key={index}>
+              <BatchHistoryCard data={item.products} notes={item.notes}></BatchHistoryCard>
+              </div>
+          }
+        })}
       </div>
     
     </>
