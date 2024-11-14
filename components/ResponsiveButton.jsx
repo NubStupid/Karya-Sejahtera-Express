@@ -1,7 +1,7 @@
 import { Button } from "@mui/material"
 import Link from "next/link"
 
-const ResponsiveButton = ({placeholder,href,bg}) => {
+const ResponsiveButton = ({placeholder,href,bg,onClick}) => {
   return (
     
         <Button variant="contained" className={`${bg?bg:"bg-blue-primary"} rounded-lg`}
@@ -25,7 +25,7 @@ const ResponsiveButton = ({placeholder,href,bg}) => {
                             padding: '10x 32px', 
                         },
                     }}
-                    
+                    onClick={onClick}
         ><Link href={href?href:"#"}>{placeholder}</Link></ Button>
   )
 }
