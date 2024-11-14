@@ -3,6 +3,7 @@ import { AppBar, Toolbar, IconButton, Avatar, Drawer, List, ListItem, Button, Bo
 import { useRouter } from "next/navigation";
 import MenuIcon from "@mui/icons-material/Menu";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import useAuth from "@/stores/store";
 
 export default function Navbar() {
     const [anchorEl, setAnchorEl] = useState(null);
