@@ -26,32 +26,79 @@ const page = () => {
       console.log("Blm di update semua");
     }else{
       console.log("Di update semua");
-      const productToUpdate = requestData.products.reduce((acc,rP)=>{
-        const found = updatedData.find(d=>rP.products[0].productId == d.pId)
-        if(found){
-          acc.push({...rP,status:found.status})
-        }else{
-          acc.push(rP)
-        }
-        return acc
-      },[]) 
-      console.log(JSON.stringify(productToUpdate));
       try{
-        const response = await fetch('http://localhost:3000/api/distributor/transaction',{
-          method:"PATCH",
+        const response = await fetch("http://localhost:3000/api/distributor/transaction/request",{
+          method:"POST",
           headers:{
             'Content-Type':"application/json"
           },
-          body:JSON.stringify({reqId:request,products:productToUpdate})
+          body:JSON.stringify({reqId:request})
         })
+        // console.log(await response.json());
         const data = await response.json()
-        if(!response.ok){
-          throw new Error(data.error)
+        const r = data.products[0].products
+        console.log(JSON.stringify(r));
+        const productToUpdate = r.reduce((acc,p)=>{
+          const found = updatedData.find(d=>p.productId == d.pId)
+          if(found){
+            acc.push({...p,status:found.status})
+          }else{
+            acc.push(p)
+          }
+          return acc
+        },[])
+        console.log(productToUpdate);
+        
+        try{
+          const response = await fetch('http://localhost:3000/api/distributor/transaction',{
+            method:"PATCH",
+            headers:{
+              'Content-Type':"application/json"
+            },
+            body:JSON.stringify({reqId:request,products:productToUpdate})
+          })
+          const data = await response.json()
+          if(!response.ok){
+            throw new Error(data.error)
+          }
+          console.log(data);
+        }catch(e){
+          console.error('API Error:', e.message)
         }
-        console.log(data);
-      }catch(e){
-        console.error('API Error:', e.message)
+        fetchRequest()
+        const updateState = update.filter((a)=>a.rId !== request)
+        setUpdate(updateState)
+        
+      }catch(e){  
+        console.log(e);
+        
       }
+      // const productToUpdate = requestData.products.reduce((acc,rP)=>{
+      //   const found = updatedData.find(d=>rP.products[0].productId == d.pId)
+      //   if(found){
+      //     acc.push({...rP,status:found.status})
+      //   }else{
+      //     acc.push(rP)
+      //   }
+      //   return acc
+      // },[]) 
+      // console.log(JSON.stringify(productToUpdate));
+      // try{
+      //   const response = await fetch('http://localhost:3000/api/distributor/transaction',{
+      //     method:"PATCH",
+      //     headers:{
+      //       'Content-Type':"application/json"
+      //     },
+      //     body:JSON.stringify({reqId:request,products:productToUpdate})
+      //   })
+      //   const data = await response.json()
+      //   if(!response.ok){
+      //     throw new Error(data.error)
+      //   }
+      //   console.log(data);
+      // }catch(e){
+      //   console.error('API Error:', e.message)
+      // }
     }
     
   }

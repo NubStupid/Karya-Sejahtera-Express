@@ -12,47 +12,30 @@ export async function GET(request) {
     return NextResponse.json({ error: 'Failed to fetch products' }, { status: 500 });
   }
 }
+
 export async function PATCH(request) {
-  const { reqId, products } = await request.json();
+  const {reqId, products} = await request.json()
+  console.log(products);
    
   await connectMongoDB();
-  try {   
-    // Find the document by reqId
-    let validate = await Requests.findOne({ reqId: reqId });
-    
-    if (!validate) {
-      console.log('Document not found for reqId:', reqId);
-      return NextResponse.json({ error: 'Request not found' }, { status: 404 });
-    }
-    console.log(JSON.stringify(products));
-    
-    console.log('Before update:', validate);
-
-    // Update the products field in the document
-    const result = await Requests.updateOne(
-      { reqId: reqId },
-      { $set: { products: products } }
-    );
-
-    // Check if the document was found and modified
-    if (result.matchedCount === 0) {
-      return NextResponse.json({ error: 'Request not found' }, { status: 404 });
-    }
-    if (result.modifiedCount === 0) {
-      console.log('Document matched but no changes made');
-    }
-    
-    console.log('Update Result:', result);
-
-    // Fetch the updated document to verify changes
-    const updatedDoc = await Requests.findOne({ reqId: reqId });
-    console.log('After update:', updatedDoc);
-
-    return NextResponse.json({ message: 'Request Updated!', body: updatedDoc });
-  } catch (err) {
-    console.error('Error updating request:', err.message);
-    return NextResponse.json({ error: 'Failed to update request', details: err.message }, { status: 500 });
+  try
+  {   
+      let validate = await Requests.findOne({reqId:reqId})
+      console.log(validate);
+      
+      const result = await Requests.updateOne({reqId:reqId},{
+        $set:{
+          products:products
+        }
+      })
+      if (result.matchedCount === 0) { return NextResponse.json({ error: 'Product not found' }, { status: 404 }); }
+      console.log(result);
+      
+      return NextResponse.json({message: "Request Updated!",body:result});
+  }
+  catch(err)
+  {
+      console.log(err);
+      return NextResponse.json(err);
   }
 }
-
-
