@@ -11,31 +11,6 @@ import {
     TextField,
 } from "@mui/material";
 
-// const products = [
-//     {
-//         name: "Kerupuk Puli",
-//         price: "Rp7.000",
-//         img: "/productDistributors/Kerupuk_Puli.jpg",
-//     },
-//     {
-//         name: "Kerupuk Udang",
-//         price: "Rp10.000",
-//         img: "/productDistributors/Kerupuk_Puli.jpg",
-//         stok: 103,
-//         desc: "Kerupuk udang Padi Kapas mentah 250 gram",
-//     },
-//     {
-//         name: "Kerupuk Putih",
-//         price: "Rp7.000",
-//         img: "/productDistributors/Kerupuk_Puli.jpg",
-//     },
-//     {
-//         name: "Kerupuk Unyil",
-//         price: "Rp11.000",
-//         img: "/productDistributors/Kerupuk_Puli.jpg",
-//     },
-// ];
-
 export default function Products() {
     const [products, setProducts] = useState([]);
 
