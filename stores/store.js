@@ -1,13 +1,28 @@
 import { create } from "zustand";
 
 const useAuth = create((set) => ({
-    user: JSON.parse(localStorage.getItem("user")) || null,
+    user: (() => {
+        if (typeof window !== "undefined") {
+            try {
+                const storedUser = localStorage.getItem("user");
+                return storedUser ? JSON.parse(storedUser) : null;
+            } catch (error) {
+                console.error("Failed to parse user from localStorage", error);
+                return null;
+            }
+        }
+        return null;
+    })(),
     login: (user) => {
-        localStorage.setItem("user", JSON.stringify(user));
+        if (typeof window !== "undefined") {
+            localStorage.setItem("user", JSON.stringify(user));
+        }
         set({ user });
     },
     logout: () => {
-        localStorage.removeItem("user");
+        if (typeof window !== "undefined") {
+            localStorage.removeItem("user");
+        }
         set({ user: null });
     },
 }));

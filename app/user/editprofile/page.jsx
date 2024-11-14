@@ -15,7 +15,7 @@ const EditProfile = () => {
         phone: "",
         address: "",
         password: "",
-        profilePic: "https://png.pngtree.com/png-vector/20230801/ourmid/pngtree-an-adorable-cartoon-cracker-with-a-crown-vector-png-image_6820716.png" // Placeholder default image
+        profilePic: "https://png.pngtree.com/png-vector/20230801/ourmid/pngtree-an-adorable-cartoon-cracker-with-a-crown-vector-png-image_6820716.png"
     });
 
     useEffect(() => {
@@ -30,8 +30,8 @@ const EditProfile = () => {
                         email: data.profile.email,
                         phone: data.profile.phone,
                         address: data.profile.address,
-                        password: "", // Kosongkan password untuk keamanan
-                        profilePic: data.profile.profpic
+                        password: "", // Clear password field for security
+                        profilePic: data.profile.propic
                     });
                 }
             } catch (error) {
@@ -74,7 +74,7 @@ const EditProfile = () => {
 
     return (
         <Container maxWidth="md" sx={{ marginTop: 5, display: "flex", flexDirection: "column", alignItems: "center" }}>
-            {/* Logo Section in Center */}
+            {/* Logo Section */}
             <IconButton onClick={handleBack} sx={{ position: "absolute", top: 20, left: 20 }}>
                 <ArrowBackIcon />
             </IconButton>
@@ -90,7 +90,20 @@ const EditProfile = () => {
                     <Avatar src={userData.profilePic} sx={{ width: 200, height: 200, mb: 2 }} />
                     <Button variant="outlined" component="label">
                         + Add Photo
-                        <input type="file" hidden onChange={(e) => setUserData({ ...userData, profilePic: URL.createObjectURL(e.target.files[0]) })} />
+                        <input 
+                            type="file" 
+                            hidden 
+                            onChange={(e) => {
+                                const file = e.target.files[0];
+                                if (file) {
+                                    const reader = new FileReader();
+                                    reader.onloadend = () => {
+                                        setUserData({ ...userData, profilePic: reader.result });
+                                    };
+                                    reader.readAsDataURL(file);
+                                }
+                            }}
+                        />
                     </Button>
                 </Box>
                 
