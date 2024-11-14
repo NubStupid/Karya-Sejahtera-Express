@@ -40,3 +40,7 @@ html {
 .bg-red-danger{
     background-color: #dc2626 !important;
 }
+
+nextjs-portal{
+    display: none;
+}
