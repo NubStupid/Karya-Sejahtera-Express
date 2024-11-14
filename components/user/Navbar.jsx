@@ -1,3 +1,4 @@
+// components/user/Navbar.jsx
 import React, { useState, useEffect } from "react";
 import { AppBar, Toolbar, IconButton, Avatar, Menu, MenuItem, Box } from "@mui/material";
 import { useRouter } from "next/navigation";
@@ -11,7 +12,6 @@ export default function Navbar() {
     const [user, setUser] = useState(null);
     const router = useRouter();
 
-    // Ambil data pengguna jika user sudah login
     useEffect(() => {
         const fetchUserData = async () => {
             if (auth.user && auth.user.username) {
@@ -30,7 +30,7 @@ export default function Navbar() {
         };
 
         fetchUserData();
-    }, [auth.user]); // Jalankan saat `auth.user` berubah
+    }, [auth.user]);
 
     const handleAvatarClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -41,18 +41,18 @@ export default function Navbar() {
     };
 
     const handleLogin = () => {
-        router.push('/login'); // Direct to login page
+        router.push('/login');
         handleMenuClose();
     };
 
     const handleRegister = () => {
-        router.push('/register'); // Direct to register page
+        router.push('/register');
         handleMenuClose();
     };
 
     const handleLogout = () => {
-        auth.logout(); // Panggil fungsi logout dari auth
-        setUser(null); // Bersihkan data user dari state
+        auth.logout();
+        setUser(null);
         handleMenuClose();
     };
 
@@ -64,8 +64,6 @@ export default function Navbar() {
     return (
         <AppBar position="static" sx={{ backgroundColor: "#00A4FF" }}>
             <Toolbar sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-
-                {/* Left Section: Logo and Menu Icon */}
                 <Box sx={{ display: "flex", alignItems: "center", marginLeft: 6 }}>
                     <Box
                         component="img"
@@ -84,11 +82,12 @@ export default function Navbar() {
                     </IconButton>
                 </Box>
 
-                {/* Right Section: Cart Icon and Avatar */}
                 <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <IconButton color="inherit" aria-label="cart" sx={{ marginRight: 2 }}>
-                        <ShoppingCartIcon />
-                    </IconButton>
+                    {user && (
+                        <IconButton color="inherit" aria-label="cart" sx={{ marginRight: 2 }} onClick={() => router.push('/user/cart')}>
+                            <ShoppingCartIcon />
+                        </IconButton>
+                    )}
                     <IconButton onClick={handleAvatarClick}>
                         <Avatar
                             alt={user ? user.profile.name : "Guest"}
@@ -98,7 +97,6 @@ export default function Navbar() {
                     </IconButton>
                 </Box>
 
-                {/* Menu for Login/Profile Options */}
                 <Menu
                     anchorEl={anchorEl}
                     open={Boolean(anchorEl)}
