@@ -1,7 +1,8 @@
 import { Box, Button, Card, CardContent, CardMedia, TextField, Typography } from "@mui/material"
 import customColor from "@/app/customColor"
 import ResponsiveButton from "../ResponsiveButton"
-const PendingBatchRequestCard = ({data,bg}) => {
+import { Update } from "@mui/icons-material"
+const PendingBatchRequestCard = ({data,bg,accept,decline,req,update}) => {
 
   return data.map((item,index)=>
         <div key = {index} className={bg}>
@@ -54,8 +55,8 @@ const PendingBatchRequestCard = ({data,bg}) => {
                             Rp. {item.products[0].stock && item.products[0].price? item.products[0].stock*item.products[0].price:0} 
                         </Typography>
                         <div className="mt-2">
-                            <Button className={`${item.status == "Accepted"?"bg-green-600":"bg-green-400"} text-black rounded-lg p-2 px-5 mx-2`} disabled={item.status !== "Pending"}>Accept</Button>
-                            <Button className={`${item.status == "Declined"?"bg-red-600":"bg-red-400"} text-black rounded-lg p-2 px-5 mx-2`} disabled={item.status !== "Pending"}>Decline</Button>
+                            <Button className={`${item.status == "Accepted"?"bg-green-600":"bg-green-400"} text-black rounded-lg p-2 px-5 mx-2`} disabled={item.status !== "Pending"} onClick={()=>accept(item.products[0].productId,req)}>Accept</Button>
+                            <Button className={`${item.status == "Declined"?"bg-red-600":"bg-red-400"} text-black rounded-lg p-2 px-5 mx-2`} disabled={item.status !== "Pending"} onClick={()=>decline(item.products[0].productId,req)}>Decline</Button>
                         </div>
                     </CardContent>
                 </Box>
@@ -64,7 +65,7 @@ const PendingBatchRequestCard = ({data,bg}) => {
                 <div className={`${bg} py-5 grid grid-cols-7`}>
                     <TextField id="outlined-basic" label="Notes" variant="outlined" sx={{backgroundColor:"white",borderRadius:1}} className="md:w-[30vw] lg:w-full sm:w-[15vw] ms-10 col-span-5"/>
                     <div className="col-start-7 flex items-center ">
-                        <ResponsiveButton placeholder={"Done"} bg={"bg-orange-primary"}/>
+                        <ResponsiveButton placeholder={"Done"} bg={"bg-orange-primary"} onClick={()=>update(req)}/>
                     </div>
                 </div>
 

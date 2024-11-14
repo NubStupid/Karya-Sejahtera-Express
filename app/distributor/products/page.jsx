@@ -1,5 +1,6 @@
 "use client"
-import { Box, Button, Card, CardContent, CardMedia, TextField, Typography  } from "@mui/material";
+import { Box, Button, Card, CardContent, CardMedia, Stack, TextField, Typography  } from "@mui/material";
+import FileUploadIcon from '@mui/icons-material/FileUpload';
 import Form from 'next/form'
 import Image from 'next/image';
 import { useEffect, useState } from "react";
@@ -7,12 +8,12 @@ import { useEffect, useState } from "react";
 export default function Products()
 {
     const [products, setProducts] = useState([]);
-    const [id, setId] = useState();
+    const [id, setId] = useState(0);
     const [detail, setDetail] = useState();
+    const [image, setImage] = useState();
     const [edit, setEdit] = useState(0);
 
-    const fetchData = async() => {
-        
+    const fetchData = async(id) => {        
         let res;
         if(id)
         {
@@ -21,7 +22,7 @@ export default function Products()
             setDetail(res.products[0])
         }
         else
-        {
+        {            
             res = await fetch('http://localhost:3000/api/distributor')
             res = await res.json()
             setProducts(res.products)
@@ -32,8 +33,25 @@ export default function Products()
         fetchData(id);
     }, [id])
 
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            if (file.type === "image/jpeg" || file.type === "image/png") {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onloadend = () => {
+                    const base64String = reader.result;
+                    setImage(base64String);
+                };
+            } else {
+                alert("Hanya file JPG atau PNG yang diperbolehkan.");
+                event.target.value = null;
+            }
+        }
+    };
+
     const updateData = async (data) => {
-        const productName = data.get("productName"), desc = data.get("desc"), price = data.get("price"), img = data.get("img");
+        const productName = data.get("productName"), desc = data.get("desc"), price = data.get("price"), img = image;
         if(id)
         {
             await fetch('http://localhost:3000/api/distributor', {
@@ -78,37 +96,32 @@ export default function Products()
     }
     
     return (
-        <div className="flex h-full">
+        <div className="flex h-5/6">
             <div className="bg-sky-200 p-10 ms-auto me-14 w-6/12 overflow-scroll rounded-md">
-                <Button variant="contained bg-orange-primary w-full" onClick={() => {setEdit(1), setId(0), setDetail()}}>+ Add</Button>
-                {/* <button className="bg-orange-primary py-2 w-full rounded-md">+ Add</button> */}
-                {/* {console.log(data.products)} */}
-                {/* console.log(products); */}
+                {edit == 0 && 
+                    <Button variant="contained" className="bg-orange-primary w-full" onClick={() => {setEdit(1), setId(0), setDetail(), setImage()}}>+ Add</Button>
+                }
                 
                 {products && products.map((p) => {
                     return (
-                        <Button key={p.productDId} sx={{ display: 'flex' }} className="mt-5 bg-orange-secondary p-3" onClick={() => {setEdit(0), setId(p.productDId), fetchData(p.productDId)}}>
+                        <Button key={p.productDId} sx={{mt: 2, p: 2}} className="bg-orange-secondary flex text-left w-full" onClick={() => {setEdit(0), setId(p.productDId), fetchData(p.productDId), setImage()}}>
                             <Box>
-                                {/* component="img"
-                                sx={{ width: 100 }}
-                                image="/productDistributors/Kerupuk Puli.jpg"
-                                alt="Live from space album cover" */}
                                 <Image
-                                    src="/productDistributors/Kerupuk Puli.jpg"
+                                    src={p.img}
                                     alt={p.productName}
-                                    width={200}
-                                    height={200}
-                                    // objectFit="contain" // Ensures the image fits within the box
+                                    width={100}
+                                    height={100}
+                                    objectFit="contain"
+                                    style={{width: 120, height: 120}}
                                 />
                             </Box>
-                            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', textTransform: 'capitalize' }} className="text-black me-auto">
                                 <CardContent sx={{ flex: '1 0 auto' }}>
-                                    <Typography component="div" variant="h6">
+                                    <Typography variant="h6">
                                         {p.productName}
                                     </Typography>
                                     <Typography
                                         variant="subtitle1"
-                                        component="div"
                                     >
                                         {new Intl.NumberFormat("id-ID", {style: "currency", currency: "IDR", trailingZeroDisplay: "stripIfInteger"}).format(p.price)}
                                     </Typography>
@@ -120,7 +133,7 @@ export default function Products()
             </div>
             <div className="bg-sky-200 p-10 w-full me-auto">
                 {id == 0 && edit == 0 && 
-                    <div className="text-center align-middle">
+                    <div className="text-center mt-52 text-gray-500">
                         <Typography variant="h4">
                             Pilih salah satu produk!
                         </Typography>
@@ -129,55 +142,69 @@ export default function Products()
                 {edit == 1 &&
                     <div>
                         <Form action={updateData}>
-                            <Typography variant="h4">
+                            <Typography variant="h4" sx={{mb: 3}}>
                                 {id == 0 && "Add Product"}
                                 {id != 0 && "Update Product"}
                             </Typography>
-                            <h4></h4>
-                            <TextField
-                                required fullWidth
-                                id="outlined-required"
-                                label="Nama"
-                                name="productName"
-                                variant="filled"
-                                className="mt-5 bg-white"
-                                defaultValue={detail && detail.productName}
-                                //     input: {
-                                    // slotProps={{
-                                //         disableUnderline: true
-                                //     },
-                                // }}
-                            />
-                            <TextField
-                                required fullWidth
-                                id="outlined-required"
-                                label="Harga"
-                                name="price"
-                                variant="filled"
-                                className="bg-white mt-5"
-                                defaultValue={detail && detail.price}
-                            />
-                            <TextField
-                                required fullWidth
-                                id="outlined-required"
-                                label="Image"
-                                name="img"
-                                variant="filled"
-                                className="bg-white mt-5"
-                                defaultValue={detail && detail.img}
-                            />
-                            <TextField
-                                required fullWidth
-                                id="outlined-required"
-                                label="Deskripsi"
-                                name="desc"
-                                variant="filled"
-                                className="bg-white mt-5"
-                                defaultValue={detail && detail.desc}
-                            />
-                            <div className="mt-36 text-right">
-                                <Button variant="contained" className="bg-green-500 ms-auto" type="submit">Save</Button>
-                                <Button variant="contained" className="ms-3 bg-red-600" onClick={() => setEdit(0)}>Cancel</Button>
+                            <Stack spacing={2}>
+                                <TextField
+                                    required fullWidth
+                                    id="outlined-required"
+                                    label="Nama"
+                                    name="productName"
+                                    variant="filled"
+                                    className="mt-5 bg-white"
+                                    defaultValue={detail && detail.productName}
+                                />
+                                <TextField
+                                    required fullWidth
+                                    id="outlined-required"
+                                    label="Harga"
+                                    name="price"
+                                    variant="filled"
+                                    className="bg-white mt-5"
+                                    defaultValue={detail && detail.price}
+                                />
+                                <TextField
+                                    required fullWidth
+                                    id="outlined-required"
+                                    label="Deskripsi"
+                                    name="desc"
+                                    variant="filled"
+                                    className="bg-white mt-5"
+                                    defaultValue={detail && detail.desc}
+                                />
+                                <div className="flex">
+                                    <input type="file"
+                                        accept="image/jpeg, image/png"
+                                        name="img"
+                                        style={{ display: 'none' }}
+                                        id="upload-button"
+                                        onChange={handleFileChange}
+                                        required />
+                                    <label htmlFor="upload-button" className="me-4">
+                                        <Button variant="contained" component="span" className="bg-orange-primary">
+                                            <FileUploadIcon /> Upload Image
+                                        </Button>
+                                    </label>
+                                    {image &&
+                                        <Image
+                                            src={image}
+                                            alt="uploaded image"
+                                            height={150}
+                                            width={150}
+                                            objectFit="contain"
+                                            style={{width: 200, height: 200}}
+                                        /> 
+                                    }
+                                </div>
+                            </Stack>
+                            <div className="fixed bottom-24 right-20">
+                                <Button variant="contained" className="bg-green-success" type="submit" onClick={() => {
+                                    if(!image)
+                                        alert("Gambar produk belum diupload!");
+                                }}>Save</Button>
+                                <Button variant="contained" sx={{ml: 1}} className="ms-3 bg-red-danger" onClick={() => setEdit(0)}>Cancel</Button>
                             </div>
                         </Form>
                     </div>
@@ -196,7 +223,7 @@ export default function Products()
                             </div>
                             <div>
                                 <p className="mt-2">: {detail.productName}</p>
-                                <p className="mt-2">: {detail.price}</p>
+                                <p className="mt-2">: {new Intl.NumberFormat("id-ID", {style: "currency", currency: "IDR", trailingZeroDisplay: "stripIfInteger"}).format(detail.price)}</p>
                                 <p className="mt-2">: {detail.desc}</p>
                                 <p className="mt-2 flex">:
                                     <Image
@@ -205,13 +232,15 @@ export default function Products()
                                         width={200}
                                         height={200}
                                         className="ms-1"
+                                        objectFit="contain"
+                                        style={{width: 200, height: 200}}
                                     />
                                 </p>
                             </div>
                         </div>
-                        <div className="mt-36 text-right">
-                            <Button variant="contained" className="bg-green-500" onClick={() => setEdit(1)}>Edit</Button>
-                            <Button variant="contained" className="ms-3 bg-red-600" onClick={deleteData}>Delete</Button>
+                        <div className="fixed bottom-24 right-20">
+                            <Button variant="contained" className="bg-green-success" onClick={() => {setEdit(1), setImage(detail.img)}}>Edit</Button>
+                            <Button variant="contained" sx={{ml: 1}} className="bg-red-danger" onClick={deleteData}>Delete</Button>
                         </div>
                     </div>
                 }
