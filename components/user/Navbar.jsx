@@ -1,11 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AppBar, Toolbar, IconButton, Avatar, Menu, MenuItem, Box } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 export default function Navbar() {
     const [anchorEl, setAnchorEl] = useState(null);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const auth = useAuth();
+    const [user, setUser] = useState(null);
+    const router = useRouter();
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            if (auth.user && auth.user.username) {
+                try {
+                    const response = await fetch(`/api/user/getUser?username=${auth.user.username}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        setUser(data);
+                    } else {
+                        console.error("Failed to fetch user data");
+                    }
+                } catch (error) {
+                    console.error("Error fetching user data:", error);
+                }
+            }
+        };
+
+        fetchUserData();
+    }, [auth.user]);
 
     const handleAvatarClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -16,21 +38,30 @@ export default function Navbar() {
     };
 
     const handleLogin = () => {
-        setIsLoggedIn(true);
+        router.push('/login');
+        handleMenuClose();
+    };
+
+    const handleRegister = () => {
+        router.push('/register');
         handleMenuClose();
     };
 
     const handleLogout = () => {
-        setIsLoggedIn(false);
+        auth.logout();
+        setUser(null);
+        handleMenuClose();
+    };
+
+    const handleProfile = () => {
+        router.push('/user/editprofile');
         handleMenuClose();
     };
 
     return (
         <AppBar position="static" sx={{ backgroundColor: "#00A4FF" }}>
             <Toolbar sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                
-                {/* Left Section: Logo and Menu Icon */}
-                <Box sx={{ display: "flex", alignItems: "center", marginLeft:6 }}>
+                <Box sx={{ display: "flex", alignItems: "center", marginLeft: 6 }}>
                     <Box
                         component="img"
                         src="/logo/KSXpress.png"
@@ -46,17 +77,17 @@ export default function Navbar() {
                     </IconButton>
                 </Box>
 
-                {/* Right Section: Cart Icon and Avatar */}
                 <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <IconButton color="inherit" aria-label="cart" sx={{ marginRight: 2 }}>
-                        <ShoppingCartIcon />
-                    </IconButton>
+                    {user && (
+                        <IconButton color="inherit" aria-label="cart" sx={{ marginRight: 2 }} onClick={() => router.push('/user/cart')}>
+                            <ShoppingCartIcon />
+                        </IconButton>
+                    )}
                     <IconButton onClick={handleAvatarClick}>
                         <Avatar alt="Guest" src="" sx={{ width: 40, height: 40 }} />
                     </IconButton>
                 </Box>
 
-                {/* Menu for Login/Profile Options */}
                 <Menu
                     anchorEl={anchorEl}
                     open={Boolean(anchorEl)}

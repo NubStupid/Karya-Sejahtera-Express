@@ -1,38 +1,42 @@
-// pages/api/user/updateUser.js
-import connectMongoDB from "../../../../database/connectDB.js";
+// /app/api/user/updateUser/route.js
+import connectMongoDB from "../../../../database/connectDB";
 import Users from "../../../../models/Users";
 
-export default async function handler(req, res) {
+export async function POST(req) {
     await connectMongoDB();
 
-    if (req.method === "POST") {
-        const { username, name, email, phone, address, password, profilePic } = req.body;
+    const { username, name, email, phone, address, profilePic } = await req.json();
 
-        try {
-            const updatedUser = await Users.findOneAndUpdate(
-                { username },
-                {
-                    $set: {
-                        "profile.name": name,
-                        "profile.email": email,
-                        "profile.phone": phone,
-                        "profile.address": address,
-                        "profile.propic": profilePic,
-                    }
+    try {
+        const updatedUser = await Users.findOneAndUpdate(
+            { username },
+            {
+                $set: {
+                    "profile.name": name,
+                    "profile.email": email,
+                    "profile.phone": phone,
+                    "profile.address": address,
+                    "profile.propic": profilePic,
                 },
-                { new: true }
-            );
+            },
+            { new: true }
+        );
 
-            if (!updatedUser) {
-                return res.status(404).json({ error: "User not found" });
-            }
-
-            return res.status(200).json({ message: "User updated successfully" });
-        } catch (error) {
-            return res.status(500).json({ error: "Failed to update user data" });
+        if (!updatedUser) {
+            return new Response(JSON.stringify({ error: "User not found" }), {
+                status: 404,
+                headers: { "Content-Type": "application/json" },
+            });
         }
-    } else {
-        res.setHeader("Allow", ["POST"]);
-        res.status(405).end(`Method ${req.method} Not Allowed`);
+
+        return new Response(JSON.stringify({ message: "User updated successfully" }), {
+            status: 200,
+            headers: { "Content-Type": "application/json" },
+        });
+    } catch (error) {
+        return new Response(JSON.stringify({ error: "Failed to update user data" }), {
+            status: 500,
+            headers: { "Content-Type": "application/json" },
+        });
     }
 }
