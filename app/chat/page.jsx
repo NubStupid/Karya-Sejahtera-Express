@@ -16,11 +16,9 @@ export default function Chat()
     const auth = useAuth();
     
     const [ authenticate, setAuthenticate ] = useState(false);
-    const [ user, setUser ] = useState({username: "", role: ""});
+    const [ user, setUser ] = useState({username: null, role: null});
 
     useEffect(() => {
-        // console.log(auth.user);
-        
         if(!auth.user)
             router.push('/login');
         else if(auth.user.role == "admin")
@@ -98,6 +96,10 @@ export default function Chat()
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [chat]);
+
+    if(user && !chat)
+        fetchChat("admin")
+    
     
     return (
         <>
@@ -105,9 +107,9 @@ export default function Chat()
                 <div>
                     <div className="fixed top-0 bg-blue-primary w-[100vw] p-5 z-40">
                         <div className="texl-xl flex">
-                            <Link href="/distributor" className="my-auto">
+                            <div className="my-auto" onClick={() => router.back()}>
                                 <ArrowBackIosNew className="h-full me-4" />
-                            </Link>
+                            </div>
                             <Avatar alt="Guest" sx={{ width: 50, height: 50 }} className="me-4" />
                             <Typography component="div" variant="h6" className="h-full pt-2">Admin</Typography>
                         </div>

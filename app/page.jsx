@@ -1,4 +1,3 @@
-// pages/index.js
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -78,11 +77,6 @@ const MainPage = () => {
                     </>
                 )}
             </Container>
-            {/* <Link href="/chat">
-                <Fab className="fixed bottom-20 right-20 bg-blue-primary w-16 h-16 text-white">
-                    <ChatIcon />
-                </Fab>
-            </Link> */}
             <Chat />
         </>
     );
