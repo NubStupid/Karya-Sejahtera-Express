@@ -7,6 +7,7 @@ export async function GET(req) {
     try {
         await connectMongoDB(); 
         const products = await Products.find().exec();
+        
         return new Response(JSON.stringify(products), {
             status: 200,
             headers: { "Content-Type": "application/json" },
