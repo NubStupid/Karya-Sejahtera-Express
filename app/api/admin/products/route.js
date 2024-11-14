@@ -5,7 +5,7 @@ import Products from "../../../../models/Products";
 export async function GET(req){
     try {
         await connectMongoDB()
-        const products = await Products.find().exec()
+        const products = await Products.find({ deletedAt: null }).exec()
         return NextResponse.json(products, {status: 200})
     } catch (error) {
         return NextResponse.json('error', {status: 400})
@@ -49,3 +49,49 @@ export async function POST(req) {
         });
     }
 }
+
+export async function DELETE(req) {
+    try {
+        const { productId } = await req.json();
+        await connectMongoDB();
+        const deletedProduct = await Products.updateOne(
+            {productId},
+            { $set: { deletedAt: new Date() } }
+        );
+
+        if (!deletedProduct) {
+            return NextResponse.json({ message: "Product not found" }, { status: 404 });
+        }
+
+        return NextResponse.json({ message: "Product deleted successfully" }, { status: 200 });
+    } catch (error) {
+        return NextResponse.json({ message: "Error deleting product", error: error.message }, { status: 400 });
+    }
+}
+
+export async function PUT(req) {
+    try {
+        const { productId, productName, price, stock, desc } = await req.json();
+        await connectMongoDB();
+        const updatedProduct = await Products.updateOne(
+            {productId},
+            { 
+                $set: { 
+                    productName: productName,
+                    price: price,
+                    stock: stock,
+                    desc: desc
+                } 
+            }
+        );
+
+        if (!updatedProduct) {
+            return NextResponse.json({ message: "Product not found" }, { status: 404 });
+        }
+
+        return NextResponse.json({ message: "Product updated successfully" }, { status: 200 });
+    } catch (error) {
+        return NextResponse.json({ message: "Error updating product", error: error.message }, { status: 400 });
+    }
+}
+
