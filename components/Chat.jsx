@@ -16,7 +16,9 @@ export default function Chat() {
                 <Link href="/chat" style={{zIndex: 0}}>
                     <Fab className="bg-blue-primary w-16 h-16" sx={{color: "white", zIndex: 0}}>
                         <ChatIcon />
-                        <p className="fixed bg-orange-primary text-white rounded-full h-5 w-5 text-center text-sm" style={{bottom: 117, right: 78}}>{unread}</p>
+                        {unread > 0 && 
+                            <p className="fixed bg-orange-primary text-white rounded-full h-6 w-6 text-center" style={{bottom: 115, right: 75}}>{unread}</p>
+                        }
                     </Fab>
                 </Link>
             </div>
