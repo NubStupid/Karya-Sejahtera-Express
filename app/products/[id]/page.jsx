@@ -1,18 +1,24 @@
 // /pages/products/[id]/page.js
-"use client";
+'use client'
 
 import React, { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { Container, Typography, Button, Box, CardMedia, Grid, CircularProgress } from "@mui/material";
+import { Container, Typography, Button, Box, CardMedia, Grid, CircularProgress, IconButton } from "@mui/material";
 import Navbar from "@/components/user/Navbar";
+import useAuth from "@/stores/store"; // Import your auth store
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import formatRupiah from "@/tools/formatrupiah";
 
 const ProductDetail = () => {
     const router = useRouter();
     const { id } = useParams();
     const [product, setProduct] = useState(null);
     const [relatedProducts, setRelatedProducts] = useState([]);
-    const [isLoading, setIsLoading] = useState(true); // Menambahkan state isLoading
-    const user = ""; 
+    const [isLoading, setIsLoading] = useState(true);
+    const [quantity, setQuantity] = useState(1);
+    const auth = useAuth(); // Get auth data
+    const user = auth.user;
 
     useEffect(() => {
         if (id) {
@@ -20,9 +26,9 @@ const ProductDetail = () => {
         }
     }, [id]);
 
-    // Fungsi untuk mengambil data produk dan produk terkait dari API
+    // Function to fetch product and related product data from the API
     const fetchProductData = async (productId) => {
-        setIsLoading(true); // Mulai loading
+        setIsLoading(true);
         try {
             const response = await fetch(`/api/products/${productId}`);
             if (!response.ok) {
@@ -35,19 +41,52 @@ const ProductDetail = () => {
         } catch (error) {
             console.error("Error fetching product data:", error);
         } finally {
-            setIsLoading(false); // Selesai loading
+            setIsLoading(false);
         }
     };
 
-    const handleAddToCart = () => {
+    const handleAddToCart = async () => {
         if (!user) {
-            router.push("/login");
+            router.push('/login');
         } else {
-            alert("Product added to cart!");
+            try {
+                const response = await fetch('/api/user/addToCart', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: user.username,
+                        productId: product.productId,
+                        qty: quantity,
+                    }),
+                });
+
+                if (response.ok) {
+                    alert('Product added to cart!');
+                    setQuantity(1); // Reset quantity to 1 after adding to cart
+                } else {
+                    const errorData = await response.json();
+                    alert(`Error: ${errorData.message}`);
+                }
+            } catch (error) {
+                console.error('Error adding product to cart:', error);
+            }
         }
     };
 
-    // Tampilkan loading spinner jika sedang memuat data
+    const handleIncrement = () => {
+        if (quantity < product.stock) {
+            setQuantity(prev => prev + 1);
+        }
+    };
+
+    const handleDecrement = () => {
+        if (quantity > 1) {
+            setQuantity(prev => prev - 1);
+        }
+    };
+
     if (isLoading) {
         return (
             <>
@@ -61,7 +100,6 @@ const ProductDetail = () => {
         );
     }
 
-    // Jika produk tidak ditemukan
     if (!product) return <p>Product not found</p>;
 
     return (
@@ -88,19 +126,34 @@ const ProductDetail = () => {
                             {product.desc}
                         </Typography>
                         <Typography variant="h5" sx={{ mt: 2 }}>
-                            Rp {product.price}
+                            {formatRupiah(product.price)}
                         </Typography>
+                        <Typography variant="body1" sx={{ mt: 1 }}>
+                            Stock: {product.stock}
+                        </Typography>
+                        <Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
+                            <IconButton onClick={handleDecrement} disabled={quantity <= 1}>
+                                <RemoveIcon />
+                            </IconButton>
+                            <Typography variant="h6" sx={{ mx: 2 }}>
+                                {quantity}
+                            </Typography>
+                            <IconButton onClick={handleIncrement} disabled={quantity >= product.stock}>
+                                <AddIcon />
+                            </IconButton>
+                        </Box>
                         <Button
                             variant="contained"
                             color="primary"
                             sx={{ mt: 3 }}
                             onClick={handleAddToCart}
+                            disabled={product.stock === 0}
                         >
                             Add to Cart
                         </Button>
                     </Box>
                 </Box>
-                
+
                 <Typography variant="h5" fontWeight="bold" sx={{ mt: 4 }}>
                     Related Products
                 </Typography>
