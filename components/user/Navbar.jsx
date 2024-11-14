@@ -1,10 +1,8 @@
-// components/user/Navbar.jsx
 import React, { useState, useEffect } from "react";
 import { AppBar, Toolbar, IconButton, Avatar, Drawer, List, ListItem, Button, Box, Menu, MenuItem } from "@mui/material";
 import { useRouter } from "next/navigation";
 import MenuIcon from "@mui/icons-material/Menu";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import useAuth from "@/stores/store";
 
 export default function Navbar() {
     const [anchorEl, setAnchorEl] = useState(null);
@@ -93,7 +91,6 @@ export default function Navbar() {
                             marginRight: 152.5,
                             cursor: "pointer"
                         }}
-                        onClick={() => router.push('/')}
                     />
 
                     {/* Cart Icon and Avatar */}
