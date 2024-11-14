@@ -104,7 +104,6 @@ export default function Chat()
     }, [chat])
 
     useEffect(() => {
-        // setChat()
         fetchChat(user.username);
         fetchData();
     }, [user])
@@ -148,8 +147,6 @@ export default function Chat()
         setText("")
     }
 
-    
-
     return (
         <>
             <div className="relative">
@@ -175,9 +172,6 @@ export default function Chat()
                             setRoutes("contact")
                         }}>Contact</div>
                     </div>
-                    {/* <div className="p-3">
-                        <input type="text" placeholder="Search" className="bg-orange-secondary w-full p-2 px-4 rounded-md" />
-                    </div> */}
                     <div className="h-screen">
                         {routes == "chat" && data &&
                             data.map((d) => {
@@ -247,16 +241,43 @@ export default function Chat()
                     <div className="absolute left-80 right-0 overflow-y-auto">
                         <div className="fixed top-0 w-full bg-blue-primary px-7 py-3 z-40 drop-shadow-lg">
                             <div className="texl-xl flex justify-center">
-                                <Avatar alt="Guest" src="" sx={{ width: 50, height: 50 }} />
-                                <Typography component="div" variant="h6" className="h-full ms-4 pt-2 w-full">{user.role} - {user.username}</Typography>
+                                <Avatar alt="Guest" src="" sx={{ width: 50, height: 50 }} className="me-4" />
+                                <Typography component="div" variant="h6" className="h-full pt-2 w-full">{user.role} - {user.username}</Typography>
                             </div>
                         </div>
                         <div className="mt-10 p-14 py-20 overflow-auto">
-                            {chat && chat.messages.map((c, idx) => <BubbleChat key={idx} sender={c.sender == "admin" ? "user" : "admin"} message={c.message} read={c.read} time={c.timestamp} />)}
+                            {chat && chat.messages.map((c, idx) => {
+                                    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
+                                    let date1 = "";
+                                    let date2 = new Date(c.timestamp);
+                                    let changeDate = false;
+
+                                    if(idx > 0)
+                                    {
+                                        date1 = new Date(chat.messages[idx-1].timestamp)
+
+                                        if(date1.getFullYear() < date2.getFullYear())
+                                            changeDate = true;
+                                        else if(date1.getMonth() < date2.getMonth())
+                                            changeDate = true;
+                                        else if(date1.getDate() < date2.getDate())
+                                            changeDate = true;
+                                    }
+                                    return (
+                                        <>
+                                            {idx == 0 &&
+                                                <p className="bg-gray-200 w-fit mx-auto p-1 px-3 rounded-full text-sm">{date2.getDate()} {months[date2.getMonth()]} {date2.getFullYear()}</p> 
+                                            }
+                                            {changeDate == true &&
+                                                <p className="bg-gray-200 w-fit mx-auto p-1 px-3 rounded-full text-sm">{date2.getDate()} {months[date2.getMonth()]} {date2.getFullYear()}</p> 
+                                            }
+                                            <BubbleChat key={idx} sender={c.sender == "admin" ? "user" : "admin"} message={c.message} read={c.read} time={c.timestamp} />
+                                        </>
+                                    )
+                                })}
                             <div ref={messagesEndRef} />
                         </div>
                         <Form action={addChat} className="fixed bottom-0 left-80 right-0 p-3 bg-blue-secondary px-14 flex">
-                            {/* <input type="text" name="message" placeholder="Type a message" className="p-2 px-5 rounded-full w-full me-3" /> */}
                             <InputEmoji placeholder="Type a message" className="rounded-full w-full me-3" value={text} onChange={setText} cleanOnEnter onEnter={addChat} />
                             <button className="bg-orange-primary rounded-full ps-2 pe-1 h-10 my-auto"><Send sx={{ width: 28, height: 25 }} /></button>
                         </Form>

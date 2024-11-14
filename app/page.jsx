@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import ProductCard from "../components/user/ProductCard";
 import Navbar from "../components/user/Navbar";
 import { Container, Grid, Typography, Box, CircularProgress } from "@mui/material";
+import Chat from "@/components/Chat";
 
 const MainPage = () => {
     const [products, setProducts] = useState([]);
@@ -77,6 +78,12 @@ const MainPage = () => {
                     </>
                 )}
             </Container>
+            {/* <Link href="/chat">
+                <Fab className="fixed bottom-20 right-20 bg-blue-primary w-16 h-16 text-white">
+                    <ChatIcon />
+                </Fab>
+            </Link> */}
+            <Chat />
         </>
     );
 };
