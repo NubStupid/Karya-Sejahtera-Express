@@ -2,22 +2,41 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+    overflow: scroll;
+    overflow-x: hidden;
+}
+::-webkit-scrollbar {
+    width: 0;
+}
+
 .bg-blue-primary{
-    background-color: #39BCFE;
+    background-color: #39BCFE !important;
 }
 .bg-blue-secondary{
-    background-color: #90D0F0;
+    background-color: #90D0F0 !important;
 }
 .bg-blue-ternary{
-    background-color: #B7E6FD;
+    background-color: #B7E6FD !important;
 }
 
 .bg-orange-primary{
-    background-color: #FF914D;
+    background-color: #FF914D !important;
 }
 .bg-orange-secondary{
-    background-color: #FEB283;
+    background-color: #FEB283 !important;
 }
 .bg-orange-ternary{
-    background-color: #FFD0B3;
+    background-color: #FFD0B3 !important;
+}
+.bg-gray{
+    background-color: #E5E5E5 !important;
+}
+
+.bg-green-success{
+    background-color: #1fb255 !important;
+}
+
+.bg-red-danger{
+    background-color: #dc2626 !important;
 }

@@ -12,3 +12,30 @@ export async function GET(request) {
     return NextResponse.json({ error: 'Failed to fetch products' }, { status: 500 });
   }
 }
+
+export async function PATCH(request) {
+  const {reqId, products} = await request.json()
+  console.log(products);
+   
+  await connectMongoDB();
+  try
+  {   
+      let validate = await Requests.findOne({reqId:reqId})
+      console.log(validate);
+      
+      const result = await Requests.updateOne({reqId:reqId},{
+        $set:{
+          products:products
+        }
+      })
+      if (result.matchedCount === 0) { return NextResponse.json({ error: 'Product not found' }, { status: 404 }); }
+      console.log(result);
+      
+      return NextResponse.json({message: "Request Updated!",body:result});
+  }
+  catch(err)
+  {
+      console.log(err);
+      return NextResponse.json(err);
+  }
+}

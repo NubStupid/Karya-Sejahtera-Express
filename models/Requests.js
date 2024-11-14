@@ -1,8 +1,13 @@
 import mongoose, { Schema } from "mongoose";
 
 const requestSchema = new Schema({
-    username: {type: String, required: true},
-    nama: {type: String}
+    reqId:{type:String,required:true},
+    username: {type: String},
+    products: {type: Array},
+    grandTotal:{type:Number},
+    createdAt:{type:Date},
+    notes:{type:String}
+
 })
 
 const Requests = mongoose.models.Requests || mongoose.model("Requests", requestSchema)
