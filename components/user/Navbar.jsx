@@ -67,7 +67,7 @@ export default function Navbar() {
     const menuItems = [
         { label: "Homepage", route: "/" },
         { label: "Catalog", route: "/catalog" },
-        { label: "History", route: "/history" },
+        { label: "History", route: "user/history" },
     ];
 
     return (
