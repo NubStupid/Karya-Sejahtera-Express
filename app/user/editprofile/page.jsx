@@ -1,13 +1,14 @@
-// components/user/EditProfile.jsx
 "use client";
 
 import React, { useEffect, useState } from "react";
 import { TextField, Button, Avatar, Box, Container, IconButton } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useRouter } from "next/navigation";
+import useAuth from "@/stores/store"; // Import the auth store
 
 const EditProfile = () => {
     const router = useRouter();
+    const auth = useAuth(); // Access the auth store
     const [userData, setUserData] = useState({
         username: "",
         name: "",
@@ -21,18 +22,20 @@ const EditProfile = () => {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const response = await fetch(`/api/user/getUser?username=jane_smith`);
-                if (response.ok) {
-                    const data = await response.json();
-                    setUserData({
-                        username: data.username,
-                        name: data.profile.name,
-                        email: data.profile.email,
-                        phone: data.profile.phone,
-                        address: data.profile.address,
-                        password: "", // Clear password field for security
-                        profilePic: data.profile.propic
-                    });
+                if (auth.user) {
+                    const response = await fetch(`/api/user/getUser?username=${auth.user.username}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        setUserData({
+                            username: data.username,
+                            name: data.profile.name,
+                            email: data.profile.email,
+                            phone: data.profile.phone,
+                            address: data.profile.address,
+                            password: "", // Clear password field for security
+                            profilePic: data.profile.propic
+                        });
+                    }
                 }
             } catch (error) {
                 console.error("Error fetching user data:", error);
@@ -40,7 +43,7 @@ const EditProfile = () => {
         };
 
         fetchUserData();
-    }, []);
+    }, [auth.user]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -116,6 +119,7 @@ const EditProfile = () => {
                         onChange={handleInputChange}
                         fullWidth
                         margin="normal"
+                        disabled // Username typically shouldn't be editable
                     />
                     <TextField
                         label="Name"
