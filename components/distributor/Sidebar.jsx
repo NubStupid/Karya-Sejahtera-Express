@@ -17,10 +17,8 @@ export default function Sidebar()
         <>
             <UnreadChat username={user.username} setUnread={setUnread} />
             <div className="bg-sky-300 w-60 p-4 text-white text-xl font-semibold">
-                <h3><Link href="/distributor" className={path == "/distributor" ? "text-black" : ""}>Dashboard</Link></h3>
-                <h3><Link href="/distributor/products" className={path == "/distributor/products" ? "text-black" : ""}>Products</Link></h3>
+                <h3><Link href="/distributor" className={path == "/distributor" ? "text-black" : ""}>Products</Link></h3>
                 <h3><Link href="/distributor/transaction" className={path.includes("/distributor/transaction") == true ? "text-black" : ""}>Transaction</Link></h3>
-                {/* <h3><Link href="/distributor/request" className={path.includes("/distributor/request") == true  ? "text-black":""}>Request</Link></h3> */}
                 <h3>
                     <Link href="/chat">
                         <div className="flex">

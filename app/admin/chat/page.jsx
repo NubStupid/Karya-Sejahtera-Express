@@ -147,7 +147,7 @@ export default function Chat()
 
         res = await fetch('http://localhost:3000/api/general/chat/?username=' + username)
         res = await res.json()
-        console.log(res.chats[0]);
+        // console.log(res.chats[0]);
 
         setChat(res.chats[0])
     }
@@ -260,7 +260,7 @@ export default function Chat()
                                     role = "Dist"
                                 return (
                                     <>
-                                        <div key={d.username} className="border-t border-gray-300 p-4 flex" onClick={() => setUser({username: d.username, role})}>
+                                        <div key={d.username} className="border-t border-gray-300 p-4 flex" onClick={() => setUser({username: d.username, role, profpic: d.profile.profpic})}>
                                             <Image
                                                 src={d.profile.profpic}
                                                 width={50}
@@ -290,7 +290,7 @@ export default function Chat()
                                     role = "Dist"
                                 return (
                                     <>
-                                        <div key={d.username} className="border-t border-gray-300 p-4 flex" onClick={() => setUser({username: d.username, role})}>
+                                        <div key={d.username} className="border-t border-gray-300 p-4 flex" onClick={() => setUser({username: d.username, role, profpic: d.profile.profpic})}>
                                             <Image
                                                 src={d.profile.profpic}
                                                 width={50}
@@ -326,6 +326,7 @@ export default function Chat()
                         </div>
                         <div className="mt-10 p-14 py-20 overflow-auto">
                             {chat && chat.messages.map((c, idx) => {
+                                    let profpic = c.sender == "admin" ? null : user.profpic;
                                     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
                                     let date1 = "";
                                     let date2 = new Date(c.timestamp);
@@ -350,7 +351,7 @@ export default function Chat()
                                             {changeDate == true &&
                                                 <p className="bg-gray-200 w-fit mx-auto p-1 px-3 rounded-full text-sm">{date2.getDate()} {months[date2.getMonth()]} {date2.getFullYear()}</p> 
                                             }
-                                            <BubbleChat key={idx} sender={c.sender == "admin" ? "user" : "admin"} message={c.message} read={c.read} time={c.timestamp} />
+                                            <BubbleChat key={idx} profpic={profpic} sender={c.sender == "admin" ? "user" : "admin"} message={c.message} read={c.read} time={c.timestamp} />
                                         </>
                                     )
                                 })}
