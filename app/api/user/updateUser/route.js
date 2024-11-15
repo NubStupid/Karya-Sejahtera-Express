@@ -16,7 +16,7 @@ export async function POST(req) {
                     "profile.email": email,
                     "profile.phone": phone,
                     "profile.address": address,
-                    "profile.propic": profilePic,
+                    "profile.profpic": profilePic,
                 },
             },
             { new: true }
