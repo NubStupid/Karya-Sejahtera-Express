@@ -3,12 +3,14 @@
 import BatchHistoryCard from "@/components/distributor/BatchHistoryCard"
 import HistoryCard from "@/components/distributor/HistoryCard"
 import ResponsiveLinedButton from "@/components/ResponsiveLinedButton"
+import useAuth from "@/stores/store"
 import { useEffect, useState } from "react"
 
 const page = () => {
   const [data,setData] = useState()
+  const auth = useAuth();
   const fetchRequest = async () =>{
-    const response = await fetch("http://localhost:3000/api/distributor/transaction/?username="+"john_doe")
+    const response = await fetch("http://localhost:3000/api/distributor/transaction/?username="+auth.user.username)
     if(response.ok){
       const data = await response.json()
       const formatedData = await Promise.all(data.products.map(async (item)=>{
