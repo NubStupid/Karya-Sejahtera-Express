@@ -34,6 +34,21 @@ const Cart = () => {
         fetchCart();
     }, [auth.user]);
 
+    useEffect(() => {
+        const snapScript = 'https://app.sandbox.midtrans.com/snap/snap.js'
+        const clientKey = process.env.MIDTRANS_CLIENT_KEY
+        const script = document.createElement('script')
+        script.src = snapScript
+        script.setAttribute('data-client-key' , clientKey)
+        script.async = true
+
+        document.body.appendChild(script)
+
+        return () => {
+            document.body.removeChild(script)
+        }
+    }, [])
+
     const calculateTotal = (cartItems) => {
         const totalAmount = cartItems.reduce((sum, item) => sum + (item.qty * (item.price || 0)), 0);
         setTotal(totalAmount);
@@ -76,6 +91,22 @@ const Cart = () => {
         });
     };
 
+    const checkout = async () => {
+        const data = {
+            totalPrice: total
+        }
+        const res = await fetch('http://localhost:3000/api/transaction', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data)
+        })
+
+        const req = await res.json()
+        window.snap.pay(req.token)
+    }
+
     return (
         <>
             <Navbar />
@@ -93,7 +124,8 @@ const Cart = () => {
                         ))}
                         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 3, padding: 2, backgroundColor: "#FFF3E0", borderRadius: "8px" }}>
                             <Typography variant="h5">Total {formatRupiah(total)}</Typography>
-                            <Button variant="contained" color="warning" onClick={() => router.push('/checkout')}>
+                            {/* <Button variant="contained" color="warning" onClick={() => router.push('/checkout')}> */}
+                            <Button variant="contained" color="warning" onClick={checkout}>
                                 Checkout ({cart.reduce((sum, item) => sum + item.qty, 0)})
                             </Button>
                         </Box>
