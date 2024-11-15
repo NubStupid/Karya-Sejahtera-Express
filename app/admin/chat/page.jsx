@@ -26,11 +26,12 @@ export default function Chat()
     const [ chat, setChat ] = useState()
     const [ user, setUser ] = useState({username: "", role: ""})
     const [ text, setText ] = useState()
+    const [ search, setSearch ] = useState()
     const [ loading, setLoading ] = useState(true)
     const [ socket, setSocket ] = useState()
     const messagesEndRef = useRef(null);
 
-    const fetchData = async () => {
+    const fetchData = async (text) => {
         let users;
         users = await fetch('http://localhost:3000/api/general/users')
         users = await users.json()
@@ -69,12 +70,68 @@ export default function Chat()
             dt = await dt.json()
             dt = dt.users
         }
+
+        if(search)
+        {
+            dt = dt.filter((d) => 
+                {
+                    let temp = `${d.role.substring(0, 4)} - ${d.username}`
+                    // console.log(temp);
+                    
+                    return temp.includes(search)
+                })
+        }
         setData(dt)
     }
+
+    // const fetchData = async () => {
+    //     let users;
+    //     users = await fetch('http://localhost:3000/api/general/users')
+    //     users = await users.json()
+    //     users = users.users
+    //     let chats = await fetch('http://localhost:3000/api/general/chats')
+    //     chats = await chats.json()
+    //     chats = chats.chats
+
+    //     let usr = []
+    //     users.forEach((u) => {
+    //         usr[u.username] = u
+    //     })
+        
+    //     let dt = []
+        
+    //     if(routes == "chat")
+    //     {
+    //         console.log(usr);
+    //         chats.forEach((c) => {
+    //             if(c.messages.length > 0)
+    //             {
+    //                 let unread = 0;
+    //                 let ctr = c.messages.length - 1;
+    //                 while(ctr >= 0 && c.messages[ctr].read == false && c.messages[ctr].sender == "user")
+    //                 {
+    //                     unread++;
+    //                     ctr--;
+    //                 }
+    //                 dt.push({...usr[c.username], messages: c.messages, unread})
+    //             }
+    //         })
+    //     }
+    //     else if(routes == "contact")
+    //     {
+    //         dt = await fetch('http://localhost:3000/api/general/users')
+    //         dt = await dt.json()
+    //         dt = dt.users
+    //     }
+    //     setData(dt)
+    // }
 
     useEffect(() => {
         fetchData();
     }, [routes])
+    useEffect(() => {
+        fetchData();
+    }, [search])
 
     const fetchChat = async(username, role="user") => {        
         if(user.username != username)
@@ -90,7 +147,7 @@ export default function Chat()
 
         res = await fetch('http://localhost:3000/api/general/chat/?username=' + username)
         res = await res.json()
-        console.log(res.chats[0]);
+        // console.log(res.chats[0]);
 
         setChat(res.chats[0])
     }
@@ -104,7 +161,6 @@ export default function Chat()
     }, [chat])
 
     useEffect(() => {
-        // setChat()
         fetchChat(user.username);
         fetchData();
     }, [user])
@@ -148,7 +204,21 @@ export default function Chat()
         setText("")
     }
 
-    
+    // const searchData = (text) => {
+    //     fetchData(text)
+        // console.log(text);
+        // // console.log(data);
+        // // let dt = data.filter((d) => console.log(d.username))
+        // let dt = data.filter((d) => 
+        //     {
+        //         let temp = `${d.role.substring(0, 4)} - ${d.username}`
+        //         // console.log(temp);
+                
+        //         return temp.includes(text)
+        //     })
+        // // console.log(dt);
+        // setData(dt)
+    // }
 
     return (
         <>
@@ -175,8 +245,11 @@ export default function Chat()
                             setRoutes("contact")
                         }}>Contact</div>
                     </div>
+                    <div className="p-3">
+                        <input type="text" placeholder="Search" className="bg-orange-secondary w-full p-2 px-4 rounded-md" value={search} onChange={(e) => setSearch(e.target.value)} />
+                    </div>
                     {/* <div className="p-3">
-                        <input type="text" placeholder="Search" className="bg-orange-secondary w-full p-2 px-4 rounded-md" />
+                        <input type="text" placeholder="Search" className="bg-orange-secondary w-full p-2 px-4 rounded-md" onChange={(e) => searchData(e.target.value)} />
                     </div> */}
                     <div className="h-screen">
                         {routes == "chat" && data &&
@@ -187,7 +260,7 @@ export default function Chat()
                                     role = "Dist"
                                 return (
                                     <>
-                                        <div key={d.username} className="border-t border-gray-300 p-4 flex" onClick={() => setUser({username: d.username, role})}>
+                                        <div key={d.username} className="border-t border-gray-300 p-4 flex" onClick={() => setUser({username: d.username, role, profpic: d.profile.profpic})}>
                                             <Image
                                                 src={d.profile.profpic}
                                                 width={50}
@@ -217,7 +290,7 @@ export default function Chat()
                                     role = "Dist"
                                 return (
                                     <>
-                                        <div key={d.username} className="border-t border-gray-300 p-4 flex" onClick={() => setUser({username: d.username, role})}>
+                                        <div key={d.username} className="border-t border-gray-300 p-4 flex" onClick={() => setUser({username: d.username, role, profpic: d.profile.profpic})}>
                                             <Image
                                                 src={d.profile.profpic}
                                                 width={50}
@@ -247,16 +320,44 @@ export default function Chat()
                     <div className="absolute left-80 right-0 overflow-y-auto">
                         <div className="fixed top-0 w-full bg-blue-primary px-7 py-3 z-40 drop-shadow-lg">
                             <div className="texl-xl flex justify-center">
-                                <Avatar alt="Guest" src="" sx={{ width: 50, height: 50 }} />
-                                <Typography component="div" variant="h6" className="h-full ms-4 pt-2 w-full">{user.role} - {user.username}</Typography>
+                                <Avatar alt="Guest" src="" sx={{ width: 50, height: 50 }} className="me-4" />
+                                <Typography component="div" variant="h6" className="h-full pt-2 w-full">{user.role} - {user.username}</Typography>
                             </div>
                         </div>
                         <div className="mt-10 p-14 py-20 overflow-auto">
-                            {chat && chat.messages.map((c, idx) => <BubbleChat key={idx} sender={c.sender == "admin" ? "user" : "admin"} message={c.message} read={c.read} time={c.timestamp} />)}
+                            {chat && chat.messages.map((c, idx) => {
+                                    let profpic = c.sender == "admin" ? null : user.profpic;
+                                    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
+                                    let date1 = "";
+                                    let date2 = new Date(c.timestamp);
+                                    let changeDate = false;
+
+                                    if(idx > 0)
+                                    {
+                                        date1 = new Date(chat.messages[idx-1].timestamp)
+
+                                        if(date1.getFullYear() < date2.getFullYear())
+                                            changeDate = true;
+                                        else if(date1.getMonth() < date2.getMonth())
+                                            changeDate = true;
+                                        else if(date1.getDate() < date2.getDate())
+                                            changeDate = true;
+                                    }
+                                    return (
+                                        <>
+                                            {idx == 0 &&
+                                                <p className="bg-gray-200 w-fit mx-auto p-1 px-3 rounded-full text-sm">{date2.getDate()} {months[date2.getMonth()]} {date2.getFullYear()}</p> 
+                                            }
+                                            {changeDate == true &&
+                                                <p className="bg-gray-200 w-fit mx-auto p-1 px-3 rounded-full text-sm">{date2.getDate()} {months[date2.getMonth()]} {date2.getFullYear()}</p> 
+                                            }
+                                            <BubbleChat key={idx} profpic={profpic} sender={c.sender == "admin" ? "user" : "admin"} message={c.message} read={c.read} time={c.timestamp} />
+                                        </>
+                                    )
+                                })}
                             <div ref={messagesEndRef} />
                         </div>
                         <Form action={addChat} className="fixed bottom-0 left-80 right-0 p-3 bg-blue-secondary px-14 flex">
-                            {/* <input type="text" name="message" placeholder="Type a message" className="p-2 px-5 rounded-full w-full me-3" /> */}
                             <InputEmoji placeholder="Type a message" className="rounded-full w-full me-3" value={text} onChange={setText} cleanOnEnter onEnter={addChat} />
                             <button className="bg-orange-primary rounded-full ps-2 pe-1 h-10 my-auto"><Send sx={{ width: 28, height: 25 }} /></button>
                         </Form>
