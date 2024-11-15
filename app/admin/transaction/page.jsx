@@ -1,4 +1,5 @@
 "use client"
+import CustomerCard from "@/components/admin/CustomerCard";
 import DistributorCard from "@/components/admin/DistributorCard";
 import ResponsiveButton from "@/components/ResponsiveButton";
 import { useEffect, useState } from "react";
@@ -64,8 +65,15 @@ export default function Transaction (){
                             <ResponsiveButton placeholder={"See All"} bg={"bg-orange-primary"}/>
                         </div>
                     </div>
-                    <div className="mt-5 bg-gray w-full rounded-lg p-10">
-                        <DistributorCard bg={"bg-red-300"} products={["A"]}></DistributorCard>
+                    <div className="mt-5 bg-gray w-full rounded-lg p-10 grid grid-cols-1 gap-1 h-[70vh] overflow-y-scroll">
+                        {/* <DistributorCard bg={"bg-red-300"} products={["A"]}></DistributorCard> */}
+                        {distributor && distributor.map((request,index)=>{
+                        // console.log(JSON.stringify(request));
+                        
+                        return (
+                            <DistributorCard key={index} products={request.products} created={request.createdAt} total={request.grandTotal} distributor={request.username} notes={request.notes} index={index}/>
+                          )
+                        })}
                     </div>
                 </div>
                 <div className="customer">
@@ -75,7 +83,14 @@ export default function Transaction (){
                             <ResponsiveButton placeholder={"See All"} bg={"bg-orange-primary"}/>
                         </div>
                     </div>
-                    <div className="mt-5 bg-gray w-full rounded-lg h-[20vh]"></div>
+                    <div className="mt-5 bg-gray w-full rounded-lg p-10 grid grid-cols-1 gap-4 h-[70vh] overflow-y-scroll">
+                      {customer && customer.map((transaction,index)=>{
+                        console.log(JSON.stringify(transaction));
+                        return (
+                          <CustomerCard key={index} transactions={transaction}/>
+                        )
+                      })}
+                    </div>
                 </div>
             </div>
         </div>
