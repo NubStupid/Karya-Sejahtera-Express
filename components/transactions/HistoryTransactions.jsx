@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography, Card, CardContent, Avatar } from "@mui/material";
+import { Box, Typography, Card, CardContent, Avatar, Divider } from "@mui/material";
 import Navbar from "@/components/user/Navbar";
 import formatRupiah from "@/tools/formatRupiah";
 
@@ -18,25 +18,38 @@ const HistoryTransactions = ({ transactions }) => {
                             sx={{
                                 backgroundColor: transaction.status === "Success" ? "#C8FACD" : transaction.status === "Pending" ? "#FFF59D" : "#FFE7D9",
                                 mt: 1,
-                                padding: 2
+                                padding: 2,
+                                borderRadius: 2
                             }}
                         >
+                            <Typography variant="h6" align="right" sx={{ color: "#000", fontWeight: "bold" }}>
+                                {transaction.status}
+                            </Typography>
                             <CardContent>
                                 {transaction.products.map((product, index) => (
                                     <Box key={index} sx={{ display: "flex", alignItems: "center", mb: 1 }}>
-                                        <Avatar src={product.img || "/path-to-placeholder-image.png"} alt={product.productId} sx={{ width: 50, height: 50, mr: 2 }} />
+                                        <Avatar src={product.img} alt={product.productName} sx={{ width: 50, height: 50, mr: 2 }} />
                                         <Box>
-                                            <Typography variant="body1" sx={{ fontWeight: "bold" }}>{product.productId}</Typography>
+                                            <Typography variant="body1" sx={{ fontWeight: "bold" }}>{product.productName}</Typography>
                                             <Typography variant="body2">x{product.qty}</Typography>
                                         </Box>
                                         <Box sx={{ ml: "auto", textAlign: "right" }}>
-                                            <Typography variant="body2">{formatRupiah(product.subtotal)}</Typography>
+                                            <Typography variant="body2" sx={{ fontWeight: "bold" }}>{formatRupiah(product.subtotal)}</Typography>
                                         </Box>
                                     </Box>
                                 ))}
-                                <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2, pt: 2, borderTop: "1px solid #ddd" }}>
-                                    <Typography variant="body2">Total: {formatRupiah(transaction.grandTotal)}</Typography>
-                                    <Typography variant="body2">Status: {transaction.status}</Typography>
+                                <Divider sx={{ my: 2 }} />
+                                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                                    <Box>
+                                        <Typography variant="body2">Total</Typography>
+                                        <Typography variant="body2">Total Quantity</Typography>
+                                        <Typography variant="body2">Payment</Typography>
+                                    </Box>
+                                    <Box sx={{ textAlign: "right" }}>
+                                        <Typography variant="body2" sx={{ fontWeight: "bold" }}>{formatRupiah(transaction.grandTotal)}</Typography>
+                                        <Typography variant="body2" sx={{ fontWeight: "bold" }}>{transaction.products.reduce((acc, product) => acc + product.qty, 0)}</Typography>
+                                        <Typography variant="body2" sx={{ fontWeight: "bold" }}>{transaction.payment}</Typography>
+                                    </Box>
                                 </Box>
                             </CardContent>
                         </Card>
