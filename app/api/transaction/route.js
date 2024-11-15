@@ -40,7 +40,7 @@ export async function POST(request) {
         // return NextResponse.json({ id: id });
         const token = await snap.createTransactionToken(parameter)
         console.log(token);
-        return NextResponse.json({token: token})
+        return NextResponse.json({token})
     } catch (error) {
         console.error("Error:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
