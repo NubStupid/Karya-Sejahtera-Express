@@ -1,4 +1,3 @@
-// components/user/EditProfile.jsx
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -23,18 +22,20 @@ const EditProfile = () => {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const response = await fetch(`/api/user/getUser?username=jane_smith`);
-                if (response.ok) {
-                    const data = await response.json();
-                    setUserData({
-                        username: data.username,
-                        name: data.profile.name,
-                        email: data.profile.email,
-                        phone: data.profile.phone,
-                        address: data.profile.address,
-                        password: "", // Clear password field for security
-                        profilePic: data.profile.profpic
-                    });
+                if (auth.user) {
+                    const response = await fetch(`/api/user/getUser?username=${auth.user.username}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        setUserData({
+                            username: data.username,
+                            name: data.profile.name,
+                            email: data.profile.email,
+                            phone: data.profile.phone,
+                            address: data.profile.address,
+                            password: "", // Clear password field for security
+                            profilePic: data.profile.propic
+                        });
+                    }
                 }
             } catch (error) {
                 console.error("Error fetching user data:", error);
@@ -42,7 +43,7 @@ const EditProfile = () => {
         };
 
         fetchUserData();
-    }, []);
+    }, [auth.user]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
