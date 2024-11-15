@@ -16,8 +16,9 @@ export default function Chat()
     const auth = useAuth();
     
     const [ authenticate, setAuthenticate ] = useState(false);
-    const [ user, setUser ] = useState({username: null, role: null});
-
+    const [ user, setUser ] = useState({username: null, role: null, profpic: null});
+    console.log(auth.user);
+    
     useEffect(() => {
         if(!auth.user)
             router.push('/login');
@@ -26,7 +27,7 @@ export default function Chat()
         else
         {
             setAuthenticate(true);
-            setUser({username: auth.user.username, role: auth.user.role})
+            setUser({...auth.user})
         }
     }, []);
 
@@ -121,6 +122,7 @@ export default function Chat()
                             let date1 = "";
                             let date2 = new Date(c.timestamp);
                             let changeDate = false;
+                            let profpic = c.sender == "admin" ? null : user.profpic;
 
                             if(idx > 0)
                             {
@@ -141,7 +143,7 @@ export default function Chat()
                                     {changeDate == true &&
                                         <p className="bg-gray-200 w-fit mx-auto p-1 px-3 rounded-full text-sm">{date2.getDate()} {months[date2.getMonth()]} {date2.getFullYear()}</p> 
                                     }
-                                    <BubbleChat key={idx} sender={c.sender} message={c.message} read={c.read} time={c.timestamp} />
+                                    <BubbleChat key={idx} profpic={profpic} sender={c.sender} message={c.message} read={c.read} time={c.timestamp} />
                                 </>
                             )
                         })}

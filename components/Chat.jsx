@@ -9,7 +9,6 @@ export default function Chat() {
     const auth = useAuth();
     const [unread, setUnread] = useState(0);
 
-    // Jika user belum login, jangan tampilkan komponen
     if (!auth.user) {
         return null;
     }

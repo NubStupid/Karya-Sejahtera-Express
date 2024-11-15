@@ -3,6 +3,7 @@ import { AppBar, Toolbar, IconButton, Avatar, Drawer, List, ListItem, Button, Bo
 import { useRouter } from "next/navigation";
 import MenuIcon from "@mui/icons-material/Menu";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import useAuth from "@/stores/store";
 
 export default function Navbar() {
     const [anchorEl, setAnchorEl] = useState(null);
@@ -103,7 +104,7 @@ export default function Navbar() {
                         <IconButton onClick={handleAvatarClick}>
                             <Avatar
                                 alt={user ? user.profile.name : "Guest"}
-                                src={user ? user.profile.propic : "https://png.pngtree.com/png-vector/20230801/ourmid/pngtree-an-adorable-cartoon-cracker-with-a-crown-vector-png-image_6820716.png"}
+                                src={user ? user.profile.profpic : "https://png.pngtree.com/png-vector/20230801/ourmid/pngtree-an-adorable-cartoon-cracker-with-a-crown-vector-png-image_6820716.png"}
                                 sx={{ width: 40, height: 40 }}
                             />
                         </IconButton>

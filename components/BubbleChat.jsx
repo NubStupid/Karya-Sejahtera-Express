@@ -1,13 +1,18 @@
 import { Avatar, Typography } from "@mui/material";
 
-export default function BubbleChat({sender, message, read, time})
+export default function BubbleChat({profpic, sender, message, read, time})
 {
     let date = new Date(time)
     return (
         <>
             {sender == "admin" &&
                 <div className="flex">
-                    <Avatar alt="Guest" src="" sx={{ width: 40, height: 40 }}/>
+                    {/* <Avatar alt="Guest" src="" sx={{ width: 40, height: 40 }}/> */}
+                    <Avatar
+                        alt="profpic"
+                        src={profpic ? profpic : "https://png.pngtree.com/png-vector/20230801/ourmid/pngtree-an-adorable-cartoon-cracker-with-a-crown-vector-png-image_6820716.png"}
+                        sx={{ width: 40, height: 40 }}
+                    />
                     <div className="ms-5 max-w-[800px]">
                         {/* <div className="flex">
                             <div className="bg-orange-secondary p-2 rounded-md mb-3 w-fit">asdfasdfasdf</div>
@@ -43,7 +48,12 @@ export default function BubbleChat({sender, message, read, time})
                             <div className="bg-gray p-2 rounded-md mb-3 w-fit">{message}</div>
                         </div>
                     </div>
-                    <Avatar alt="Guest" src="" sx={{ width: 40, height: 40 }}/>
+                    {/* <Avatar alt="Guest" src="" sx={{ width: 40, height: 40 }}/> */}
+                    <Avatar
+                        alt="Guest"
+                        src={profpic ? profpic : "https://png.pngtree.com/png-vector/20230801/ourmid/pngtree-an-adorable-cartoon-cracker-with-a-crown-vector-png-image_6820716.png"}
+                        sx={{ width: 40, height: 40 }}
+                    />
                 </div>
             }
         </>

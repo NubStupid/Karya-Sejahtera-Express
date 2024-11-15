@@ -5,9 +5,11 @@ import React, { useEffect, useState } from "react";
 import { TextField, Button, Avatar, Box, Container, IconButton } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useRouter } from "next/navigation";
+import useAuth from "@/stores/store";
 
 const EditProfile = () => {
     const router = useRouter();
+    const auth = useAuth();
     const [userData, setUserData] = useState({
         username: "",
         name: "",
@@ -31,7 +33,7 @@ const EditProfile = () => {
                         phone: data.profile.phone,
                         address: data.profile.address,
                         password: "", // Clear password field for security
-                        profilePic: data.profile.propic
+                        profilePic: data.profile.profpic
                     });
                 }
             } catch (error) {
@@ -63,7 +65,8 @@ const EditProfile = () => {
 
             if (response.ok) {
                 alert("Profile updated successfully!");
-                router.push("/"); // Redirect to homepage or another page
+                auth.login({username: auth.user.username, role: auth.user.role, profpic: profilePic})
+                router.push("/");
             } else {
                 console.error("Failed to update profile");
             }
@@ -116,6 +119,7 @@ const EditProfile = () => {
                         onChange={handleInputChange}
                         fullWidth
                         margin="normal"
+                        disabled
                     />
                     <TextField
                         label="Name"
