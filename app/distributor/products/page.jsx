@@ -131,7 +131,7 @@ export default function Products()
                     )
                 })}
             </div>
-            <div className="bg-sky-200 p-10 w-full me-auto">
+            <div className="bg-sky-200 p-10 w-full me-auto rounded-md">
                 {id == 0 && edit == 0 && 
                     <div className="text-center mt-52 text-gray-500">
                         <Typography variant="h4">
