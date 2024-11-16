@@ -16,7 +16,8 @@ export default function Chat() {
     return (
         <>
             <div className="fixed bottom-20 right-20">
-                <UnreadChat username={auth.user.username} setUnread={setUnread} />
+                {auth.user.role == "admin" && <UnreadChat username="admin" setUnread={setUnread} />}
+                {auth.user.role != "admin" && <UnreadChat username={auth.user.username} setUnread={setUnread} />}
                 <Link href="/chat" style={{ zIndex: 0 }}>
                     <Fab className="bg-blue-primary w-16 h-16" sx={{ color: "white", zIndex: 0 }}>
                         <ChatIcon />
