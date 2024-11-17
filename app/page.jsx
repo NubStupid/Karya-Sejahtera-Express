@@ -1,10 +1,10 @@
-// pages/index.js
 "use client";
 
 import React, { useEffect, useState } from "react";
 import ProductCard from "../components/user/ProductCard";
 import Navbar from "../components/user/Navbar";
 import { Container, Grid, Typography, Box, CircularProgress } from "@mui/material";
+import Chat from "@/components/Chat";
 
 const MainPage = () => {
     const [products, setProducts] = useState([]);
@@ -77,6 +77,7 @@ const MainPage = () => {
                     </>
                 )}
             </Container>
+            <Chat />
         </>
     );
 };

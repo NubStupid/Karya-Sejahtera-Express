@@ -1,5 +1,5 @@
 "use client"
-import { usePathname } from "next/navigation";
+// import { usePathname } from "next/navigation";
 import Navbar from "@/components/distributor/Navbar";
 import Sidebar from "@/components/distributor/Sidebar";
 import useAuth from "@/stores/store";
@@ -17,12 +17,12 @@ export default function DistributorLayout({ children }) {
           else
             setAuthenticate(true);
     }, []);
-    const path = usePathname();
+    // const path = usePathname();
     return (
       <>
         {authenticate == true &&
           <div className="h-screen">
-            {path == "/distributor/chat" ? children :
+            {/* {path == "/distributor/chat" ? children : */}
               <div className="h-screen overflow-hidden">
                   <Navbar />
                   <div className="h-full flex">
@@ -32,7 +32,7 @@ export default function DistributorLayout({ children }) {
                       </div>
                   </div>
               </div>
-            }
+            {/* } */}
           </div>
         }
         {authenticate == false &&
