@@ -1,10 +1,9 @@
 "use client"
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { io } from "socket.io-client";
 
 export default function UnreadChat({username, setUnread})
 {
-    // const [ socket, setSocket ] = useState()
     const fetchChat = async() => {
         if(username != "admin")
         {
@@ -74,8 +73,6 @@ export default function UnreadChat({username, setUnread})
                 setUnread((u) => u+1);
             });
         }
-        
-        // setSocket(socket)
     
         return () => {
           socket.disconnect();

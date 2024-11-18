@@ -1,5 +1,4 @@
 "use client"
-// import ResponsiveImage from "../../../components/ResponsiveImage";
 import Link from "next/link";
 import Form from 'next/form'
 import Image from 'next/image'
@@ -75,56 +74,12 @@ export default function Chat()
         {
             dt = dt.filter((d) => 
                 {
-                    let temp = `${d.role.substring(0, 4)} - ${d.username}`
-                    // console.log(temp);
-                    
+                    let temp = `${d.role.substring(0, 4)} - ${d.username}`                    
                     return temp.includes(search)
                 })
         }
         setData(dt)
     }
-
-    // const fetchData = async () => {
-    //     let users;
-    //     users = await fetch('http://localhost:3000/api/general/users')
-    //     users = await users.json()
-    //     users = users.users
-    //     let chats = await fetch('http://localhost:3000/api/general/chats')
-    //     chats = await chats.json()
-    //     chats = chats.chats
-
-    //     let usr = []
-    //     users.forEach((u) => {
-    //         usr[u.username] = u
-    //     })
-        
-    //     let dt = []
-        
-    //     if(routes == "chat")
-    //     {
-    //         console.log(usr);
-    //         chats.forEach((c) => {
-    //             if(c.messages.length > 0)
-    //             {
-    //                 let unread = 0;
-    //                 let ctr = c.messages.length - 1;
-    //                 while(ctr >= 0 && c.messages[ctr].read == false && c.messages[ctr].sender == "user")
-    //                 {
-    //                     unread++;
-    //                     ctr--;
-    //                 }
-    //                 dt.push({...usr[c.username], messages: c.messages, unread})
-    //             }
-    //         })
-    //     }
-    //     else if(routes == "contact")
-    //     {
-    //         dt = await fetch('http://localhost:3000/api/general/users')
-    //         dt = await dt.json()
-    //         dt = dt.users
-    //     }
-    //     setData(dt)
-    // }
 
     useEffect(() => {
         fetchData();
@@ -147,7 +102,6 @@ export default function Chat()
 
         res = await fetch('http://localhost:3000/api/general/chat/?username=' + username)
         res = await res.json()
-        // console.log(res.chats[0]);
 
         setChat(res.chats[0])
     }
@@ -204,22 +158,6 @@ export default function Chat()
         setText("")
     }
 
-    // const searchData = (text) => {
-    //     fetchData(text)
-        // console.log(text);
-        // // console.log(data);
-        // // let dt = data.filter((d) => console.log(d.username))
-        // let dt = data.filter((d) => 
-        //     {
-        //         let temp = `${d.role.substring(0, 4)} - ${d.username}`
-        //         // console.log(temp);
-                
-        //         return temp.includes(text)
-        //     })
-        // // console.log(dt);
-        // setData(dt)
-    // }
-
     return (
         <>
             <div className="relative">
@@ -248,9 +186,6 @@ export default function Chat()
                     <div className="p-3">
                         <input type="text" placeholder="Search" className="bg-orange-secondary w-full p-2 px-4 rounded-md" value={search} onChange={(e) => setSearch(e.target.value)} />
                     </div>
-                    {/* <div className="p-3">
-                        <input type="text" placeholder="Search" className="bg-orange-secondary w-full p-2 px-4 rounded-md" onChange={(e) => searchData(e.target.value)} />
-                    </div> */}
                     <div className="h-screen">
                         {routes == "chat" && data &&
                             data.map((d) => {
