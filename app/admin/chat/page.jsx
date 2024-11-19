@@ -20,6 +20,9 @@ export default function Chat()
             router.push('/');
     }, []);
     
+    const [ status, setStatus ] = useState("connected");
+    
+    const [ action, setAction ] = useState(null);
     const [ routes, setRoutes ] = useState("chat")
     const [ data, setData ] = useState()
     const [ chat, setChat ] = useState()
@@ -48,7 +51,7 @@ export default function Chat()
         
         if(routes == "chat")
         {
-            console.log(usr);
+            // console.log(usr);
             chats.forEach((c) => {
                 if(c.messages.length > 0)
                 {
@@ -122,9 +125,12 @@ export default function Chat()
     useEffect(() => {
         let socket = io('/admin');
         
-        socket.on('connect', () => {
-          console.log('Admin connected to server');
-        });
+        // if(status == "connected")
+        // {
+            socket.on('connect', () => {
+              console.log('Admin connected to server');
+            });
+        // }
 
         socket.on('new_user_connected', ({username}) => {
             fetchChat(username, "admin");
@@ -138,25 +144,72 @@ export default function Chat()
         });
 
         setSocket(socket)
+        // if(status == "disconnected")
+            // socket.disconnect();
     
         return () => {
           socket.disconnect();
         };
-      }, [user]);
+      }, [user, status]);
 
     const addChat = async () => {
-        socket.emit('admin_message', { username: user.username, message: text });
-        await fetch('http://localhost:3000/api/general/chat', {
-            method: 'PUT',
-            headers: {
-            'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({username: user.username, role: "admin", message: text}),
-        });
+        let delivered = true;
+        if(socket.disconnected)
+        {
+            console.log("chat tidak terkirim");
+            delivered = false;
+        }
+        else
+            socket.emit('admin_message', { username: user.username, message: text });
+        // console.log(action);
+        
+        if(action)
+        {
+            await fetch('http://localhost:3000/api/general/chat', {
+                method: 'DELETE',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({username: user.username, id: action.id})
+            });
+        }
+        if(action && action.act == "retry")
+        {
+            await fetch('http://localhost:3000/api/general/chat', {
+                method: 'PUT',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({username: user.username, role: "admin", message: action.message, delivered})
+            });
+
+        }
+        else if(!action)
+        {
+            await fetch('http://localhost:3000/api/general/chat', {
+                method: 'PUT',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({username: user.username, role: "admin", message: text, delivered})
+            });
+        }
+        
         fetchChat(user.username)
-        fetchData()
         setText("")
     }
+
+    useEffect(() => {
+        addChat();
+        setAction(null);
+    }, [action])
+
+    // const changeStatus = () => {
+    //     if(status == "connected")
+    //         setStatus("disconnected")
+    //     else
+    //         setStatus("connected")
+    // }
 
     return (
         <>
@@ -260,6 +313,7 @@ export default function Chat()
                             </div>
                         </div>
                         <div className="mt-10 p-14 py-20 overflow-auto">
+                            {/* <button className='bg-blue-secondary' onClick={changeStatus}>{status}</button> */}
                             {chat && chat.messages.map((c, idx) => {
                                     let profpic = c.sender == "admin" ? null : user.profpic;
                                     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
@@ -286,7 +340,7 @@ export default function Chat()
                                             {changeDate == true &&
                                                 <p className="bg-gray-200 w-fit mx-auto p-1 px-3 rounded-full text-sm">{date2.getDate()} {months[date2.getMonth()]} {date2.getFullYear()}</p> 
                                             }
-                                            <BubbleChat key={idx} profpic={profpic} sender={c.sender == "admin" ? "user" : "admin"} message={c.message} read={c.read} time={c.timestamp} />
+                                            <BubbleChat key={idx} profpic={profpic} id={c._id} sender={c.sender == "admin" ? "user" : "admin"} message={c.message} read={c.read} time={c.timestamp} delivered={c.delivered} setAction={setAction} />
                                         </>
                                     )
                                 })}

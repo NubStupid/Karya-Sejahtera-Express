@@ -9,7 +9,7 @@ export async function PUT(request) {
     // console.log(request);
     // console.log(await request.json());
     
-    let { username, role, message } = await request.json() 
+    let { username, role, message, delivered } = await request.json() 
 
     // console.log(username + " " + role);
     // console.log(addMsg);
@@ -25,16 +25,19 @@ export async function PUT(request) {
             let now = new Date();
             await Chats.findOneAndUpdate(
                 { username },
-                { $push: { messages: {sender: role, message, timestamp: now, read: false} } },
+                { $push: { messages: {sender: role, message, timestamp: now, read: false, delivered} } },
                 { new: true, upsert: true }
             );
             await Chats.findOneAndUpdate({ username }, { updatedAt: now });
-            return NextResponse.json({message: "Chat berhasil dikirim"});
+            if(delivered == true)
+                return NextResponse.json({message: "Chat berhasil dikirim"});
+            else
+                return NextResponse.json({message: "Chat gagal dikirim"});
         }
         await Chats.updateOne(
             { username },
             { $set: { "messages.$[elem].read": true } }, // Menggunakan `$` untuk menargetkan elemen yang cocok
-            { arrayFilters: [{ "elem.read": false, "elem.sender": role }] }
+            { arrayFilters: [{ "elem.read": false, "elem.sender": role, "elem.delivered": true }] }
         );
         // role == "admin" ? role = "admin" : role = "user"
         return NextResponse.json({message: "Chat dibaca"});
@@ -49,20 +52,19 @@ export async function PUT(request) {
 export async function GET(request) {
     const username = await request.nextUrl.searchParams.get('username')
     await connectMongoDB();
-    let chats = await Chats.find({username});
+    let chats = await Chats.find({username}).sort({ "messages.delivered": -1 });
+    chats[0].messages.sort((a, b) => b.delivered - a.delivered)
     return NextResponse.json({chats});
 }
 
-// export async function PUT(request) {
-//     const {id, productName, desc, price, img} = await request.json() 
-//     await connectMongoDB();
-//     await ProductDistributors.updateOne({productDId: id}, {productName, desc, price, img});
-//     return NextResponse.json({message: "Produk berhasil diupdate"});
-// }
+export async function DELETE(request) {
+    const {username, id} = await request.json();
+    await connectMongoDB();
 
-// export async function DELETE(request) {
-//     const {id} = await request.json() ;
-//     await connectMongoDB();
-//     await ProductDistributors.updateOne({productDId: id}, {deletedAt: new Date()})
-//     return NextResponse.json({message: "Produk berhasil dihapus"});
-// }
+    const chat = await Chats.findOne({username});
+    let idx = chat.messages.findIndex((c) => c._id == id);
+    chat.messages.splice(idx, 1);
+    await chat.save();
+
+    return NextResponse.json({message: "Pesan berhasil dihapus"});
+}
