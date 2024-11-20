@@ -7,19 +7,12 @@ export default function BubbleChat({profpic, sender, message, read, time})
         <>
             {sender == "admin" &&
                 <div className="flex">
-                    {/* <Avatar alt="Guest" src="" sx={{ width: 40, height: 40 }}/> */}
                     <Avatar
                         alt="profpic"
                         src={profpic ? profpic : "https://png.pngtree.com/png-vector/20230801/ourmid/pngtree-an-adorable-cartoon-cracker-with-a-crown-vector-png-image_6820716.png"}
                         sx={{ width: 40, height: 40 }}
                     />
                     <div className="ms-5 max-w-[800px]">
-                        {/* <div className="flex">
-                            <div className="bg-orange-secondary p-2 rounded-md mb-3 w-fit">asdfasdfasdf</div>
-                            <div className="mt-auto mb-3 ms-1">
-                                <Typography component="div" variant="body2" sx={{fontSize: 11}} className="text-gray-600">10.30</Typography>
-                            </div>
-                        </div> */}
                         <div className="flex">
                             <div className="bg-orange-ternary p-2 rounded-md mb-3 w-fit">{message}</div>
                             <div className="mt-auto mb-3 ms-1">
@@ -33,12 +26,6 @@ export default function BubbleChat({profpic, sender, message, read, time})
             {sender != "admin" &&
                 <div className="flex">
                     <div className="ms-auto me-5 max-w-[800px] justify-end">
-                        {/* <div className="flex">
-                            <div className="mt-auto mb-3 me-1 ms-auto">
-                                <Typography component="div" variant="body2" sx={{fontSize: 11}} className="text-gray-600">Read</Typography>
-                            </div>
-                            <div className="bg-gray p-2 rounded-md mb-3 w-fit">asdfasdfasdf</div>
-                        </div> */}
                         <div className="flex">
                             <div className="mt-auto mb-3 me-1 ms-auto">
                                 {read == true && 
@@ -48,7 +35,6 @@ export default function BubbleChat({profpic, sender, message, read, time})
                             <div className="bg-gray p-2 rounded-md mb-3 w-fit">{message}</div>
                         </div>
                     </div>
-                    {/* <Avatar alt="Guest" src="" sx={{ width: 40, height: 40 }}/> */}
                     <Avatar
                         alt="Guest"
                         src={profpic ? profpic : "https://png.pngtree.com/png-vector/20230801/ourmid/pngtree-an-adorable-cartoon-cracker-with-a-crown-vector-png-image_6820716.png"}
