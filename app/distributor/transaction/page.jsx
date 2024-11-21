@@ -9,7 +9,29 @@ import { useEffect, useState } from "react"
 const page = () => {
   const [data,setData] = useState()
   const [update, setUpdate] = useState([]);
+  const [notes,setNotes] = useState([]);
   const auth = useAuth();
+
+  const handleNotes = (request,note) => {
+    const found = notes.findIndex((n)=>n.reqId == request)
+    if(found !== -1){
+      
+      if(note !== ""){
+        notes[found].notes = note
+      }else{
+        const updatedNotes = [...notes]
+        updatedNotes.splice(found,1)
+        setNotes(updatedNotes)
+      }
+    }else{
+      const newNote = {
+        reqId:request,
+        notes:note
+      }
+      setNotes([...notes,newNote])
+    }
+  }
+
   const updateRequest = async (request) => {
     // console.log(request);
     const updatedData = update.filter((d)=>d.rId == request)
@@ -38,7 +60,9 @@ const page = () => {
         // console.log(await response.json());
         const data = await response.json()
         const r = data.products[0].products
-        console.log(JSON.stringify(r));
+        console.log(JSON.stringify(notes));
+        
+        // console.log(JSON.stringify(r));
         const productToUpdate = r.reduce((acc,p)=>{
           const found = updatedData.find(d=>p.productId == d.pId)
           if(found){
@@ -49,14 +73,18 @@ const page = () => {
           return acc
         },[])
         console.log(productToUpdate);
-        
+        let notesToUpdate = ""
+        const findNotes = notes.find((n)=>n.reqId == request)
+        if(findNotes){
+          notesToUpdate = findNotes.notes
+        }
         try{
           const response = await fetch('http://localhost:3000/api/distributor/transaction',{
             method:"PATCH",
             headers:{
               'Content-Type':"application/json"
             },
-            body:JSON.stringify({reqId:request,products:productToUpdate})
+            body:JSON.stringify({reqId:request,products:productToUpdate,notes:notesToUpdate})
           })
           const data = await response.json()
           if(!response.ok){
@@ -107,6 +135,7 @@ const page = () => {
 
   const acceptRequest = (id, request) => {
     // console.log("accept " + id + " " + request);
+    // console.log(JSON.stringify(notes));
     setUpdate(prevUpdate => {
       const found = prevUpdate.find(pr => pr.pId === id);
       if (!found) {
@@ -190,11 +219,11 @@ const page = () => {
       <div className="grid mt-5 gap-10">
         {data && data.map((item,index)=>{
           if(item.products && item.products.length == 1){
-            return <PendingRequestCard key={index} bg={"bg-blue-ternary"} image={"/dummy/Bobi bobi.png"} productName={item.products[0].products[0].productName} price={item.products[0].products[0].price} qty={item.products[0].products[0].stock} accept={acceptRequest} decline={declineRequest} id={item.products[0].products[0].productId} req={item.reqId} update={updateRequest}/>
+            return <PendingRequestCard key={index} bg={"bg-blue-ternary"} image={"/dummy/Bobi bobi.png"} productName={item.products[0].products[0].productName} price={item.products[0].products[0].price} qty={item.products[0].products[0].stock} accept={acceptRequest} decline={declineRequest} id={item.products[0].products[0].productId} req={item.reqId} update={updateRequest} setNotes={handleNotes} notes={item.notes}/>
           }else{
             return <div className="" key={index}>
               {/* {console.log(JSON.stringify(item.products))} */}
-                <PendingBatchRequestCard bg={"bg-blue-ternary"} data={item.products} accept={acceptRequest} decline={declineRequest} req={item.reqId} update={updateRequest}/>
+                <PendingBatchRequestCard bg={"bg-blue-ternary"} data={item.products} accept={acceptRequest} decline={declineRequest} req={item.reqId} update={updateRequest} setNotes={handleNotes} notes={item.notes}/>
               </div>
           }
         })}

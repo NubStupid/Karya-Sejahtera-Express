@@ -62,7 +62,7 @@ export default function Transaction (){
                     <div className="grid grid-cols-5">
                         <div className="text-2xl font-semibold">Distributor</div>
                         <div className="col-start-5">
-                            <ResponsiveButton placeholder={"See All"} bg={"bg-orange-primary"}/>
+                            <ResponsiveButton placeholder={"See All"} bg={"bg-orange-primary"} href={"/admin/transaction/distributor"}/>
                         </div>
                     </div>
                     <div className="mt-5 bg-gray w-full rounded-lg p-10 grid grid-cols-1 gap-1 h-[70vh] overflow-y-scroll">
