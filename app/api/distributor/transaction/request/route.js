@@ -12,3 +12,4 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Failed to fetch products' }, { status: 500 });
   }
 }
+  
