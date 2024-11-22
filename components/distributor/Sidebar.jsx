@@ -11,7 +11,7 @@ export default function Sidebar()
     const auth = useAuth();
 
     const [ unread, setUnread ] = useState(0)
-    const [ user, setUser ] = useState({username: auth.user.username, role: auth.user.role})
+    const user = {username: auth.user.username, role: auth.user.role}
 
     return (
         <>

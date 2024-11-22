@@ -1,5 +1,4 @@
 "use client"
-import Link from "next/link";
 import Form from 'next/form'
 import BubbleChat from "../../components/BubbleChat"
 import { Avatar, Box, CircularProgress, Typography } from "@mui/material";
@@ -116,7 +115,6 @@ export default function Chat()
                         </div>
                     </div>
                     <div className="mt-10 p-14 py-20 overflow-y-auto">
-                        {/* {chat && console.log(chat.messages)} */}
                         {chat && chat.messages.map((c, idx) => {
                             const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
                             let date1 = "";
