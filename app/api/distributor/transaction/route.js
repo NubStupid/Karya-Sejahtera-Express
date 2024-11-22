@@ -14,7 +14,7 @@ export async function GET(request) {
 }
 
 export async function PATCH(request) {
-  const {reqId, products} = await request.json()
+  const {reqId, products,notes} = await request.json()
   console.log(products);
    
   await connectMongoDB();
@@ -25,7 +25,8 @@ export async function PATCH(request) {
       
       const result = await Requests.updateOne({reqId:reqId},{
         $set:{
-          products:products
+          products:products,
+          notes:notes
         }
       })
       if (result.matchedCount === 0) { return NextResponse.json({ error: 'Product not found' }, { status: 404 }); }
