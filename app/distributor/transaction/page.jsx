@@ -64,7 +64,7 @@ const page = () => {
         
         // console.log(JSON.stringify(r));
         const productToUpdate = r.reduce((acc,p)=>{
-          const found = updatedData.find(d=>p.productId == d.pId)
+          const found = updatedData.find(d=>p.productPId == d.pId)
           if(found){
             acc.push({...p,status:found.status})
           }else{
@@ -180,8 +180,8 @@ const page = () => {
           const productData = await fetch("http://localhost:3000/api/distributor/transaction/products/?productId=" + p.productId)
           let up = await productData.json()
           up.status = p.status
-          up.stock = p.qty
-          
+          up.products[0].stock = p.qty
+          // up
           if(p.status == "Pending"){
             totalPending++
           }
@@ -195,7 +195,7 @@ const page = () => {
       }))
       const filteredData = formatedData.filter(Boolean)
       setData(filteredData)
-      // console.log(filteredData);
+      console.log(filteredData);
       
     }else{
       throw new Error("Failed to fetch data!")
