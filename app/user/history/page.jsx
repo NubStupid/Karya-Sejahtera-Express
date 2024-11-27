@@ -18,12 +18,29 @@ const HistoryPage = () => {
 
         const fetchTransactions = async () => {
             try {
-                const response = await fetch(`/api/transactions/getTransactions?username=${auth.user.username}`);
-                if (!response.ok) throw new Error("Failed to fetch transactions");
-                const data = await response.json();
-                setTransactions(data);
+                const transactionResponse = await fetch(`/api/transactions/getTransactions?username=${auth.user.username}`);
+                if (!transactionResponse.ok) throw new Error("Failed to fetch transactions");
+                const transactionsData = await transactionResponse.json();
+
+                const productResponse = await fetch(`/api/products/getProduct`);
+                if (!productResponse.ok) throw new Error("Failed to fetch products");
+                const productsData = await productResponse.json();
+
+                const enrichedTransactions = transactionsData.map(transaction => {
+                    const enrichedProducts = transaction.products.map(product => {
+                        const productDetails = productsData.find(p => p.productId === product.productId) || {};
+                        return {
+                            ...product,
+                            productName: productDetails.productName || product.productId,
+                            img: productDetails.img || "/path-to-placeholder-image.png",
+                        };
+                    });
+                    return { ...transaction, products: enrichedProducts };
+                });
+
+                setTransactions(enrichedTransactions);
             } catch (error) {
-                console.error("Failed to fetch transactions:", error);
+                console.error("Failed to fetch data:", error);
             }
         };
 

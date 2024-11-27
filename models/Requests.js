@@ -7,7 +7,6 @@ const requestSchema = new Schema({
     grandTotal:{type:Number},
     createdAt:{type:Date},
     notes:{type:String}
-
 })
 
 const Requests = mongoose.models.Requests || mongoose.model("Requests", requestSchema)

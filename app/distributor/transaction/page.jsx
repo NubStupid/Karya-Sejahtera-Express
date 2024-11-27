@@ -3,12 +3,13 @@
 import PendingBatchRequestCard from "@/components/distributor/PendingBatchRequestCard"
 import PendingRequestCard from "@/components/distributor/PendingRequestCard"
 import ResponsiveLinedButton from "@/components/ResponsiveLinedButton"
+import useAuth from "@/stores/store"
 import { useEffect, useState } from "react"
 
 const page = () => {
   const [data,setData] = useState()
   const [update, setUpdate] = useState([]);
-
+  const auth = useAuth();
   const updateRequest = async (request) => {
     // console.log(request);
     const updatedData = update.filter((d)=>d.rId == request)
@@ -140,7 +141,7 @@ const page = () => {
   
 
   const fetchRequest = async () =>{
-    const response = await fetch("http://localhost:3000/api/distributor/transaction/?username="+"john_doe")
+    const response = await fetch("http://localhost:3000/api/distributor/transaction/?username="+auth.user.username)
     if(response.ok){
       const data = await response.json()
       const formatedData = await Promise.all(data.products.map(async (item)=>{
@@ -150,6 +151,8 @@ const page = () => {
           const productData = await fetch("http://localhost:3000/api/distributor/transaction/products/?productId=" + p.productId)
           let up = await productData.json()
           up.status = p.status
+          up.stock = p.qty
+          
           if(p.status == "Pending"){
             totalPending++
           }

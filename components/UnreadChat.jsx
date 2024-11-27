@@ -1,26 +1,45 @@
 "use client"
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { io } from "socket.io-client";
 
 export default function UnreadChat({username, setUnread})
 {
-    const [ socket, setSocket ] = useState()
     const fetchChat = async() => {
-        
-        let messages;
-        messages = await fetch('http://localhost:3000/api/general/chat/?username=' + username)
-        messages = await messages.json()
-        messages = messages.chats[0].messages
-        if(messages.length > 0)
+        if(username != "admin")
         {
-            let unread = 0;
-            let ctr = messages.length - 1;
-            while(ctr >= 0 && messages[ctr].read == false && messages[ctr].sender == "admin")
+            let messages;
+            messages = await fetch('http://localhost:3000/api/general/chat/?username=' + username)
+            messages = await messages.json()
+            messages = messages.chats[0].messages
+            if(messages.length > 0)
             {
-                unread++;
-                ctr--;
+                let unread = 0;
+                let ctr = messages.length - 1;
+                while(ctr >= 0 && messages[ctr].read == false && messages[ctr].sender == "admin")
+                {
+                    unread++;
+                    ctr--;
+                }
+                setUnread(unread)
             }
-            setUnread(unread)
+        }
+        else
+        {
+            let chats = await fetch('http://localhost:3000/api/general/chats')
+            chats = await chats.json()
+            chats = chats.chats
+
+            chats.forEach((c) => {
+                if(c.messages.length > 0)
+                {
+                    let ctr = c.messages.length - 1;
+                    while(ctr >= 0 && c.messages[ctr].read == false && c.messages[ctr].sender == "user")
+                    {
+                        setUnread((u) => u+1);
+                        ctr--;
+                    }
+                }
+            })
         }
     }
 
@@ -30,18 +49,30 @@ export default function UnreadChat({username, setUnread})
 
     useEffect(() => {
         let socket = io();
+        if(username != "admin")
+        {
+            socket.on('connect', () => {
+                console.log(username + ' connected to server');
+            });
+            
+            socket.emit('join_room', (username));
+    
+            socket.on('admin_reply', (msg) => {
+                fetchChat();
+            });
+        }
+        else
+        {
+            socket = io('/admin');
         
-        socket.on('connect', () => {
-            console.log(username + ' connected to server');
-        });
-        
-        socket.emit('join_room', (username));
+            socket.on('connect', () => {
+            console.log('Admin connected to server');
+            });
 
-        socket.on('admin_reply', (msg) => {
-            fetchChat();
-        });
-        
-        setSocket(socket)
+            socket.on('new_user_message', () => {
+                setUnread((u) => u+1);
+            });
+        }
     
         return () => {
           socket.disconnect();
