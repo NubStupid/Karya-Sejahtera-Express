@@ -2,7 +2,7 @@ import { Box, Button, Card, CardContent, CardMedia, TextField, Typography } from
 import customColor from "@/app/customColor"
 import ResponsiveButton from "../ResponsiveButton"
 import { Update } from "@mui/icons-material"
-const PendingBatchRequestCard = ({data,bg,accept,decline,req,update}) => {
+const PendingBatchRequestCard = ({data,bg,accept,decline,req,update,setNotes,notes}) => {
 
   return data.map((item,index)=>
         <div key = {index} className={bg}>
@@ -63,7 +63,7 @@ const PendingBatchRequestCard = ({data,bg,accept,decline,req,update}) => {
             </Card>
             {index == data.length-1?<>
                 <div className={`${bg} py-5 grid grid-cols-7`}>
-                    <TextField id="outlined-basic" label="Notes" variant="outlined" sx={{backgroundColor:"white",borderRadius:1}} className="md:w-[30vw] lg:w-full sm:w-[15vw] ms-10 col-span-5"/>
+                    <TextField defaultValue={notes?notes:""} id="outlined-basic" label="Notes" variant="outlined" sx={{backgroundColor:"white",borderRadius:1}} className="md:w-[30vw] lg:w-full sm:w-[15vw] ms-10 col-span-5" onInput={(e)=>setNotes(req,e.target.value)}/>
                     <div className="col-start-7 flex items-center ">
                         <ResponsiveButton placeholder={"Done"} bg={"bg-orange-primary"} onClick={()=>update(req)}/>
                     </div>

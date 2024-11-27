@@ -6,13 +6,15 @@
     "dev": "node server.js",
     "build": "next build",
     "start": "NODE_ENV=production node server.js",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed": "node database/seeder.js"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^6.1.6",
     "@mui/material": "^6.1.6",
+    "dotenv": "^16.4.5",
     "formidable": "^3.5.2",
     "midtrans-client": "^1.4.2",
     "mongoose": "^8.7.2",

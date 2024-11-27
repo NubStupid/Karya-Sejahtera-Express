@@ -1,7 +1,7 @@
 import { Box, Button, Card, CardContent, CardMedia, TextField, Typography } from "@mui/material"
 import customColor from "@/app/customColor"
 import ResponsiveButton from "../ResponsiveButton"
-const PendingRequestCard = ({bg,image,productName,price,qty,accept,decline,id,req,update}) => {
+const PendingRequestCard = ({bg,image,productName,price,qty,accept,decline,id,req,update,setNotes,notes}) => {
   return (
     <>
         <div className="">
@@ -38,7 +38,7 @@ const PendingRequestCard = ({bg,image,productName,price,qty,accept,decline,id,re
                         </div>
                     </div>
                 </Typography>
-                <TextField id="outlined-basic" label="Notes" variant="outlined" sx={{backgroundColor:"white",borderRadius:1}} className="md:w-[30vw] lg:w-[40vw] sm:w-[15vw]"/>
+                <TextField id="outlined-basic" label="Notes" variant="outlined" sx={{backgroundColor:"white",borderRadius:1}} className="md:w-[30vw] lg:w-[40vw] sm:w-[15vw]" defaultValue={notes?notes:""} onChange={(e)=>setNotes(req,e.target.value)}/>
                 </CardContent>
             </Box>
                 <Box sx={{pl: 1, pb: 1 }} className="ms-auto">

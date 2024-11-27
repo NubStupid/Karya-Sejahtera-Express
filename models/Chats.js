@@ -4,11 +4,11 @@ const chatSchema = new Schema({
     username: {type: String, required: true},
     messages: [
         {
-            _id : false,
             sender: {type: String, required: true},
             message: {type: String, required: true},
             timestamp: {type: Date, required: true},
-            read: {type: Boolean, required: true}
+            read: {type: Boolean, required: true},
+            delivered: {type: Boolean, required: true}
         }
     ],
     updatedAt: {type: Date, default: null}
