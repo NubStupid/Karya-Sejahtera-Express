@@ -38,40 +38,47 @@ export default function Chat()
     // }, [])
 
     const fetchData = async () => {
-        let users;
-        users = await fetch('http://localhost:3000/api/general/users')
-        users = await users.json()
-        users = users.users
+        console.log(routes);
+        
+        // let users;
+        // users = await fetch('http://localhost:3000/api/general/users')
+        // users = await users.json()
+        // users = users.users
         let chats = await fetch('http://localhost:3000/api/general/chats')
         chats = await chats.json()
         chats = chats.chats
+        // console.log(chats);
+        
 
-        let usr = []
-        users.forEach((u) => {
-            usr[u.username] = u
-        })
+        // let usr = []
+        // users.forEach((u) => {
+        //     usr[u.username] = u
+        // })
         
         let dt = []
-        console.log("fetch data " + routes);
         
         
         if(routes == "chat")
         {
             // console.log(usr);
+            // console.log("chat")
+            // console.log(chats)
             chats.forEach((c) => {
-                // console.log(c.messages.length);
+                // console.log(c.chats.messages.length);
                 
-                if(c.messages.length > 0)
+                // if(c.messages.length > 0)
+                // {
+                let unread = 0;
+                let ctr = c.chats.messages.length - 1;
+                while(ctr >= 0 && c.chats.messages[ctr].read == false && c.chats.messages[ctr].sender == "user")
                 {
-                    let unread = 0;
-                    let ctr = c.messages.length - 1;
-                    while(ctr >= 0 && c.messages[ctr].read == false && c.messages[ctr].sender == "user")
-                    {
-                        unread++;
-                        ctr--;
-                    }
-                    dt.push({...usr[c.username], messages: c.messages, unread})
+                    unread++;
+                    ctr--;
                 }
+                // console.log({...c, messages: c.chats.messages, unread});
+                
+                dt.push({...c, messages: c.chats.messages, unread})
+                // }
             })
         }
         else if(routes == "contact")
@@ -115,10 +122,12 @@ export default function Chat()
             body: JSON.stringify({username, role}),
         });
 
-        res = await fetch('http://localhost:3000/api/general/chat/?username=' + username)
-        res = await res.json()
-
-        setChat(res.chats[0])
+        if(user.username)
+        {
+            res = await fetch('http://localhost:3000/api/general/chat/?username=' + user.username)
+            res = await res.json()
+            setChat(res.chats)
+        }
     }
 
     useEffect(() => {

@@ -51,7 +51,7 @@ export default function Chat()
 
         res = await fetch('http://localhost:3000/api/general/chat/?username=' + user.username)
         res = await res.json()
-        setChat(res.chats[0])
+        setChat(res.chats)
     }
 
     useEffect(() => {

@@ -1,5 +1,6 @@
 import connectMongoDB from "@/database/connectDB";
-import Chats from "@/models/Chats";
+// import Chats from "@/models/Chats";
+import Users from "@/models/Users";
 // import ProductDistributors from "@/models/ProductDistributors";
 import { NextResponse } from "next/server";
 
@@ -23,20 +24,20 @@ export async function PUT(request) {
         {
             role == "admin" ? role = "admin" : role = "user"
             let now = new Date();
-            await Chats.findOneAndUpdate(
+            await Users.findOneAndUpdate(
                 { username },
-                { $push: { messages: {sender: role, message, timestamp: now, read: false, delivered} } },
+                { $push: { "chats.messages": {sender: role, message, timestamp: now, read: false, delivered} } },
                 { new: true, upsert: true }
             );
-            await Chats.findOneAndUpdate({ username }, { updatedAt: now });
+            await Users.findOneAndUpdate({ username }, { "chats.updatedAt": now });
             if(delivered == true)
                 return NextResponse.json({message: "Chat berhasil dikirim"});
             else
                 return NextResponse.json({message: "Chat gagal dikirim"});
         }
-        await Chats.updateOne(
+        await Users.updateOne(
             { username },
-            { $set: { "messages.$[elem].read": true } }, // Menggunakan `$` untuk menargetkan elemen yang cocok
+            { $set: { "chats.messages.$[elem].read": true } }, // Menggunakan `$` untuk menargetkan elemen yang cocok
             { arrayFilters: [{ "elem.read": false, "elem.sender": role, "elem.delivered": true }] }
         );
         // role == "admin" ? role = "admin" : role = "user"
@@ -52,18 +53,19 @@ export async function PUT(request) {
 export async function GET(request) {
     const username = await request.nextUrl.searchParams.get('username')
     await connectMongoDB();
-    let chats = await Chats.find({username}).sort({ "messages.delivered": -1 });
-    chats[0].messages.sort((a, b) => b.delivered - a.delivered)
+    let chats = await Users.findOne({username}).sort({ "chats.messages.delivered": -1 });
+    chats = chats.chats
+    
+    chats.messages.sort((a, b) => b.delivered - a.delivered)
     return NextResponse.json({chats});
 }
 
 export async function DELETE(request) {
     const {username, id} = await request.json();
     await connectMongoDB();
-
-    const chat = await Chats.findOne({username});
-    let idx = chat.messages.findIndex((c) => c._id == id);
-    chat.messages.splice(idx, 1);
+    const chat = await Users.findOne({username});
+    let idx = chat.chats.messages.findIndex((c) => c._id == id);
+    chat.chats.messages.splice(idx, 1);
     await chat.save();
 
     return NextResponse.json({message: "Pesan berhasil dihapus"});
