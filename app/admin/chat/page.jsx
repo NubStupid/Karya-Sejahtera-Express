@@ -56,7 +56,6 @@ export default function Chat()
         // })
         
         let dt = []
-        // console.log("fetch data " + routes);
         
         
         if(routes == "chat")
@@ -222,7 +221,6 @@ export default function Chat()
         }
         
         fetchChat(user.username)
-        fetchData()
         setText("")
     }
 
