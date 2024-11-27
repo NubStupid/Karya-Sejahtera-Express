@@ -33,7 +33,11 @@ export default function Chat()
     const [ socket, setSocket ] = useState()
     const messagesEndRef = useRef(null);
 
-    const fetchData = async (text) => {
+    // useEffect(() => {
+    //     setRoutes("chat")
+    // }, [])
+
+    const fetchData = async () => {
         let users;
         users = await fetch('http://localhost:3000/api/general/users')
         users = await users.json()
@@ -48,11 +52,15 @@ export default function Chat()
         })
         
         let dt = []
+        console.log("fetch data " + routes);
+        
         
         if(routes == "chat")
         {
             // console.log(usr);
             chats.forEach((c) => {
+                // console.log(c.messages.length);
+                
                 if(c.messages.length > 0)
                 {
                     let unread = 0;
@@ -81,6 +89,10 @@ export default function Chat()
                     return temp.includes(search)
                 })
         }
+        // console.log("isi dt");
+        
+        // console.log(dt);
+        
         setData(dt)
     }
 
@@ -139,6 +151,10 @@ export default function Chat()
         socket.emit('admin_connect', {username: user.username});
 
         socket.on('new_user_message', ({ username, message }) => {
+            console.log("chat masuk dari " + username);
+            console.log("routes " + routes);
+            
+            
             fetchChat(username);
             fetchData();
         });
@@ -211,20 +227,24 @@ export default function Chat()
     //         setStatus("connected")
     // }
 
+    // console.log("data");
+    // console.log(data);
+    
+
     return (
         <>
             <div className="relative">
                 <div className="w-80 border-r-2 fixed">
                     <div className="flex p-2 px-4">
-                        <Link href="/admin">
+                        <div className="my-auto" onClick={() => router.back()}>
                             <ArrowBackIosNew className="h-full me-4" />
-                        </Link>
+                        </div>
                         <Image
                             src="/logo/KSXpress.png"
                             width={120}
                             height={120}
                             alt="Picture of the author"
-                            />
+                        />
                     </div>
                     <div className="flex text-center">
                         <div className={`w-full pb-2 ${routes == "chat" && "border-b-2 border-black"}`} onClick={() => {
@@ -242,6 +262,8 @@ export default function Chat()
                     <div className="h-screen">
                         {routes == "chat" && data &&
                             data.map((d) => {
+                                // console.log(d);
+                                
                                 let date = new Date(d.messages[d.messages.length-1].timestamp)
                                 let role = "Cust"
                                 if(d.role == "distributor")
