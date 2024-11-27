@@ -5,7 +5,7 @@ const requestSchema = new Schema({
     username: {type: String},
     products: {type: Array},
     grandTotal:{type:Number},
-    createdAt:{type:Date},
+    createdAt:{type:String},
     notes:{type:String}
 })
 
