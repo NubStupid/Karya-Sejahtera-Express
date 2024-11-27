@@ -41,6 +41,7 @@ export default function Request() {
 const makeRequest = () => {
   const response = confirm("Proceed to make request?")
   if(response){
+    alert("Request is being made, please wait until further notice")
     // alert("yes")
     console.log(cart);
     const categorizedData = cart.reduce((acc,item)=>{
@@ -54,32 +55,62 @@ const makeRequest = () => {
 
     console.log(categorizedData);
     const distributors = Object.keys(categorizedData)
-    const errorData = distributors.map(async (d)=>{
-      console.log(d);
-      const distributorCart = categorizedData[d]
-      console.log(distributorCart);
-      const updatedData = distributorCart.map((dc)=>{
-        return {
-          productId: dc.productDId,
-          qty:dc.qty,
-          price:dc.payload.price,
-          subtotal:(dc.qty*dc.payload.price),
-          status:"Pending"
-        }
-      })
-      console.log(updatedData);
-      const grandTotal = updatedData.reduce((acc,item)=>{
-        return acc + item.subtotal
-      },0)
-      console.log(grandTotal);
-      const dateCreated = new Date()
-      const dateString = dateCreated.toISOString().split(".")[0]+"Z"
-      console.log(dateString);
-      
-      
-    })
+    const errorData = distributors.map(async (d,index)=>{
+      try{
+          console.log(d);
+          const distributorCart = categorizedData[d]
+          console.log(distributorCart);
+          const updatedData = distributorCart.map((dc)=>{
+            return {
+              productId: dc.productDId,
+              qty:dc.qty, 
+              price:dc.payload.price,
+              subtotal:(dc.qty*dc.payload.price),
+              status:"Pending"
+            }
+          })
+          console.log(updatedData);
+          const grandTotal = updatedData.reduce((acc,item)=>{
+            return acc + item.subtotal
+          },0)
+          console.log(grandTotal);
+          const dateCreated = new Date()
+          const dateString = dateCreated.toISOString().split(".")[0]+"Z"
+          console.log(dateString);
+          const maxIDJSON = await fetch("http://localhost:3000/api/admin/request/make")
+          // console.log(await maxID.json());
+          const maxID = await maxIDJSON.json()
+          console.log(maxID.toString().substring(2));
+          
+          const newID = "RQ"+(Number.parseInt(maxID.substring(2).toString())+1+index).toString().padStart(3,"0")
+          console.log(newID);
+          
+          const newRequest = {
+            reqId: newID,
+            username:d,
+            products:updatedData,
+            grandTotal:grandTotal,
+            createdAt:dateString,
+            notes:""
+          }
+          console.log(newRequest);
+          const response = await fetch("http://localhost:3000/api/admin/request/make",{
+            method:"POST",
+            headers:{
+              "Content-Type":"application/json"
+            },
+            body:JSON.stringify(newRequest)
+          })
+          console.log(await response.json());
+          setCart([])
+      }catch(e){
+          console.log(e);
+          alert("error creating request for "+d)
+      }
 
-  }
+    })  
+    alert("all request has been made")
+  }   
 }
 
   const fetchData = async () => {
