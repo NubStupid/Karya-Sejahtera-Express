@@ -8,17 +8,20 @@ import UnreadChat from "./UnreadChat";
 export default function Chat() {
     const auth = useAuth();
     const [unread, setUnread] = useState(0);
+    let link = "/chat";
 
-    if (!auth.user) {
+    if (!auth.user)
         return null;
-    }
+
+    if(auth.user.role == "admin")
+        link = "/admin/chat";
 
     return (
         <>
             <div className="fixed bottom-20 right-20">
                 {auth.user.role == "admin" && <UnreadChat username="admin" setUnread={setUnread} />}
                 {auth.user.role != "admin" && <UnreadChat username={auth.user.username} setUnread={setUnread} />}
-                <Link href="/chat" style={{ zIndex: 0 }}>
+                <Link href={link} style={{ zIndex: 0 }}>
                     <Fab className="bg-blue-primary w-16 h-16" sx={{ color: "white", zIndex: 0 }}>
                         <ChatIcon />
                         {unread > 0 && 
