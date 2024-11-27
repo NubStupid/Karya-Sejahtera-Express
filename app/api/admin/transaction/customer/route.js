@@ -1,40 +1,42 @@
 import connectMongoDB from "@/database/connectDB";
-import ProductDistributors from "@/models/ProductDistributors";
-import Requests from "@/models/Requests";
+import Products from "@/models/Products";
+import Transactions from "@/models/Transactions";
 import { NextResponse } from "next/server";
 export async function GET() {
   try {
     await connectMongoDB();
-    let distributor = await Requests.find();
-    let updatedData = await Promise.all(distributor.map(async (d)=>{
+    let customer = await Transactions.find();
+    let updatedData = await Promise.all(customer.map(async (d)=>{
       if(d.products.length == 1){
         const productId = d.products[0].productId
-        // console.log(productId);
-        let product = await ProductDistributors.find({productDId:productId})
+        let product = await Products.find({productId:productId})
         const updated = 
           [{
-            reqId:d.reqId,
-            ...d.products[0],
-            productName:product[0].productName,
-            desc:product[0].desc,
-            img:product[0].img,
-            notes:d.notes,
-            
+                ...d.products[0]._doc,
+                productName:product[0].productName,
+                desc:product[0].desc,
+                img:product[0].img,
+                payment:d.payment,
+                status:d.status,
+                transId:d.transId,
+                username:d.username
           }]
         return updated
         
       }else{
         const updateBatchProduct = Promise.all(d.products.map(async (p)=>{
           const productId = p.productId
-          let product = await ProductDistributors.find({productDId:productId})          
+          let product = await Products.find({productId:productId})          
           const updated = 
           {
-            reqId:d.reqId,
-            ...p,
+            ...p._doc,
             productName:product[0].productName,
             desc:product[0].desc,
             img:product[0].img,
-            notes:d.notes,
+            payment:d.payment,
+            status:d.status,
+            transId:d.transId,
+            username:d.username
           }
           // console.log(updated);
           
