@@ -19,7 +19,7 @@ export async function POST(req) {
             productId: product.productId,
             qty: product.qty,
             price: product.price,
-            basePrice: product.base_price,
+            basePrice: 0,
             subtotal: product.price * product.qty,
         }));
 
