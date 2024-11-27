@@ -30,6 +30,7 @@ export async function GET(req) {
                     productName: product.productName,
                     img: product.img,
                     price: product.price,
+                    base_price: product.base_price,
                     qty: item.qty,
                     stock: product.stock
                 };

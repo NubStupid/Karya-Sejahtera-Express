@@ -33,7 +33,7 @@ const EditProfile = () => {
                             phone: data.profile.phone,
                             address: data.profile.address,
                             password: "", // Clear password field for security
-                            profilePic: data.profile.propic
+                            profilePic: data.profile.profpic
                         });
                     }
                 }
@@ -55,6 +55,18 @@ const EditProfile = () => {
     };
 
     const handleSave = async () => {
+        const missingFields = [];
+        if (!userData.name) missingFields.push("Name");
+        if (!userData.email) missingFields.push("Email");
+        if (!userData.phone) missingFields.push("Phone");
+        if (!userData.address) missingFields.push("Address");
+        if (!userData.profilePic) missingFields.push("Profile Picture");
+
+        if (missingFields.length > 0) {
+            alert(`Field ini harus diisi: ${missingFields.join(", ")}`);
+            return;
+        }
+
         try {
             const response = await fetch(`/api/user/updateUser`, {
                 method: "POST",

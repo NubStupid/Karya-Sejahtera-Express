@@ -22,6 +22,7 @@ export default function Products() {
                 );
                 const data = await resp.json();
                 setProducts(data);
+                console.log(data);
             } catch (error) {
                 console.error("Error fetching data ", error);
             }
@@ -32,37 +33,43 @@ export default function Products() {
 
     const [selectedProduct, setSelectedProduct] = useState();
     const [mode, setMode] = useState(0);
+    const [file, setFile] = useState(null);
     const [formData, setFormData] = useState({
-        productName: '',
-        desc: '',
+        productName: "",
+        desc: "",
         price: 0,
-        img: '',
         stock: 0,
-    })
+    });
 
     const handleChange = (e) => {
         e.preventDefault();
-        const {name, value} = e.target
+        const { name, value } = e.target;
         setFormData({
             ...formData,
-            [name]: value
-        })
-    }
+            [name]: value,
+        });
+    };
 
     const handleChangeEdit = (e) => {
         e.preventDefault();
-        const {name, value} = e.target
+        const { name, value } = e.target;
         setSelectedProduct({
             ...selectedProduct,
-            [name]: value
-        })
-    }
+            [name]: value,
+        });
+    };
 
     const handleAdd = async (e) => {
         e.preventDefault();
-        if(formData.name == '' || formData.price == 0 || formData.stock == 0 || formData.desc == '' || formData.img == '') {
-            alert('Semua field harus diisi!')
-            return
+        if (
+            formData.name == "" ||
+            formData.price == 0 ||
+            formData.stock == 0 ||
+            formData.desc == "" ||
+            file == null
+        ) {
+            alert("Semua field harus diisi!");
+            return;
         }
 
         try {
@@ -77,80 +84,98 @@ export default function Products() {
                         productName: formData.productName,
                         desc: formData.desc,
                         price: formData.price,
-                        img: formData.img,
+                        img: file,
                         stock: formData.stock,
                     }),
                 }
             );
             const data = await resp.json();
             if (resp.ok) {
-                alert('Berhasil menambah data')
+                alert("Berhasil menambah data");
                 window.location.reload();
             } else {
                 alert("Error: " + data.error);
             }
         } catch (e) {
-            alert('Error: ', e);
+            alert("Error: ", e);
         }
     };
     const handleUpdate = async (productId) => {
         try {
-            console.log('Product ID: ', productId)
+            console.log("Product ID: ", productId);
             const resp = await fetch(
-                'http://localhost:3000/api/admin/products',
+                "http://localhost:3000/api/admin/products",
                 {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
                         productId: productId,
                         productName: selectedProduct.productName,
                         desc: selectedProduct.desc,
                         price: selectedProduct.price,
-                        img: selectedProduct.img,
+                        img: file,
                         stock: selectedProduct.stock,
-                    })
+                    }),
                 }
-            )
+            );
             if (!resp.ok) {
                 const errorData = await resp.json();
-                alert('Error updating product:', errorData.error);
+                alert("Error updating product:", errorData.error);
                 return;
             }
             const data = await resp.json();
-            console.log('Product updated successfully:', data);
+            console.log("Product updated successfully:", data);
             // window.location.reload();
         } catch (error) {
-            console.log('Error: ', error);
+            console.log("Error: ", error);
         }
-    }
+    };
     const handleDelete = async (productId) => {
         try {
             console.log("Product ID: ", productId);
             const resp = await fetch(
-                'http://localhost:3000/api/admin/products',
+                "http://localhost:3000/api/admin/products",
                 {
-                    method: 'DELETE',
+                    method: "DELETE",
                     headers: {
-                        'Content-Type': 'application/json',
+                        "Content-Type": "application/json",
                     },
                     body: JSON.stringify({ productId: productId }),
                 }
-            )
-    
+            );
+
             if (!resp.ok) {
                 const errorData = await resp.json();
-                alert('Error deleting product:', errorData.error);
+                alert("Error deleting product:", errorData.error);
                 return;
             }
-    
+
             const data = await resp.json();
-            console.log('Product deleted successfully:', data);
+            console.log("Product deleted successfully:", data);
             window.location.reload();
         } catch (error) {
-            console.log('Error: ', error);
+            console.log("Error: ", error);
         }
-        
-    }
+    };
+    const handleFileChange = (e) => {
+        const selectedFile = e.target.files[0];
+        if (selectedFile) {
+            // Cek format file (opsional, untuk validasi tambahan di JS)
+            const validFormats = ["image/png", "image/jpeg"];
+            if (validFormats.includes(selectedFile.type)) {
+                // Konversi file ke Base64
+                const reader = new FileReader();
+                reader.onload = () => {
+                    setFile(reader.result);
+                    console.log(reader.result);
+                };
+                reader.readAsDataURL(selectedFile);
+            } else {
+                alert("Hanya file PNG atau JPG yang diperbolehkan.");
+                setFile(null);
+            }
+        }
+    };
 
     return (
         <Grid container spacing={3} sx={{ padding: 2 }}>
@@ -192,7 +217,7 @@ export default function Products() {
                     >
                         <CardMedia
                             component="img"
-                            image="/productDistributors/Kerupuk_Puli.jpg"
+                            image={product.img}
                             alt={product.productName}
                             sx={{ width: 64, height: 64, marginLeft: 1 }}
                         />
@@ -244,7 +269,9 @@ export default function Products() {
                             variant="contained"
                             color="error"
                             sx={{ marginTop: 2, marginLeft: 1 }}
-                            onClick={() => handleDelete(selectedProduct.productId)}
+                            onClick={() =>
+                                handleDelete(selectedProduct.productId)
+                            }
                         >
                             Delete
                         </Button>
@@ -254,7 +281,7 @@ export default function Products() {
                         <Typography variant="h3" gutterBottom>
                             Add Product
                         </Typography>
-                        <Box component='form' noValidate onSubmit={handleAdd}>
+                        <Box component="form" noValidate onSubmit={handleAdd}>
                             <Typography sx={{ fontSize: "20px" }}>
                                 <TextField
                                     name="productName"
@@ -302,12 +329,14 @@ export default function Products() {
                             <br />
                             <Typography sx={{ fontSize: "20px" }}>
                                 <TextField
+                                    type="file"
                                     name="img"
                                     id="img"
-                                    label="Image URL: "
                                     fullWidth
-                                    onChange={handleChange}
-                                    value={formData.img}
+                                    inputProps={{
+                                        accept: "image/png, image/jpeg",
+                                    }}
+                                    onChange={handleFileChange}
                                 />
                             </Typography>
                             <br />
@@ -321,13 +350,16 @@ export default function Products() {
                             </Button>
                         </Box>
                     </div>
-                ) : 
-                mode == 2 ? (
+                ) : mode == 2 ? (
                     <div style={{ padding: "10px" }}>
                         <Typography variant="h3" gutterBottom>
                             Edit Product
                         </Typography>
-                        <Box component='form' noValidate onSubmit={handleUpdate(selectedProduct.productId)}>
+                        <Box
+                            component="form"
+                            noValidate
+                            onSubmit={handleUpdate(selectedProduct.productId)}
+                        >
                             <Typography sx={{ fontSize: "20px" }}>
                                 <TextField
                                     name="productName"
@@ -375,12 +407,14 @@ export default function Products() {
                             <br />
                             <Typography sx={{ fontSize: "20px" }}>
                                 <TextField
+                                    type="file"
                                     name="img"
                                     id="img"
-                                    label="Image URL: "
                                     fullWidth
-                                    onChange={handleChangeEdit}
-                                    value={selectedProduct.img}
+                                    inputProps={{
+                                        accept: "image/png, image/jpeg",
+                                    }}
+                                    onChange={handleFileChange}
                                 />
                             </Typography>
                             <br />
@@ -394,11 +428,9 @@ export default function Products() {
                             </Button>
                         </Box>
                     </div>
-                ) :
-                (
+                ) : (
                     <div></div>
-                )
-                }
+                )}
             </Grid>
         </Grid>
     );
