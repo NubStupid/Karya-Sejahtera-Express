@@ -118,18 +118,18 @@ const Cart = () => {
                     onSuccess: async (response) => {
                         console.log("Payment successful:", response);
                         alert("Pembayaran berhasil!");
-                        const deleteCart = await fetch('/api/user/deleteCart', {
-                            method: 'DELETE',
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                            body: JSON.stringify(data2),
-                        });
-                        if(deleteCart.status != 200){
-                            console.log('Gagal delete cart');
-                            console.log(deleteCart.data);
-                            return
-                        }
+                        // const deleteCart = await fetch('/api/user/deleteCart', {
+                        //     method: 'DELETE',
+                        //     headers: {
+                        //         "Content-Type": "application/json",
+                        //     },
+                        //     body: JSON.stringify(data2),
+                        // });
+                        // if(deleteCart.status != 200){
+                        //     console.log('Gagal delete cart');
+                        //     console.log(deleteCart.data);
+                        //     return
+                        // }
                         console.log('Berhasil delete cart');
                         const dataTransaction = {
                             transId: result.id,
@@ -147,7 +147,7 @@ const Cart = () => {
                             body: JSON.stringify(dataTransaction)
                         })
                         console.log(addTransaction.data);
-                        window.location.reload();
+                        // window.location.reload();
                     },
                     onPending: (response) => {
                         console.log("Payment pending:", response);

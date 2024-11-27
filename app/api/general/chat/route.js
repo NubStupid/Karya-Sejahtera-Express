@@ -63,7 +63,6 @@ export async function GET(request) {
 export async function DELETE(request) {
     const {username, id} = await request.json();
     await connectMongoDB();
-
     const chat = await Users.findOne({username});
     let idx = chat.chats.messages.findIndex((c) => c._id == id);
     chat.chats.messages.splice(idx, 1);
