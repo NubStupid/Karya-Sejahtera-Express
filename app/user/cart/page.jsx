@@ -24,6 +24,7 @@ const Cart = () => {
             try {
                 const response = await fetch(`/api/user/getUserCart?username=${auth.user.username}`);
                 const data = await response.json();
+                console.log(data.cart);
                 setCart(data.cart);
                 calculateTotal(data.cart);
             } catch (error) {
@@ -91,21 +92,82 @@ const Cart = () => {
         });
     };
 
-    const checkout = async () => {
-        const data = {
-            totalPrice: total
-        }
-        const res = await fetch('http://localhost:3000/api/transaction', {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data)
-        })
 
-        const req = await res.json()
-        window.snap.pay(req.token)
-    }
+    const checkout = async () => {
+        try {
+            const data = {
+                username: auth.user.username,
+                totalPrice: total,
+                cart,
+            };
+            const data2 = {
+                username: auth.user.username,
+            }
+    
+            const res = await fetch('/api/transaction', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            });
+    
+            const result = await res.json();
+            if (result.token) {
+                window.snap.pay(result.token, {
+                    onSuccess: async (response) => {
+                        console.log("Payment successful:", response);
+                        alert("Pembayaran berhasil!");
+                        const deleteCart = await fetch('/api/user/deleteCart', {
+                            method: 'DELETE',
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify(data2),
+                        });
+                        if(deleteCart.status != 200){
+                            console.log('Gagal delete cart');
+                            console.log(deleteCart.data);
+                            return
+                        }
+                        console.log('Berhasil delete cart');
+                        const dataTransaction = {
+                            transId: result.id,
+                            username: data.username,
+                            products: data.cart,
+                            grandTotal: data.totalPrice,
+                            payment: response.payment_type
+                        }
+                        console.log(dataTransaction);
+                        const addTransaction = await fetch('/api/transactions/addTransactions', {
+                            method: 'POST',
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(dataTransaction)
+                        })
+                        console.log(addTransaction.data);
+                        window.location.reload();
+                    },
+                    onPending: (response) => {
+                        console.log("Payment pending:", response);
+                    },
+                    onError: (response) => {
+                        console.log("Payment error:", response);
+                        alert("Terjadi kesalahan saat pembayaran.");
+                    },
+                    onClose: () => {
+                        console.log("Payment popup closed");
+                    },
+                });
+            } else {
+                alert("Gagal membuat transaksi.");
+            }
+        } catch (error) {
+            console.error("Error during checkout:", error);
+            alert("Terjadi kesalahan saat proses checkout.");
+        }
+    };
 
     return (
         <>

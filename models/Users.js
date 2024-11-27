@@ -6,7 +6,7 @@ const userSchema = new Schema({
     role: {type: String, required: true},
     profile: {
         name: {type: String, required: true},
-        profpic: {type: String, required: true},
+        profpic: {type: String, required: false},
         email: {type: String, required: true},
         phone: {type: String, required: true},
         address: {type: String, required: true},

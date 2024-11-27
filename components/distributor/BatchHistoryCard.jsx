@@ -28,7 +28,7 @@ const BatchHistoryCard = ({bg,data,notes}) => {
                 >
                     <div className="flex">
                         <div className="me-10">
-                            x{item.products[0].stock?item.products[0].stock:0}
+                            x{item.products[0].qty?item.products[0].qty:0}
                         </div>
                         <div className="">
                             Rp. {item.products[0].price?item.products[0].price:0}
@@ -49,7 +49,7 @@ const BatchHistoryCard = ({bg,data,notes}) => {
                             sx={{ color: 'text.secondary' }}
                             className="lg:ms-32 md:ms-auto"
                         >
-                            Rp. {item.products[0].stock && item.products[0].price? item.products[0].stock*item.products[0].price:0} 
+                            Rp. {item.products[0].qty && item.products[0].price? item.products[0].qty*item.products[0].price:0} 
                         </Typography>
                         <div className={`mt-2 text-end ${item.status&&item.status=="Accepted"?"text-green-500 font-bold text-xl":""} ${item.status&&item.status=="Declined"?"text-red-500 font-bold text-xl":""} ${item.status&&item.status=="Pending"?"text-amber-500 font-bold text-xl":""}`}>
                             {item.status?item.status:"Pending"}

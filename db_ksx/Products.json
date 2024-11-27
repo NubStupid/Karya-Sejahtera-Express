@@ -4,6 +4,7 @@
       "productName": "Laptop Gaming",
       "desc": "Laptop gaming dengan prosesor terbaru dan kartu grafis unggulan.",
       "price": 15000000,
+      "base_price": 1000000,
       "img": "laptop_gaming.jpg",
       "stock": 10,
       "deletedAt": null
@@ -13,6 +14,7 @@
       "productName": "Smartphone Flagship",
       "desc": "Smartphone dengan kamera terbaik dan performa tinggi.",
       "price": 10000000,
+      "base_price": 500000,
       "img": "smartphone_flagship.jpg",
       "stock": 25,
       "deletedAt": null
@@ -22,6 +24,7 @@
       "productName": "Headphone Noise Cancelling",
       "desc": "Headphone dengan fitur noise cancelling aktif.",
       "price": 3000000,
+      "base_price": 2000000,
       "img": "headphone_noise_cancelling.jpg",
       "stock": 50,
       "deletedAt": null
@@ -31,6 +34,7 @@
       "productName": "Smartwatch",
       "desc": "Smartwatch dengan fitur pelacak kesehatan dan tahan air.",
       "price": 5000000,
+      "base_price": 4000000,
       "img": "smartwatch.jpg",
       "stock": 30,
       "deletedAt": null
@@ -40,6 +44,7 @@
       "productName": "Tablet Pro",
       "desc": "Tablet dengan layar besar dan performa yang mendukung produktivitas.",
       "price": 12000000,
+      "base_price": 1000000,
       "img": "tablet_pro.jpg",
       "stock": 15,
       "deletedAt": null
