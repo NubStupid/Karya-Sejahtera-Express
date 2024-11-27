@@ -147,7 +147,7 @@ const Cart = () => {
                             body: JSON.stringify(dataTransaction)
                         })
                         console.log(addTransaction.data);
-                        // window.location.reload();
+                        window.location.reload();
                     },
                     onPending: (response) => {
                         console.log("Payment pending:", response);
