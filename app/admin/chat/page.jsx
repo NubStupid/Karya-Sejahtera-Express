@@ -1,5 +1,4 @@
 "use client"
-import Link from "next/link";
 import Form from 'next/form'
 import Image from 'next/image'
 import BubbleChat from "../../../components/BubbleChat"
@@ -33,41 +32,16 @@ export default function Chat()
     const [ socket, setSocket ] = useState()
     const messagesEndRef = useRef(null);
 
-    // useEffect(() => {
-    //     setRoutes("chat")
-    // }, [])
-
     const fetchData = async () => {
-        console.log(routes);
-        
-        // let users;
-        // users = await fetch('http://localhost:3000/api/general/users')
-        // users = await users.json()
-        // users = users.users
         let chats = await fetch('http://localhost:3000/api/general/chats')
         chats = await chats.json()
         chats = chats.chats
-        // console.log(chats);
-        
-
-        // let usr = []
-        // users.forEach((u) => {
-        //     usr[u.username] = u
-        // })
-        
         let dt = []
         
         
         if(routes == "chat")
         {
-            // console.log(usr);
-            // console.log("chat")
-            // console.log(chats)
             chats.forEach((c) => {
-                // console.log(c.chats.messages.length);
-                
-                // if(c.messages.length > 0)
-                // {
                 let unread = 0;
                 let ctr = c.chats.messages.length - 1;
                 while(ctr >= 0 && c.chats.messages[ctr].read == false && c.chats.messages[ctr].sender == "user")
@@ -75,10 +49,8 @@ export default function Chat()
                     unread++;
                     ctr--;
                 }
-                // console.log({...c, messages: c.chats.messages, unread});
                 
                 dt.push({...c, messages: c.chats.messages, unread})
-                // }
             })
         }
         else if(routes == "contact")
@@ -96,9 +68,6 @@ export default function Chat()
                     return temp.includes(search)
                 })
         }
-        // console.log("isi dt");
-        
-        // console.log(dt);
         
         setData(dt)
     }
@@ -160,10 +129,6 @@ export default function Chat()
         socket.emit('admin_connect', {username: user.username});
 
         socket.on('new_user_message', ({ username, message }) => {
-            console.log("chat masuk dari " + username);
-            console.log("routes " + routes);
-            
-            
             fetchChat(username);
             fetchData();
         });
@@ -219,7 +184,7 @@ export default function Chat()
                 body: JSON.stringify({username: user.username, role: "admin", message: text, delivered})
             });
         }
-        
+        fetchData()
         fetchChat(user.username)
         setText("")
     }
@@ -271,8 +236,6 @@ export default function Chat()
                     <div className="h-screen">
                         {routes == "chat" && data &&
                             data.map((d) => {
-                                // console.log(d);
-                                
                                 let date = new Date(d.messages[d.messages.length-1].timestamp)
                                 let role = "Cust"
                                 if(d.role == "distributor")
