@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
 import connectMongoDB from "../../../../database/connectDB";
 import Products from "../../../../models/Products";
-import fs from 'fs';
-import path from 'path';
 
 export const config = {
     api: {
