@@ -46,10 +46,10 @@ export default function Register() {
                 body: JSON.stringify({
                     username: formData.username,
                     password: formData.password,
-                    role: "user",
+                    role: "customer",
                     profile: {
                         name: formData.name,
-                        profpic: 'user',
+                        profpic: 'customer',
                         email: formData.email,
                         phone: formData.phone,
                         address: formData.address,
