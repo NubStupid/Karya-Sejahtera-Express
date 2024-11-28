@@ -45,8 +45,6 @@ export default function Login() {
 
             const result = await response.json();
             if (response.ok) {
-                alert("Login berhasil!");
-                
                 auth.login({username: result.data.username, role: result.data.role, profpic: result.data.profile.profpic});
                 router.push("/");
             } else {

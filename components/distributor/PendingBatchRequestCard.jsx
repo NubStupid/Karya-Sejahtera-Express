@@ -55,8 +55,8 @@ const PendingBatchRequestCard = ({data,bg,accept,decline,req,update,setNotes,not
                             Rp. {item.products[0].stock && item.products[0].price? item.products[0].stock*item.products[0].price:0} 
                         </Typography>
                         <div className="mt-2">
-                            <Button className={`${item.status == "Accepted"?"bg-green-600":"bg-green-400"} text-black rounded-lg p-2 px-5 mx-2`} disabled={item.status !== "Pending"} onClick={()=>accept(item.products[0].productId,req)}>Accept</Button>
-                            <Button className={`${item.status == "Declined"?"bg-red-600":"bg-red-400"} text-black rounded-lg p-2 px-5 mx-2`} disabled={item.status !== "Pending"} onClick={()=>decline(item.products[0].productId,req)}>Decline</Button>
+                            <Button className={`${item.status == "Accepted"?"bg-green-600":"bg-green-400"} text-black rounded-lg p-2 px-5 mx-2`} disabled={item.status !== "Pending"} onClick={()=>accept(item.products[0].productDId,req)}>Accept</Button>
+                            <Button className={`${item.status == "Declined"?"bg-red-600":"bg-red-400"} text-black rounded-lg p-2 px-5 mx-2`} disabled={item.status !== "Pending"} onClick={()=>decline(item.products[0].productDId,req)}>Decline</Button>
                         </div>
                     </CardContent>
                 </Box>

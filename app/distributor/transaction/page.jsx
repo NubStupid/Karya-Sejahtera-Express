@@ -36,15 +36,19 @@ const page = () => {
     // console.log(request);
     const updatedData = update.filter((d)=>d.rId == request)
     const requestData = data.find((r)=>r.reqId == request)
-    // console.log(JSON.stringify(updatedData));
+    console.log(JSON.stringify(updatedData));
     // console.log(JSON.stringify(requestData.products));
     const filter = requestData.products.reduce((acc,rP)=>{
-      const found = updatedData.find(d=>rP.products[0].productId == d.pId)
+      const found = updatedData.find(d=>rP.products[0].productDId == d.pId)
       if(!found && rP.status == "Pending"){
         acc.push(rP)
+        // console.log(acc);
+        
       }
-      return acc
+      return acc  
     },[]) 
+    // console.log(filter);
+    
     if(filter.length>0){
       console.log("Blm di update semua");
     }else{
@@ -134,7 +138,7 @@ const page = () => {
 
 
   const acceptRequest = (id, request) => {
-    // console.log("accept " + id + " " + request);
+    console.log("accept " + id + " " + request);
     // console.log(JSON.stringify(notes));
     setUpdate(prevUpdate => {
       const found = prevUpdate.find(pr => pr.pId === id);
@@ -151,7 +155,7 @@ const page = () => {
   };
 
   const declineRequest = (id, request) => {
-    // console.log("decline " + id + " " + request);
+    console.log("decline " + id + " " + request);
     setUpdate(prevUpdate => {
       const found = prevUpdate.find(pr => pr.pId === id);
       if (!found) {
@@ -180,8 +184,8 @@ const page = () => {
           const productData = await fetch("http://localhost:3000/api/distributor/transaction/products/?productId=" + p.productId)
           let up = await productData.json()
           up.status = p.status
-          up.stock = p.qty
-          
+          up.products[0].stock = p.qty
+          // up
           if(p.status == "Pending"){
             totalPending++
           }
@@ -195,7 +199,7 @@ const page = () => {
       }))
       const filteredData = formatedData.filter(Boolean)
       setData(filteredData)
-      // console.log(filteredData);
+      console.log(filteredData);
       
     }else{
       throw new Error("Failed to fetch data!")
@@ -219,7 +223,7 @@ const page = () => {
       <div className="grid mt-5 gap-10">
         {data && data.map((item,index)=>{
           if(item.products && item.products.length == 1){
-            return <PendingRequestCard key={index} bg={"bg-blue-ternary"} image={"/dummy/Bobi bobi.png"} productName={item.products[0].products[0].productName} price={item.products[0].products[0].price} qty={item.products[0].products[0].stock} accept={acceptRequest} decline={declineRequest} id={item.products[0].products[0].productId} req={item.reqId} update={updateRequest} setNotes={handleNotes} notes={item.notes}/>
+            return <PendingRequestCard key={index} bg={"bg-blue-ternary"} image={"/dummy/Bobi bobi.png"} productName={item.products[0].products[0].productName} price={item.products[0].products[0].price} qty={item.products[0].products[0].stock} accept={acceptRequest} decline={declineRequest} id={item.products[0].products[0].productDId} req={item.reqId} update={updateRequest} setNotes={handleNotes} notes={item.notes}/>
           }else{
             return <div className="" key={index}>
               {/* {console.log(JSON.stringify(item.products))} */}

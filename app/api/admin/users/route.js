@@ -44,3 +44,36 @@ export async function PUT(req){
         return NextResponse.json({ message: "Error banning user", error: error.message }, { status: 400 });
     }
 }
+
+export async function POST(req){
+    try {
+        const {username} = await req.json()
+        await connectMongoDB()
+        const user = await Users.findOne({username})
+        console.log(user);
+        let updatedUser
+        if(user.role == 'customer'){
+            console.log('customer');
+            updatedUser = await Users.updateOne(
+                {username: username},
+                { $set: {role: 'distributor'}}
+            )
+        }
+        else{
+            console.log('distributor');
+            updatedUser = await Users.updateOne(
+                {username: username},
+                { $set: {role: 'customer'}}
+            )
+        }
+
+        if(!updatedUser){
+            return NextResponse.json({message: 'User not found'}, {status: 404})
+        }
+
+        return NextResponse.json({message: 'User banned successfully'}, {status: 200})
+        
+    } catch (error) {
+        return NextResponse.json({ message: "Error banning user", error: error.message }, { status: 400 });
+    }
+}

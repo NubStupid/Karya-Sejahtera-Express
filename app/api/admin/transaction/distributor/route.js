@@ -1,37 +1,55 @@
 import connectMongoDB from "@/database/connectDB";
-import Products from "@/models/Products";
+import ProductDistributors from "@/models/ProductDistributors";
 import Requests from "@/models/Requests";
 import { NextResponse } from "next/server";
 export async function GET() {
   try {
     await connectMongoDB();
     let distributor = await Requests.find();
-    console.log("===");
     let updatedData = await Promise.all(distributor.map(async (d)=>{
       if(d.products.length == 1){
-        let product = await Products.find({
-          productId:d.products[0].productId
-        })
+        const productId = d.products[0].productId
+        // console.log(productId);
+        let product = await ProductDistributors.find({productDId:productId})
         const updated = 
           [{
+            reqId:d.reqId,
             ...d.products[0],
             productName:product[0].productName,
             desc:product[0].desc,
-            img:product[0].img
+            img:product[0].img,
+            notes:d.notes,
+            
           }]
-        d.products = updated
         return updated
         
       }else{
-        // console.log("b");
+        const updateBatchProduct = Promise.all(d.products.map(async (p)=>{
+          const productId = p.productId
+          let product = await ProductDistributors.find({productDId:productId})          
+          const updated = 
+          {
+            reqId:d.reqId,
+            ...p,
+            productName:product[0].productName,
+            desc:product[0].desc,
+            img:product[0].img,
+            notes:d.notes,
+          }
+          // console.log(updated);
+          
+          return updated
+        }))
+        
+        return updateBatchProduct
         
       }
       
     }))
-    console.log(JSON.stringify(updatedData));
+    console.log(updatedData);
     
     
-    return NextResponse.json(distributor);
+    return NextResponse.json(updatedData);
   } catch (error) {
     console.error('Error fetching products:', error);
     return NextResponse.json({ error: 'Failed to fetch products' }, { status: 500 });

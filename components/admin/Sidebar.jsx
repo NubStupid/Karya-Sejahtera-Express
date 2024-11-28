@@ -22,7 +22,7 @@ export default function Sidebar()
                         <div className="flex">
                             <p>Chat</p>
                             {unread > 0 && 
-                                <p className="bg-orange-primary text-white rounded-full h-6 w-6 text-center text-xs ms-auto my-auto p-1">{unread}</p>
+                                <p className="bg-orange-primary text-white rounded-full h-5 w-5 text-center text-sm ms-auto my-auto">{unread}</p>
                             }
                         </div>
                     </Link>

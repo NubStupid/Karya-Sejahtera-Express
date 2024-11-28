@@ -6,7 +6,7 @@ const userSchema = new Schema({
     role: {type: String, required: true},
     profile: {
         name: {type: String, required: true},
-        profpic: {type: String, required: true},
+        profpic: {type: String, required: false},
         email: {type: String, required: true},
         phone: {type: String, required: true},
         address: {type: String, required: true},
@@ -16,6 +16,18 @@ const userSchema = new Schema({
         qty: {type: Number, required: true}
     }],
     totalPrice: {type: Number, required: true, default: 0},
+    chats: {
+        messages: [
+            {
+                sender: {type: String, required: true},
+                message: {type: String, required: true},
+                timestamp: {type: Date, required: true},
+                read: {type: Boolean, required: true},
+                delivered: {type: Boolean, required: true}
+            }
+        ],
+        updatedAt: {type: Date, default: null}
+    },
     active: {type: Boolean, required: true}
 })
 

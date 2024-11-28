@@ -10,7 +10,7 @@ export default function UnreadChat({username, setUnread})
             let messages;
             messages = await fetch('http://localhost:3000/api/general/chat/?username=' + username)
             messages = await messages.json()
-            messages = messages.chats[0].messages
+            messages = messages.chats.messages
             if(messages.length > 0)
             {
                 let unread = 0;
@@ -27,32 +27,25 @@ export default function UnreadChat({username, setUnread})
         {
             let chats = await fetch('http://localhost:3000/api/general/chats')
             chats = await chats.json()
-            chats = chats.chats
-
+            chats = chats.chats.map((c) => c.chats)
             chats.forEach((c) => {
-                if(c.messages.length > 0)
+                let ctr = c.messages.length - 1;
+                while(ctr >= 0 && c.messages[ctr].read == false && c.messages[ctr].sender == "user")
                 {
-                    let ctr = c.messages.length - 1;
-                    while(ctr >= 0 && c.messages[ctr].read == false && c.messages[ctr].sender == "user")
-                    {
-                        setUnread((u) => u+1);
-                        ctr--;
-                    }
+                    setUnread((u) => u+1);
+                    ctr--;
                 }
             })
         }
     }
 
     useEffect(() => {
-        fetchChat();
-    }, [])
-
-    useEffect(() => {
         let socket = io();
         if(username != "admin")
         {
-            socket.on('connect', () => {
+            socket.on('connect', async () => {
                 console.log(username + ' connected to server');
+                fetchChat()
             });
             
             socket.emit('join_room', (username));
@@ -65,8 +58,9 @@ export default function UnreadChat({username, setUnread})
         {
             socket = io('/admin');
         
-            socket.on('connect', () => {
-            console.log('Admin connected to server');
+            socket.on('connect', async () => {
+                console.log('Admin connected to server');
+                fetchChat()
             });
 
             socket.on('new_user_message', () => {

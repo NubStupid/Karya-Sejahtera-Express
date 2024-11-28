@@ -1,5 +1,4 @@
 "use client"
-import Link from "next/link";
 import Form from 'next/form'
 import Image from 'next/image'
 import BubbleChat from "../../../components/BubbleChat"
@@ -20,6 +19,9 @@ export default function Chat()
             router.push('/');
     }, []);
     
+    const [ status, setStatus ] = useState("connected");
+    
+    const [ action, setAction ] = useState(null);
     const [ routes, setRoutes ] = useState("chat")
     const [ data, setData ] = useState()
     const [ chat, setChat ] = useState()
@@ -30,37 +32,25 @@ export default function Chat()
     const [ socket, setSocket ] = useState()
     const messagesEndRef = useRef(null);
 
-    const fetchData = async (text) => {
-        let users;
-        users = await fetch('http://localhost:3000/api/general/users')
-        users = await users.json()
-        users = users.users
+    const fetchData = async () => {
         let chats = await fetch('http://localhost:3000/api/general/chats')
         chats = await chats.json()
         chats = chats.chats
-
-        let usr = []
-        users.forEach((u) => {
-            usr[u.username] = u
-        })
-        
         let dt = []
+        
         
         if(routes == "chat")
         {
-            console.log(usr);
             chats.forEach((c) => {
-                if(c.messages.length > 0)
+                let unread = 0;
+                let ctr = c.chats.messages.length - 1;
+                while(ctr >= 0 && c.chats.messages[ctr].read == false && c.chats.messages[ctr].sender == "user")
                 {
-                    let unread = 0;
-                    let ctr = c.messages.length - 1;
-                    while(ctr >= 0 && c.messages[ctr].read == false && c.messages[ctr].sender == "user")
-                    {
-                        unread++;
-                        ctr--;
-                    }
-                    dt.push({...usr[c.username], messages: c.messages, unread})
+                    unread++;
+                    ctr--;
                 }
+                
+                dt.push({...c, messages: c.chats.messages, unread})
             })
         }
         else if(routes == "contact")
@@ -78,6 +68,7 @@ export default function Chat()
                     return temp.includes(search)
                 })
         }
+        
         setData(dt)
     }
 
@@ -100,10 +91,12 @@ export default function Chat()
             body: JSON.stringify({username, role}),
         });
 
-        res = await fetch('http://localhost:3000/api/general/chat/?username=' + username)
-        res = await res.json()
-
-        setChat(res.chats[0])
+        if(user.username)
+        {
+            res = await fetch('http://localhost:3000/api/general/chat/?username=' + user.username)
+            res = await res.json()
+            setChat(res.chats)
+        }
     }
 
     useEffect(() => {
@@ -122,9 +115,12 @@ export default function Chat()
     useEffect(() => {
         let socket = io('/admin');
         
-        socket.on('connect', () => {
-          console.log('Admin connected to server');
-        });
+        // if(status == "connected")
+        // {
+            socket.on('connect', () => {
+              console.log('Admin connected to server');
+            });
+        // }
 
         socket.on('new_user_connected', ({username}) => {
             fetchChat(username, "admin");
@@ -138,40 +134,91 @@ export default function Chat()
         });
 
         setSocket(socket)
+        // if(status == "disconnected")
+            // socket.disconnect();
     
         return () => {
           socket.disconnect();
         };
-      }, [user]);
+      }, [user, status]);
 
     const addChat = async () => {
-        socket.emit('admin_message', { username: user.username, message: text });
-        await fetch('http://localhost:3000/api/general/chat', {
-            method: 'PUT',
-            headers: {
-            'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({username: user.username, role: "admin", message: text}),
-        });
-        fetchChat(user.username)
+        let delivered = true;
+        if(socket.disconnected)
+        {
+            console.log("chat tidak terkirim");
+            delivered = false;
+        }
+        else
+            socket.emit('admin_message', { username: user.username, message: text });
+        // console.log(action);
+        
+        if(action)
+        {
+            await fetch('http://localhost:3000/api/general/chat', {
+                method: 'DELETE',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({username: user.username, id: action.id})
+            });
+        }
+        if(action && action.act == "retry")
+        {
+            await fetch('http://localhost:3000/api/general/chat', {
+                method: 'PUT',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({username: user.username, role: "admin", message: action.message, delivered})
+            });
+
+        }
+        else if(!action)
+        {
+            await fetch('http://localhost:3000/api/general/chat', {
+                method: 'PUT',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({username: user.username, role: "admin", message: text, delivered})
+            });
+        }
         fetchData()
+        fetchChat(user.username)
         setText("")
     }
+
+    useEffect(() => {
+        addChat();
+        setAction(null);
+    }, [action])
+
+    // const changeStatus = () => {
+    //     if(status == "connected")
+    //         setStatus("disconnected")
+    //     else
+    //         setStatus("connected")
+    // }
+
+    // console.log("data");
+    // console.log(data);
+    
 
     return (
         <>
             <div className="relative">
                 <div className="w-80 border-r-2 fixed">
                     <div className="flex p-2 px-4">
-                        <Link href="/admin">
+                        <div className="my-auto" onClick={() => router.back()}>
                             <ArrowBackIosNew className="h-full me-4" />
-                        </Link>
+                        </div>
                         <Image
                             src="/logo/KSXpress.png"
                             width={120}
                             height={120}
                             alt="Picture of the author"
-                            />
+                        />
                     </div>
                     <div className="flex text-center">
                         <div className={`w-full pb-2 ${routes == "chat" && "border-b-2 border-black"}`} onClick={() => {
@@ -260,6 +307,7 @@ export default function Chat()
                             </div>
                         </div>
                         <div className="mt-10 p-14 py-20 overflow-auto">
+                            {/* <button className='bg-blue-secondary' onClick={changeStatus}>{status}</button> */}
                             {chat && chat.messages.map((c, idx) => {
                                     let profpic = c.sender == "admin" ? null : user.profpic;
                                     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
@@ -286,7 +334,7 @@ export default function Chat()
                                             {changeDate == true &&
                                                 <p className="bg-gray-200 w-fit mx-auto p-1 px-3 rounded-full text-sm">{date2.getDate()} {months[date2.getMonth()]} {date2.getFullYear()}</p> 
                                             }
-                                            <BubbleChat key={idx} profpic={profpic} sender={c.sender == "admin" ? "user" : "admin"} message={c.message} read={c.read} time={c.timestamp} />
+                                            <BubbleChat key={idx} profpic={profpic} id={c._id} sender={c.sender == "admin" ? "user" : "admin"} message={c.message} read={c.read} time={c.timestamp} delivered={c.delivered} setAction={setAction} />
                                         </>
                                     )
                                 })}

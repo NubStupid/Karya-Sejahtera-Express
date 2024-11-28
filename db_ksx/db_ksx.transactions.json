@@ -1,0 +1,156 @@
+[{
+  "_id": {
+    "$oid": "67469e8d43ac217b8a38083c"
+  },
+  "transId": "TR271120248763",
+  "username": "michael_scott",
+  "products": [
+    {
+      "productId": "PR001",
+      "qty": 1,
+      "price": 15000000,
+      "basePrice": 1000000,
+      "subtotal": 15000000,
+      "_id": {
+        "$oid": "67469e8d43ac217b8a38083d"
+      }
+    }
+  ],
+  "grandTotal": 15000000,
+  "payment": "bank_transfer",
+  "status": "Success",
+  "createdAt": {
+    "$date": "2024-11-27T04:22:37.459Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67469f7d43ac217b8a380859"
+  },
+  "transId": "TR271120244312",
+  "username": "michael_scott",
+  "products": [
+    {
+      "productId": "PR001",
+      "qty": 1,
+      "price": 15000000,
+      "basePrice": 1000000,
+      "subtotal": 15000000,
+      "_id": {
+        "$oid": "67469f7d43ac217b8a38085a"
+      }
+    }
+  ],
+  "grandTotal": 15000000,
+  "payment": "bank_transfer",
+  "status": "Success",
+  "createdAt": {
+    "$date": "2024-11-27T04:26:37.856Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67469fb943ac217b8a38085e"
+  },
+  "transId": "TR271120246314",
+  "username": "michael_scott",
+  "products": [
+    {
+      "productId": "PR001",
+      "qty": 1,
+      "price": 15000000,
+      "basePrice": 1000000,
+      "subtotal": 15000000,
+      "_id": {
+        "$oid": "67469fb943ac217b8a38085f"
+      }
+    }
+  ],
+  "grandTotal": 15000000,
+  "payment": "bank_transfer",
+  "status": "Success",
+  "createdAt": {
+    "$date": "2024-11-27T04:27:37.896Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6746a05443ac217b8a380884"
+  },
+  "transId": "TR271120241716",
+  "username": "michael_scott",
+  "products": [
+    {
+      "productId": "PR001",
+      "qty": 1,
+      "price": 15000000,
+      "basePrice": 1000000,
+      "subtotal": 15000000,
+      "_id": {
+        "$oid": "6746a05443ac217b8a380885"
+      }
+    }
+  ],
+  "grandTotal": 15000000,
+  "payment": "bank_transfer",
+  "status": "Success",
+  "createdAt": {
+    "$date": "2024-11-27T04:30:12.960Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6746a0e743ac217b8a3808b3"
+  },
+  "transId": "TR271120243465",
+  "username": "michael_scott",
+  "products": [
+    {
+      "productId": "PR001",
+      "qty": 1,
+      "price": 15000000,
+      "basePrice": 1000000,
+      "subtotal": 15000000,
+      "_id": {
+        "$oid": "6746a0e743ac217b8a3808b4"
+      }
+    }
+  ],
+  "grandTotal": 15000000,
+  "payment": "bank_transfer",
+  "status": "Success",
+  "createdAt": {
+    "$date": "2024-11-27T04:32:39.068Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6746a20f51b137fd9c38e40d"
+  },
+  "transId": "TR271120249605",
+  "username": "michael_scott",
+  "products": [
+    {
+      "productId": "PR001",
+      "qty": 1,
+      "price": 15000000,
+      "basePrice": 1000000,
+      "subtotal": 15000000,
+      "_id": {
+        "$oid": "6746a20f51b137fd9c38e40e"
+      }
+    }
+  ],
+  "grandTotal": 15000000,
+  "payment": "bank_transfer",
+  "status": "Success",
+  "createdAt": {
+    "$date": "2024-11-27T04:37:35.557Z"
+  },
+  "__v": 0
+}]

@@ -56,7 +56,34 @@ export default function Users() {
         } catch (error) {
             console.log('Error: ', error);
         }
-        
+    }
+
+    const handleUpdate = async (username) => {
+        try {
+            console.log('Username: ', username);
+            const resp = await fetch(
+                'http://localhost:3000/api/admin/users',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({username: username})
+                }
+            )
+
+            if (!resp.ok){
+                const errorData = await resp.json()
+                alert('Error updating user: ', errorData.error)
+                return
+            }
+
+            const data = await resp.json()
+            console.log('User updated successfully: ', data);
+            window.location.reload()
+        } catch (error) {
+            console.log('Error: ', error);
+        }
     }
     return (
         <div>
@@ -136,6 +163,35 @@ export default function Users() {
                             <Typography sx={{ fontSize: "24px", marginBottom: '10px'  }}>
                                 <strong>Status:</strong> {selectedUser.active ? 'Active' : 'Banned'}
                             </Typography>
+                            {
+                                selectedUser.role == 'customer' ? (
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        sx={{ marginTop: 2, marginLeft: 0, marginRight: 1, width: '20%'}}
+                                        onClick={() =>
+                                            handleUpdate(selectedUser.username)
+                                        }
+                                    >
+                                        Make Distributor
+                                    </Button>
+                                ) : 
+                                selectedUser.role == 'distributor' ? (
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        sx={{ marginTop: 2, marginLeft: 0, marginRight: 1, width: '20%'}}
+                                        onClick={() =>
+                                            handleUpdate(selectedUser.username)
+                                        }
+                                    >
+                                        Make Customer
+                                    </Button>
+                                ) :
+                                (
+                                    <div></div>
+                                )
+                            }
                             {
                                 selectedUser.active ? (
                                     <Button

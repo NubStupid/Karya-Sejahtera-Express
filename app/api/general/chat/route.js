@@ -1,42 +1,32 @@
 import connectMongoDB from "@/database/connectDB";
-import Chats from "@/models/Chats";
-// import ProductDistributors from "@/models/ProductDistributors";
+import Users from "@/models/Users";
 import { NextResponse } from "next/server";
 
 export async function PUT(request) {
-    // console.log("masuk add data");
-    
-    // console.log(request);
-    // console.log(await request.json());
-    
-    let { username, role, message } = await request.json() 
-
-    // console.log(username + " " + role);
-    // console.log(addMsg);
-    
-    await connectMongoDB();
+    let { username, role, message, delivered } = await request.json() 
     try
     {
-        // console.log("action " + addMsg);
-        
+        await connectMongoDB();
         if(message)
         {
             role == "admin" ? role = "admin" : role = "user"
             let now = new Date();
-            await Chats.findOneAndUpdate(
+            await Users.findOneAndUpdate(
                 { username },
-                { $push: { messages: {sender: role, message, timestamp: now, read: false} } },
+                { $push: { "chats.messages": {sender: role, message, timestamp: now, read: false, delivered} } },
                 { new: true, upsert: true }
             );
-            await Chats.findOneAndUpdate({ username }, { updatedAt: now });
-            return NextResponse.json({message: "Chat berhasil dikirim"});
+            await Users.findOneAndUpdate({ username }, { "chats.updatedAt": now });
+            if(delivered == true)
+                return NextResponse.json({message: "Chat berhasil dikirim"});
+            else
+                return NextResponse.json({message: "Chat gagal dikirim"});
         }
-        await Chats.updateOne(
+        await Users.updateOne(
             { username },
-            { $set: { "messages.$[elem].read": true } }, // Menggunakan `$` untuk menargetkan elemen yang cocok
-            { arrayFilters: [{ "elem.read": false, "elem.sender": role }] }
+            { $set: { "chats.messages.$[elem].read": true } },
+            { arrayFilters: [{ "elem.read": false, "elem.sender": role, "elem.delivered": true }] }
         );
-        // role == "admin" ? role = "admin" : role = "user"
         return NextResponse.json({message: "Chat dibaca"});
     }
     catch(err)
@@ -48,21 +38,38 @@ export async function PUT(request) {
 
 export async function GET(request) {
     const username = await request.nextUrl.searchParams.get('username')
-    await connectMongoDB();
-    let chats = await Chats.find({username});
-    return NextResponse.json({chats});
+    try
+    {
+        await connectMongoDB();
+        let chats = await Users.findOne({username}).sort({ "chats.messages.delivered": -1 });
+        chats = chats.chats
+        
+        chats.messages.sort((a, b) => b.delivered - a.delivered)
+        return NextResponse.json({chats});
+    }
+    catch(err)
+    {
+        console.log(err);
+        return NextResponse.json(err);
+    }
+    
 }
 
-// export async function PUT(request) {
-//     const {id, productName, desc, price, img} = await request.json() 
-//     await connectMongoDB();
-//     await ProductDistributors.updateOne({productDId: id}, {productName, desc, price, img});
-//     return NextResponse.json({message: "Produk berhasil diupdate"});
-// }
+export async function DELETE(request) {
+    const {username, id} = await request.json();
+    try
+    {
+        await connectMongoDB();
+        const chat = await Users.findOne({username});
+        let idx = chat.chats.messages.findIndex((c) => c._id == id);
+        chat.chats.messages.splice(idx, 1);
+        await chat.save();
 
-// export async function DELETE(request) {
-//     const {id} = await request.json() ;
-//     await connectMongoDB();
-//     await ProductDistributors.updateOne({productDId: id}, {deletedAt: new Date()})
-//     return NextResponse.json({message: "Produk berhasil dihapus"});
-// }
+        return NextResponse.json({message: "Pesan berhasil dihapus"});
+    }
+    catch(err)
+    {
+        console.log(err);
+        return NextResponse.json(err);
+    }
+}

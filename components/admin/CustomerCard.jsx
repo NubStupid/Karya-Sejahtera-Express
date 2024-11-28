@@ -11,7 +11,7 @@ const CustomerCard = ({transactions}) => {
         <div className="col-span-2">
           <div className="grid grid-rows-3 grid-flow-cols">
             <div className="text-end text-xs text-orange-400 font-semibold ">{transactions.createdAt.substring(0,10)+"   "+transactions.createdAt.substring(11,19)}</div>
-            <div className="text-end text-sm font-semibold">View Details {">"}</div>
+            <div className="text-end text-sm font-semibold"></div>
             <div className="text-end text-xs text-green-600 font-semibold">Total: Rp. {transactions.grandTotal}</div>
           </div>
         </div>

@@ -2,6 +2,13 @@ import { NextResponse } from "next/server";
 import connectMongoDB from "../../../../database/connectDB";
 import Products from "../../../../models/Products";
 
+export const config = {
+    api: {
+      bodyParser: false, // Matikan bodyParser bawaan untuk menangani FormData
+    },
+  };
+  
+
 export async function GET(req){
     try {
         await connectMongoDB()
@@ -18,7 +25,7 @@ export async function POST(req) {
         const data = await req.json();
         console.log("Data received:", data);
         const { productName, desc, price, img, stock } = data
-        if (!productName || !desc || !price || !img || !stock) {
+        if (!productName || !desc || !price || !stock) {
             return new Response(JSON.stringify({ error: "All fields are required" }), {
                 status: 400,
             });
@@ -71,7 +78,7 @@ export async function DELETE(req) {
 
 export async function PUT(req) {
     try {
-        const { productId, productName, price, stock, desc } = await req.json();
+        const { productId, productName, price, stock, desc, img } = await req.json();
         await connectMongoDB();
         const updatedProduct = await Products.updateOne(
             {productId},
@@ -80,7 +87,8 @@ export async function PUT(req) {
                     productName: productName,
                     price: price,
                     stock: stock,
-                    desc: desc
+                    desc: desc,
+                    img: img
                 } 
             }
         );
