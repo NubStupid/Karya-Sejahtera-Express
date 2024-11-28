@@ -4,9 +4,11 @@ import FileUploadIcon from '@mui/icons-material/FileUpload';
 import Form from 'next/form'
 import Image from 'next/image';
 import { useEffect, useState } from "react";
+import useAuth from "@/stores/store";
 
 export default function Products()
 {
+    const auth = useAuth();
     const [products, setProducts] = useState([]);
     const [id, setId] = useState(0);
     const [detail, setDetail] = useState();
@@ -67,7 +69,7 @@ export default function Products()
         }
         else
         {
-            let pid, username = "john_doe"
+            let pid, username = auth.user.username
             pid = await fetch('http://localhost:3000/api/distributor', {
                 method: 'POST',
                 headers: {
@@ -163,6 +165,7 @@ export default function Products()
                                     name="price"
                                     variant="filled"
                                     className="bg-white mt-5"
+                                    type="number"
                                     defaultValue={detail && detail.price}
                                 />
                                 <TextField
@@ -180,8 +183,7 @@ export default function Products()
                                         name="img"
                                         style={{ display: 'none' }}
                                         id="upload-button"
-                                        onChange={handleFileChange}
-                                        required />
+                                        onChange={handleFileChange} />
                                     <label htmlFor="upload-button" className="me-4">
                                         <Button variant="contained" component="span" className="bg-orange-primary">
                                             <FileUploadIcon /> Upload Image
@@ -200,9 +202,12 @@ export default function Products()
                                 </div>
                             </Stack>
                             <div className="fixed bottom-24 right-20">
-                                <Button variant="contained" className="bg-green-success" type="submit" onClick={() => {
+                                <Button variant="contained" className="bg-green-success" type="submit" onClick={(e) => {
                                     if(!image)
+                                    {
                                         alert("Gambar produk belum diupload!");
+                                        e.preventDefault();
+                                    }
                                 }}>Save</Button>
                                 <Button variant="contained" sx={{ml: 1}} className="ms-3 bg-red-danger" onClick={() => setEdit(0)}>Cancel</Button>
                             </div>

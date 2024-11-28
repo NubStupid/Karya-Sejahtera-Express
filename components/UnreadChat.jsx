@@ -10,7 +10,7 @@ export default function UnreadChat({username, setUnread})
             let messages;
             messages = await fetch('http://localhost:3000/api/general/chat/?username=' + username)
             messages = await messages.json()
-            messages = messages.chats[0].messages
+            messages = messages.chats.messages
             if(messages.length > 0)
             {
                 let unread = 0;
