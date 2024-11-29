@@ -13,15 +13,30 @@ const useAuth = create((set) => ({
         }
         return null;
     })(),
-    login: (user) => {
+    login: (userData) => {
         if (typeof window !== "undefined") {
-            localStorage.setItem("user", JSON.stringify(user));
+            const { username, role, profpic } = userData;
+            console.log(profpic);
+            
+            const smallUserData = { username, role, profpic };
+
+            try {
+                localStorage.setItem("user", JSON.stringify(smallUserData));
+                set({ user: smallUserData });
+            } catch (error) {
+                console.error("Error saving to localStorage:", error);
+            }
         }
-        set({ user });
     },
     logout: () => {
         if (typeof window !== "undefined") {
-            localStorage.removeItem("user");
+            console.log(localStorage.getItem("user"));
+            
+            localStorage.clear();
+            sessionStorage.removeItem("user");
+            console.log("hapus user");
+            
+            console.log(localStorage.getItem("user"));
         }
         set({ user: null });
     },

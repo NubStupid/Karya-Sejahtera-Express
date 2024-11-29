@@ -1,23 +1,67 @@
 import connectMongoDB from "@/database/connectDB";
 import Users from "@/models/Users";
-import { NextResponse } from "next/server";
+import bcrypt from "bcrypt";
 
-export async function POST(request) {
+export async function POST(req) {
+    await connectMongoDB();
+
     try {
-        await connectMongoDB();
-        const data = await request.json();
+        const { username, password } = await req.json();
 
-        let username = data.username
-        let password = data.password
+        console.log("Login attempt:", { username, password });
 
-        const user = await Users.findOne({ username, password });
+        const user = await Users.findOne({ username });
 
         if (!user) {
-            return NextResponse.json({ success: false, message: 'Invalid username or password' });
+            return new Response(
+                JSON.stringify({ message: "Username atau password salah." }),
+                {
+                    status: 401,
+                    headers: { "Content-Type": "application/json" },
+                }
+            );
         }
 
-        return NextResponse.json({ success: true, message: 'Login successful', data: user });
+        const validPassword = await bcrypt.compare(password, user.password);
+
+        if (!validPassword) {
+            return new Response(
+                JSON.stringify({ message: "Username atau password salah." }),
+                {
+                    status: 401,
+                    headers: { "Content-Type": "application/json" },
+                }
+            );
+        }
+
+        // Logging user data for debugging
+        console.log("User authenticated:", { username: user.username, role: user.role });
+
+        return new Response(
+            JSON.stringify({
+                data: {
+                    username: user.username,
+                    role: user.role,
+                    profile: {
+                        profpic: user.profile.profpic,
+                    },
+                },
+                message: "Login berhasil.",
+            }),
+            {
+                status: 200,
+                headers: { "Content-Type": "application/json" },
+            }
+        );
     } catch (error) {
-        return NextResponse.json({ success: false, message: error.message });
+        console.error("Error during login:", error);
+
+        return new Response(
+            JSON.stringify({ message: "Login gagal. Silakan coba lagi." }),
+            {
+                status: 500,
+                headers: { "Content-Type": "application/json" },
+            }
+        );
     }
 }
