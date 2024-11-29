@@ -1,4 +1,5 @@
-'use client'
+'use client';
+
 import React, { useState } from "react";
 import {
     TextField,
@@ -34,7 +35,7 @@ export default function Login() {
         e.preventDefault();
 
         try {
-            const response = await fetch("http://localhost:3000/api/login", {
+            const response = await fetch("/api/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -45,7 +46,12 @@ export default function Login() {
 
             const result = await response.json();
             if (response.ok) {
-                auth.login({username: result.data.username, role: result.data.role, profpic: result.data.profile.profpic});
+                auth.login({
+                    username: result.data.username,
+                    role: result.data.role,
+                    profpic: result.data.profile.profpic
+                });
+                
                 router.push("/");
             } else {
                 alert(`Error: ${result.message}`);

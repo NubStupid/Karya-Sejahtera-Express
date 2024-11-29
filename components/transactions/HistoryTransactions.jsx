@@ -6,7 +6,6 @@ import formatRupiah from "@/tools/formatRupiah";
 const HistoryTransactions = ({ transactions }) => {
     return (
         <>
-            <Navbar />
             <Box sx={{ padding: 3 }}>
                 <Typography variant="h5" sx={{ fontWeight: "bold", mb: 3 }}>History Transaction</Typography>
                 {transactions.map((transaction) => (

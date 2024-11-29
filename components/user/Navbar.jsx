@@ -31,7 +31,8 @@ export default function Navbar() {
 
         fetchUserData();
     }, [auth.user]);
-
+    console.log(auth.user);
+    
     const handleAvatarClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -70,6 +71,15 @@ export default function Navbar() {
         { label: "Catalog", route: "/catalog" },
         { label: "History", route: "user/history" },
     ];
+
+    // Menambahkan button khusus untuk Distributor dan Admin
+    if (auth.user) {
+        if (auth.user.role === 'distributor') {
+            menuItems.push({ label: "Distributor Page", route: "/distributor" });
+        } else if (auth.user.role === 'admin') {
+            menuItems.push({ label: "Admin Page", route: "/admin" });
+        }
+    }
 
     return (
         <>
