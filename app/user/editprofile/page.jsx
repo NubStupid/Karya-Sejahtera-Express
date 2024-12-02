@@ -69,10 +69,10 @@ const EditProfile = () => {
                 },
                 body: JSON.stringify(userData),
             });
-    
+
             const result = await response.json();
             console.log("Result from server:", result);
-    
+
             if (response.ok) {
                 alert("Profile updated successfully!");
                 auth.login({
@@ -84,7 +84,7 @@ const EditProfile = () => {
             } else {
                 const serverErrors = result.errors || {};
                 setErrors(serverErrors);
-    
+
                 if (serverErrors.email) {
                     setUserData(prevData => ({ ...prevData, email: "" }));
                 }
@@ -104,11 +104,18 @@ const EditProfile = () => {
             alert("Update failed. Please try again.");
         }
     };
-    
 
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
+            if (!file.type.startsWith("image/")) {
+                alert("Please upload an image file.");
+                return;
+            }
+            if (file.size > 3145728) { // 3MB in bytes
+                alert("File size should not exceed 3MB.");
+                return;
+            }
             const reader = new FileReader();
             reader.onloadend = () => {
                 setImage(reader.result);
