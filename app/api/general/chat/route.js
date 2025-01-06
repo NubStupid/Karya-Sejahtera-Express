@@ -78,7 +78,13 @@ export async function GET(request) {
         chats = chats.chats
         
         chats.messages.sort((a, b) => b.delivered - a.delivered)
-        return NextResponse.json({chats});
+        // return NextResponse.json({chats});
+        return new Response(JSON.stringify({ chats }), {
+            status: 200,
+            headers: {
+              'Access-Control-Allow-Origin': 'https://karyasejahteraexpress.my.id',
+            },
+        });
     }
     catch(err)
     {
