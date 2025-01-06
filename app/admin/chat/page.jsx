@@ -33,7 +33,7 @@ export default function Chat()
     const messagesEndRef = useRef(null);
 
     const fetchData = async () => {
-        let chats = await fetch('https://karyasejahteraexpress.my.id/api/general/chats')
+        let chats = await fetch('/api/general/chats')
         chats = await chats.json()
         chats = chats.chats
         let dt = []
@@ -55,7 +55,7 @@ export default function Chat()
         }
         else if(routes == "contact")
         {
-            dt = await fetch('https://karyasejahteraexpress.my.id/api/general/users')
+            dt = await fetch('/api/general/users')
             dt = await dt.json()
             dt = dt.users
         }
@@ -252,7 +252,7 @@ export default function Chat()
                                             />
                                             <div>
                                                 <p className="my-auto">{`${role} - ${d.username}`}</p>
-                                                <p className="truncate">{d.messages[d.messages.length-1].message}</p>
+                                                <p className="truncate w-48">{d.messages[d.messages.length-1].message}</p>
                                             </div>
                                             <div className="text-right ms-auto">
                                                 <p className="text-gray-500 text-xs mb-3">{`${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`}</p>
