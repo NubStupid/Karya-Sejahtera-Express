@@ -2,6 +2,17 @@ import connectMongoDB from "@/database/connectDB";
 import Users from "@/models/Users";
 import { NextResponse } from "next/server";
 
+export async function OPTIONS(request) {
+    return new Response(null, {
+        status: 204,
+        headers: {
+            'Access-Control-Allow-Origin': 'https://karyasejahteraexpress.my.id',
+            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        },
+    });
+}
+
 export async function PUT(request) {
     let { username, role, message, delivered } = await request.json() 
     try
