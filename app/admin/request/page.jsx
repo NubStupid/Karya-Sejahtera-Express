@@ -77,7 +77,7 @@ const makeRequest = () => {
           const dateCreated = new Date()
           const dateString = dateCreated.toISOString().split(".")[0]+"Z"
           console.log(dateString);
-          const maxIDJSON = await fetch("http://localhost:3000/api/admin/request/make")
+          const maxIDJSON = await fetch("/api/admin/request/make")
           // console.log(await maxID.json());
           const maxID = await maxIDJSON.json()
           console.log(maxID.toString().substring(2));
@@ -94,7 +94,7 @@ const makeRequest = () => {
             notes:""
           }
           console.log(newRequest);
-          const response = await fetch("http://localhost:3000/api/admin/request/make",{
+          const response = await fetch("/api/admin/request/make",{
             method:"POST",
             headers:{
               "Content-Type":"application/json"
@@ -114,7 +114,7 @@ const makeRequest = () => {
 }
 
   const fetchData = async () => {
-    const response = await fetch("http://localhost:3000/api/admin/request")
+    const response = await fetch("/api/admin/request")
     const data = await response.json()
     setDistributor(data)
     console.log(JSON.stringify(data));
