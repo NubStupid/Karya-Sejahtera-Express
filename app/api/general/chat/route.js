@@ -29,16 +29,38 @@ export async function PUT(request) {
             );
             await Users.findOneAndUpdate({ username }, { "chats.updatedAt": now });
             if(delivered == true)
-                return NextResponse.json({message: "Chat berhasil dikirim"});
+            {
+                return new Response(JSON.stringify({ message: 'Chat berhasil dikirim' }), {
+                    status: 200,
+                    headers: {
+                      'Access-Control-Allow-Origin': 'https://karyasejahteraexpress.my.id',
+                    },
+                });
+                  // return NextResponse.json({message: "Chat berhasil dikirim"});
+            }
             else
-                return NextResponse.json({message: "Chat gagal dikirim"});
+            {
+                return new Response(JSON.stringify({ message: 'Chat gagal dikirim' }), {
+                    status: 200,
+                    headers: {
+                      'Access-Control-Allow-Origin': 'https://karyasejahteraexpress.my.id',
+                    },
+                });
+                // return NextResponse.json({message: "Chat gagal dikirim"});
+            }
         }
         await Users.updateOne(
             { username },
             { $set: { "chats.messages.$[elem].read": true } },
             { arrayFilters: [{ "elem.read": false, "elem.sender": role, "elem.delivered": true }] }
         );
-        return NextResponse.json({message: "Chat dibaca"});
+        return new Response(JSON.stringify({ message: 'Chat dibaca' }), {
+            status: 200,
+            headers: {
+              'Access-Control-Allow-Origin': 'https://karyasejahteraexpress.my.id',
+            },
+        });
+        // return NextResponse.json({message: "Chat dibaca"});
     }
     catch(err)
     {
