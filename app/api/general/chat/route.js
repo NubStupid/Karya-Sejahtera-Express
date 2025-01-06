@@ -33,7 +33,9 @@ export async function PUT(request) {
                 return new Response(JSON.stringify({ message: 'Chat berhasil dikirim' }), {
                     status: 200,
                     headers: {
-                      'Access-Control-Allow-Origin': 'https://karyasejahteraexpress.my.id',
+                        'Access-Control-Allow-Origin': 'https://karyasejahteraexpress.my.id',
+                        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+                        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
                     },
                 });
                   // return NextResponse.json({message: "Chat berhasil dikirim"});
@@ -43,7 +45,9 @@ export async function PUT(request) {
                 return new Response(JSON.stringify({ message: 'Chat gagal dikirim' }), {
                     status: 200,
                     headers: {
-                      'Access-Control-Allow-Origin': 'https://karyasejahteraexpress.my.id',
+                        'Access-Control-Allow-Origin': 'https://karyasejahteraexpress.my.id',
+                        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+                        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
                     },
                 });
                 // return NextResponse.json({message: "Chat gagal dikirim"});
@@ -57,7 +61,9 @@ export async function PUT(request) {
         return new Response(JSON.stringify({ message: 'Chat dibaca' }), {
             status: 200,
             headers: {
-              'Access-Control-Allow-Origin': 'https://karyasejahteraexpress.my.id',
+                'Access-Control-Allow-Origin': 'https://karyasejahteraexpress.my.id',
+                'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
             },
         });
         // return NextResponse.json({message: "Chat dibaca"});
@@ -82,7 +88,9 @@ export async function GET(request) {
         return new Response(JSON.stringify({ chats }), {
             status: 200,
             headers: {
-              'Access-Control-Allow-Origin': 'https://karyasejahteraexpress.my.id',
+                'Access-Control-Allow-Origin': 'https://karyasejahteraexpress.my.id',
+                'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
             },
         });
     }
