@@ -10,13 +10,13 @@ const page = () => {
   const [data,setData] = useState()
   const auth = useAuth();
   const fetchRequest = async () =>{
-    const response = await fetch("http://localhost:3000/api/distributor/transaction/?username="+auth.user.username)
+    const response = await fetch("/api/distributor/transaction/?username="+auth.user.username)
     if(response.ok){
       const data = await response.json()
       const formatedData = await Promise.all(data.products.map(async (item)=>{
         console.log(JSON.stringify(item));
         const updatedProducts = await Promise.all(item.products.map(async (p,index)=>{
-          const productData = await fetch("http://localhost:3000/api/distributor/transaction/products/?productId=" + p.productId)
+          const productData = await fetch("/api/distributor/transaction/products/?productId=" + p.productId)
           let up = await productData.json()
           console.log(up);
           up.status = p.status

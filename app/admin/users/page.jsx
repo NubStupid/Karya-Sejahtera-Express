@@ -18,7 +18,7 @@ export default function Users() {
         const fetchData = async () => {
             try {
                 const resp = await fetch(
-                    "http://localhost:3000/api/admin/users"
+                    "/api/admin/users"
                 );
                 const data = await resp.json();
                 setUsers(data);

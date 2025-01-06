@@ -19,13 +19,13 @@ export default function Products()
         let res;
         if(id)
         {
-            res = await fetch('http://localhost:3000/api/distributor/?id=' + id)
+            res = await fetch('/api/distributor/?id=' + id)
             res = await res.json()
             setDetail(res.products[0])
         }
         else
         {            
-            res = await fetch('http://localhost:3000/api/distributor')
+            res = await fetch('/api/distributor')
             res = await res.json()
             setProducts(res.products)
         }
@@ -56,7 +56,7 @@ export default function Products()
         const productName = data.get("productName"), desc = data.get("desc"), price = data.get("price"), img = image;
         if(id)
         {
-            await fetch('http://localhost:3000/api/distributor', {
+            await fetch('/api/distributor', {
                 method: 'PUT',
                 headers: {
                   'Content-Type': 'application/json',
@@ -70,7 +70,7 @@ export default function Products()
         else
         {
             let pid, username = auth.user.username
-            pid = await fetch('http://localhost:3000/api/distributor', {
+            pid = await fetch('/api/distributor', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ export default function Products()
     }
 
     const deleteData = async () => {
-        await fetch('http://localhost:3000/api/distributor', {
+        await fetch('/api/distributor', {
             method: 'DELETE',
             headers: {
               'Content-Type': 'application/json',

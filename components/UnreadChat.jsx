@@ -8,7 +8,7 @@ export default function UnreadChat({username, setUnread})
         if(username != "admin")
         {
             let messages;
-            messages = await fetch('http://localhost:3000/api/general/chat/?username=' + username)
+            messages = await fetch('/api/general/chat/?username=' + username)
             messages = await messages.json()
             messages = messages.chats.messages
             if(messages.length > 0)
@@ -25,7 +25,7 @@ export default function UnreadChat({username, setUnread})
         }
         else
         {
-            let chats = await fetch('http://localhost:3000/api/general/chats')
+            let chats = await fetch('/api/general/chats')
             chats = await chats.json()
             chats = chats.chats.map((c) => c.chats)
             chats.forEach((c) => {

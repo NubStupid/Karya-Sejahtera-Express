@@ -18,7 +18,7 @@ export default function Products() {
         const fetchData = async () => {
             try {
                 const resp = await fetch(
-                    "http://localhost:3000/api/admin/products"
+                    "/api/admin/products"
                 );
                 const data = await resp.json();
                 setProducts(data);
@@ -74,7 +74,7 @@ export default function Products() {
 
         try {
             const resp = await fetch(
-                "http://localhost:3000/api/admin/products",
+                "/api/admin/products",
                 {
                     method: "POST",
                     headers: {
@@ -104,7 +104,7 @@ export default function Products() {
         try {
             console.log("Product ID: ", productId);
             const resp = await fetch(
-                "http://localhost:3000/api/admin/products",
+                "/api/admin/products",
                 {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
@@ -134,7 +134,7 @@ export default function Products() {
         try {
             console.log("Product ID: ", productId);
             const resp = await fetch(
-                "http://localhost:3000/api/admin/products",
+                "/api/admin/products",
                 {
                     method: "DELETE",
                     headers: {
