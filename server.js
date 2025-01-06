@@ -1,13 +1,10 @@
 const { createServer } = require('http');
 const { Server } = require('socket.io');
 const next = require('next');
-const cors = require("cors");
 
 const dev = true;
 const app = next({ dev });
 const handle = app.getRequestHandler();
-
-app.use(cors());
 
 app.prepare().then(() => {
   const server = createServer((req, res) => {
