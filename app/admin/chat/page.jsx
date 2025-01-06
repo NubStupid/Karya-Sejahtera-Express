@@ -33,7 +33,7 @@ export default function Chat()
     const messagesEndRef = useRef(null);
 
     const fetchData = async () => {
-        let chats = await fetch('http://localhost:3000/api/general/chats')
+        let chats = await fetch('https://karyasejahteraexpress.my.id/api/general/chats')
         chats = await chats.json()
         chats = chats.chats
         let dt = []
@@ -55,7 +55,7 @@ export default function Chat()
         }
         else if(routes == "contact")
         {
-            dt = await fetch('http://localhost:3000/api/general/users')
+            dt = await fetch('https://karyasejahteraexpress.my.id/api/general/users')
             dt = await dt.json()
             dt = dt.users
         }
