@@ -83,7 +83,7 @@ export default function Chat()
         if(user.username != username)
             return
         let res;
-        await fetch('http://localhost:3000/api/general/chat', {
+        await fetch('https://karyasejahteraexpress.my.id/api/general/chat', {
             method: 'PUT',
             headers: {
             'Content-Type': 'application/json',
@@ -93,7 +93,7 @@ export default function Chat()
 
         if(user.username)
         {
-            res = await fetch('http://localhost:3000/api/general/chat/?username=' + user.username)
+            res = await fetch('https://karyasejahteraexpress.my.id/api/general/chat/?username=' + user.username)
             res = await res.json()
             setChat(res.chats)
         }
@@ -155,7 +155,7 @@ export default function Chat()
         
         if(action)
         {
-            await fetch('http://localhost:3000/api/general/chat', {
+            await fetch('https://karyasejahteraexpress.my.id/api/general/chat', {
                 method: 'DELETE',
                 headers: {
                 'Content-Type': 'application/json',
@@ -165,7 +165,7 @@ export default function Chat()
         }
         if(action && action.act == "retry")
         {
-            await fetch('http://localhost:3000/api/general/chat', {
+            await fetch('https://karyasejahteraexpress.my.id/api/general/chat', {
                 method: 'PUT',
                 headers: {
                 'Content-Type': 'application/json',
@@ -176,7 +176,7 @@ export default function Chat()
         }
         else if(!action)
         {
-            await fetch('http://localhost:3000/api/general/chat', {
+            await fetch('https://karyasejahteraexpress.my.id/api/general/chat', {
                 method: 'PUT',
                 headers: {
                 'Content-Type': 'application/json',

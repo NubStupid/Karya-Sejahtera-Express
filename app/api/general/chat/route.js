@@ -2,17 +2,6 @@ import connectMongoDB from "@/database/connectDB";
 import Users from "@/models/Users";
 import { NextResponse } from "next/server";
 
-export async function OPTIONS(request) {
-    return new Response(null, {
-        status: 204,
-        headers: {
-            'Access-Control-Allow-Origin': 'https://karyasejahteraexpress.my.id',
-            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-        },
-    });
-}
-
 export async function PUT(request) {
     let { username, role, message, delivered } = await request.json() 
     try
@@ -29,44 +18,16 @@ export async function PUT(request) {
             );
             await Users.findOneAndUpdate({ username }, { "chats.updatedAt": now });
             if(delivered == true)
-            {
-                return new Response(JSON.stringify({ message: 'Chat berhasil dikirim' }), {
-                    status: 200,
-                    headers: {
-                        'Access-Control-Allow-Origin': 'https://karyasejahteraexpress.my.id',
-                        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-                        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-                    },
-                });
-                  // return NextResponse.json({message: "Chat berhasil dikirim"});
-            }
+                return NextResponse.json({message: "Chat berhasil dikirim"});
             else
-            {
-                return new Response(JSON.stringify({ message: 'Chat gagal dikirim' }), {
-                    status: 200,
-                    headers: {
-                        'Access-Control-Allow-Origin': 'https://karyasejahteraexpress.my.id',
-                        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-                        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-                    },
-                });
-                // return NextResponse.json({message: "Chat gagal dikirim"});
-            }
+                return NextResponse.json({message: "Chat gagal dikirim"});
         }
         await Users.updateOne(
             { username },
             { $set: { "chats.messages.$[elem].read": true } },
             { arrayFilters: [{ "elem.read": false, "elem.sender": role, "elem.delivered": true }] }
         );
-        return new Response(JSON.stringify({ message: 'Chat dibaca' }), {
-            status: 200,
-            headers: {
-                'Access-Control-Allow-Origin': 'https://karyasejahteraexpress.my.id',
-                'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-            },
-        });
-        // return NextResponse.json({message: "Chat dibaca"});
+        return NextResponse.json({message: "Chat dibaca"});
     }
     catch(err)
     {
@@ -84,15 +45,7 @@ export async function GET(request) {
         chats = chats.chats
         
         chats.messages.sort((a, b) => b.delivered - a.delivered)
-        // return NextResponse.json({chats});
-        return new Response(JSON.stringify({ chats }), {
-            status: 200,
-            headers: {
-                'Access-Control-Allow-Origin': 'https://karyasejahteraexpress.my.id',
-                'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-            },
-        });
+        return NextResponse.json({chats});
     }
     catch(err)
     {
