@@ -33,7 +33,7 @@ export default function Chat()
     const messagesEndRef = useRef(null);
 
     const fetchData = async () => {
-        let chats = await fetch('http://localhost:3000/api/general/chats')
+        let chats = await fetch('/api/general/chats')
         chats = await chats.json()
         chats = chats.chats
         let dt = []
@@ -55,7 +55,7 @@ export default function Chat()
         }
         else if(routes == "contact")
         {
-            dt = await fetch('http://localhost:3000/api/general/users')
+            dt = await fetch('/api/general/users')
             dt = await dt.json()
             dt = dt.users
         }
@@ -83,7 +83,7 @@ export default function Chat()
         if(user.username != username)
             return
         let res;
-        await fetch('http://localhost:3000/api/general/chat', {
+        await fetch('/api/general/chat', {
             method: 'PUT',
             headers: {
             'Content-Type': 'application/json',
@@ -93,7 +93,7 @@ export default function Chat()
 
         if(user.username)
         {
-            res = await fetch('http://localhost:3000/api/general/chat/?username=' + user.username)
+            res = await fetch('/api/general/chat/?username=' + user.username)
             res = await res.json()
             setChat(res.chats)
         }
@@ -155,7 +155,7 @@ export default function Chat()
         
         if(action)
         {
-            await fetch('http://localhost:3000/api/general/chat', {
+            await fetch('/api/general/chat', {
                 method: 'DELETE',
                 headers: {
                 'Content-Type': 'application/json',
@@ -165,7 +165,7 @@ export default function Chat()
         }
         if(action && action.act == "retry")
         {
-            await fetch('http://localhost:3000/api/general/chat', {
+            await fetch('/api/general/chat', {
                 method: 'PUT',
                 headers: {
                 'Content-Type': 'application/json',
@@ -176,7 +176,7 @@ export default function Chat()
         }
         else if(!action)
         {
-            await fetch('http://localhost:3000/api/general/chat', {
+            await fetch('/api/general/chat', {
                 method: 'PUT',
                 headers: {
                 'Content-Type': 'application/json',
@@ -252,7 +252,7 @@ export default function Chat()
                                             />
                                             <div>
                                                 <p className="my-auto">{`${role} - ${d.username}`}</p>
-                                                <p className="truncate">{d.messages[d.messages.length-1].message}</p>
+                                                <p className="truncate w-48">{d.messages[d.messages.length-1].message}</p>
                                             </div>
                                             <div className="text-right ms-auto">
                                                 <p className="text-gray-500 text-xs mb-3">{`${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`}</p>

@@ -1,12 +1,11 @@
 import React from "react";
 import { Box, Typography, Card, CardContent, Avatar, Divider } from "@mui/material";
 import Navbar from "@/components/user/Navbar";
-import formatRupiah from "@/tools/formatRupiah";
+import formatRupiah from "@/tools/formatrupiah";
 
 const HistoryTransactions = ({ transactions }) => {
     return (
         <>
-            <Navbar />
             <Box sx={{ padding: 3 }}>
                 <Typography variant="h5" sx={{ fontWeight: "bold", mb: 3 }}>History Transaction</Typography>
                 {transactions.map((transaction) => (

@@ -8,7 +8,7 @@ import { useEffect, useState } from "react"
 export default function AllDistributor () {
     const [transaction, setTransaction] = useState([])
     const fetchData = async () => {
-        const response = await fetch("http://localhost:3000/api/admin/transaction/distributor")
+        const response = await fetch("/api/admin/transaction/distributor")
         const data = await response.json()
         console.log(JSON.stringify(data));
         setTransaction(data)

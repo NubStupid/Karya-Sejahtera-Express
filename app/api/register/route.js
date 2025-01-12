@@ -1,18 +1,55 @@
 import connectMongoDB from "@/database/connectDB";
 import Users from "@/models/Users";
-import { NextResponse } from "next/server";
+import bcrypt from "bcrypt";
 
-export async function POST(request) {
+export async function POST(req) {
+    await connectMongoDB();
+
     try {
-        await connectMongoDB(); // Koneksi ke database
+        const { username, password, role, profile, active } = await req.json();
 
-        const data = await request.json();
-        data["chats"] = { messages: [], updatedAt: null }
-        const user = new Users(data);
-        await user.save();
+        // Log input data
+        console.log("Received data:", { username, password, role, profile, active });
 
-        return NextResponse.json({ success: true, data: user });
+        const existingUser = await Users.findOne({ username });
+        if (existingUser) {
+            return new Response(
+                JSON.stringify({ message: "Username sudah digunakan." }),
+                {
+                    status: 400,
+                    headers: { "Content-Type": "application/json" },
+                }
+            );
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const newUser = new Users({
+            username,
+            password: hashedPassword,
+            role,
+            profile,
+            active
+        });
+
+        await newUser.save();
+
+        return new Response(
+            JSON.stringify({ message: "Registrasi berhasil!" }),
+            {
+                status: 201,
+                headers: { "Content-Type": "application/json" },
+            }
+        );
     } catch (error) {
-        return NextResponse.json({ success: false, message: error.message });
+        console.error("Error in registration:", error);
+
+        return new Response(
+            JSON.stringify({ message: "Registrasi gagal. Silakan coba lagi." }),
+            {
+                status: 500,
+                headers: { "Content-Type": "application/json" },
+            }
+        );
     }
 }

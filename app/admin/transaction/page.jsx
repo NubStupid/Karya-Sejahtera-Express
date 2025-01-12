@@ -9,7 +9,7 @@ export default function Transaction (){
     const [distributor,setDistributor] = useState([])
     const [customer,setCustomer] = useState([])
     const fetchData = async () => {
-        const response = await fetch("http://localhost:3000/api/admin/transaction")
+        const response = await fetch("/api/admin/transaction")
         // console.log(await response.json());
         const data = await response.json()
         setCustomer(data.customer)
@@ -20,7 +20,7 @@ export default function Transaction (){
               console.log(request.reqId);
               const fetchProduct = await request.products.reduce(async (acc, product) => {
                 let acc2 = await acc;
-                const productData = await fetch("http://localhost:3000/api/distributor/transaction/products/?productId=" + product.productId);
+                const productData = await fetch("/api/distributor/transaction/products/?productId=" + product.productId);
                 const data = await productData.json();
                 let toPush = {
                   ...product,
