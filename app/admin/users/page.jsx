@@ -18,7 +18,7 @@ export default function Users() {
         const fetchData = async () => {
             try {
                 const resp = await fetch(
-                    "http://localhost:3000/api/admin/users"
+                    "/api/admin/users"
                 );
                 const data = await resp.json();
                 setUsers(data);
@@ -34,7 +34,7 @@ export default function Users() {
         try {
             console.log("Username:  ", username);
             const resp = await fetch(
-                'http://localhost:3000/api/admin/users',
+                '/api/admin/users',
                 {
                     method: 'PUT',
                     headers: {
@@ -62,7 +62,7 @@ export default function Users() {
         try {
             console.log('Username: ', username);
             const resp = await fetch(
-                'http://localhost:3000/api/admin/users',
+                '/api/admin/users',
                 {
                     method: 'POST',
                     headers: {
@@ -100,34 +100,38 @@ export default function Users() {
                         height: "80vh",
                     }}
                 >
-                    {users.map((user, index) => (
-                        <Card
-                            key={index}
-                            onClick={() => {
-                                setSelectedUser(user);
-                            }}
-                            sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                marginBottom: 2,
-                                backgroundColor: "#ffcc99",
-                                cursor: "pointer",
-                                padding: 3
-                            }}
-                        >
-                            <CardMedia
-                                component="img"
-                                image="/productDistributors/Kerupuk_Puli.jpg"
-                                alt={user.username}
-                                sx={{ width: 128, height: 128, marginLeft: 1 }}
-                            />
-                            <CardContent>
-                                <Typography variant="h6">
-                                    {user.username}
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                    ))}
+                    {users.map((user, index) => {
+                        if(user.role == "admin")
+                            return
+                        return (
+                            <Card
+                                key={index}
+                                onClick={() => {
+                                    setSelectedUser(user);
+                                }}
+                                sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    marginBottom: 2,
+                                    backgroundColor: "#ffcc99",
+                                    cursor: "pointer",
+                                    padding: 3
+                                }}
+                            >
+                                <CardMedia
+                                    component="img"
+                                    image={user.profile.profpic}
+                                    alt={user.username}
+                                    sx={{ width: 128, height: 128, marginLeft: 1 }}
+                                />
+                                <CardContent>
+                                    <Typography variant="h6">
+                                        {user.username}
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                        )
+                    })}
                 </Grid>
                 <Grid item xs={0.2} />
                 {/* Detail User */}

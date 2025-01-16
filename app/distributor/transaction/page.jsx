@@ -54,7 +54,7 @@ const page = () => {
     }else{
       console.log("Di update semua");
       try{
-        const response = await fetch("http://localhost:3000/api/distributor/transaction/request",{
+        const response = await fetch("/api/distributor/transaction/request",{
           method:"POST",
           headers:{
             'Content-Type':"application/json"
@@ -83,7 +83,7 @@ const page = () => {
           notesToUpdate = findNotes.notes
         }
         try{
-          const response = await fetch('http://localhost:3000/api/distributor/transaction',{
+          const response = await fetch('/api/distributor/transaction',{
             method:"PATCH",
             headers:{
               'Content-Type':"application/json"
@@ -174,14 +174,14 @@ const page = () => {
   
 
   const fetchRequest = async () =>{
-    const response = await fetch("http://localhost:3000/api/distributor/transaction/?username="+auth.user.username)
+    const response = await fetch("/api/distributor/transaction/?username="+auth.user.username)
     if(response.ok){
       const data = await response.json()
       const formatedData = await Promise.all(data.products.map(async (item)=>{
         // console.log(JSON.stringify(item));
         let totalPending = 0
         const updatedProducts = await Promise.all(item.products.map(async (p)=>{
-          const productData = await fetch("http://localhost:3000/api/distributor/transaction/products/?productId=" + p.productId)
+          const productData = await fetch("/api/distributor/transaction/products/?productId=" + p.productId)
           let up = await productData.json()
           up.status = p.status
           up.products[0].stock = p.qty

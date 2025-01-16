@@ -41,7 +41,7 @@ export default function Chat()
         
         let res;
 
-        await fetch('http://localhost:3000/api/general/chat', {
+        await fetch('/api/general/chat', {
             method: 'PUT',
             headers: {
             'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ export default function Chat()
             body: JSON.stringify({username: user.username, role}),
         });
 
-        res = await fetch('http://localhost:3000/api/general/chat/?username=' + user.username)
+        res = await fetch('/api/general/chat/?username=' + user.username)
         res = await res.json()
         setChat(res.chats)
     }
@@ -103,7 +103,7 @@ export default function Chat()
         
         if(action)
         {
-            await fetch('http://localhost:3000/api/general/chat', {
+            await fetch('/api/general/chat', {
                 method: 'DELETE',
                 headers: {
                 'Content-Type': 'application/json',
@@ -113,7 +113,7 @@ export default function Chat()
         }
         if(action && action.act == "retry")
         {
-            await fetch('http://localhost:3000/api/general/chat', {
+            await fetch('/api/general/chat', {
                 method: 'PUT',
                 headers: {
                 'Content-Type': 'application/json',
@@ -124,7 +124,7 @@ export default function Chat()
         }
         else if(!action)
         {
-            await fetch('http://localhost:3000/api/general/chat', {
+            await fetch('/api/general/chat', {
                 method: 'PUT',
                 headers: {
                 'Content-Type': 'application/json',

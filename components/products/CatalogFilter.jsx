@@ -1,7 +1,7 @@
 // components/products/CatalogFilter.js
 import React from "react";
 import { Box, TextField, Slider, Typography, Button } from "@mui/material";
-import formatRupiah from "@/tools/formatRupiah";
+import formatRupiah from "@/tools/formatrupiah";
 
 const CatalogFilter = ({ search, setSearch, minPrice, setMinPrice, maxPrice, setMaxPrice }) => {
     return (

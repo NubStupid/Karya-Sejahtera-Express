@@ -21,7 +21,15 @@ export async function POST(req) {
                 }
             );
         }
-
+        if (!user.active){
+            return new Response(
+                JSON.stringify({ message: "User banned." }),
+                {
+                    status: 400,
+                    headers: { "Content-Type": "application/json" },
+                }
+            );
+        }
         const validPassword = await bcrypt.compare(password, user.password);
 
         if (!validPassword) {
