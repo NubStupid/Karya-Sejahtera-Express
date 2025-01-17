@@ -20,8 +20,10 @@ export default function DistributorLayout({ children }) {
     // const path = usePathname();
     return (
       <>
-        {authenticate == true &&
-                          {children}
+        {authenticate == true && 
+        <>
+          {children}
+        </>
         }
         {authenticate == false &&
           <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "50vh" }}>
