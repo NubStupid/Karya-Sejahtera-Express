@@ -18,7 +18,7 @@ const Catalog = () => {
     const router = useRouter();
 
     useEffect(() => {
-        if(!auth.user || auth.user.role == "admin")
+        if(auth.user && auth.user.role == "admin")
             router.push('/admin');
     }, []);
 
