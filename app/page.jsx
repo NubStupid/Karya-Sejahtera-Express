@@ -15,7 +15,7 @@ const MainPage = () => {
     const auth = useAuth();
 
     useEffect(() => {
-        if(!auth.user || auth.user.role == "admin")
+        if(auth.user && auth.user.role == "admin")
             router.push('/admin');
         const fetchProducts = async () => {
             setIsLoading(true); 

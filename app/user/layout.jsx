@@ -12,7 +12,7 @@ export default function DistributorLayout({ children }) {
     const auth = useAuth();
     const [ authenticate, setAuthenticate ] = useState(false);
     useEffect(() => {
-        if(!auth.user || auth.user.role == "admin")
+          if(auth.user && auth.user.role == "admin")
             router.push('/admin');
           else
             setAuthenticate(true);
