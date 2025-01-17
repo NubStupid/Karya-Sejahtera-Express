@@ -5,12 +5,18 @@ import ProductCard from "../components/user/ProductCard";
 import Navbar from "../components/user/Navbar";
 import { Container, Grid, Typography, Box, CircularProgress } from "@mui/material";
 import Chat from "@/components/Chat";
+import { useRouter } from "next/navigation";
+import useAuth from "@/stores/store";
 
 const MainPage = () => {
     const [products, setProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const router = useRouter();
+    const auth = useAuth();
 
     useEffect(() => {
+        if(!auth.user || auth.user.role == "admin")
+            router.push('/admin');
         const fetchProducts = async () => {
             setIsLoading(true); 
             try {

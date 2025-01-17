@@ -27,7 +27,7 @@ const CustomerHistoryCard = (props) => {
                               <div className="p-3 ">
                                   <grid className="grid grid-cols-2">
                                       <div className="">
-                                          Status: <span className={props.product[0].status == "Accepted"?"text-green-600 font-semibold":props.product[0].status == "Declined"?"text-red-400 font-semibold":"text-yellow-200 font-semibold"}>{props.product[0].status}</span>
+                                          Status: <span className={props.product[0].status == "Success"?"text-green-600 font-semibold":props.product[0].status == "Failed"?"text-red-400 font-semibold":"text-yellow-200 font-semibold"}>{props.product[0].status}</span>
                                       </div>
                                       <div className="">
                                           <span className="font-semibold">Method:</span> {props.product[0].payment}

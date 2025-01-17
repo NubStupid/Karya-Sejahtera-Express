@@ -17,6 +17,11 @@ const Catalog = () => {
     const auth = useAuth();
     const router = useRouter();
 
+    useEffect(() => {
+        if(!auth.user || auth.user.role == "admin")
+            router.push('/admin');
+    }, []);
+
     const fetchProducts = async () => {
         const queryParams = new URLSearchParams({
             search,
