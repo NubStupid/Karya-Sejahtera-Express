@@ -21,6 +21,11 @@ const ProductDetail = () => {
     const user = auth.user;
 
     useEffect(() => {
+        if(auth.user && auth.user.role == "admin")
+            router.push('/admin');
+    }, []);
+
+    useEffect(() => {
         if (id) {
             fetchProductData(id);
         }

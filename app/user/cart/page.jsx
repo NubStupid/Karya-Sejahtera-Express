@@ -62,7 +62,7 @@ const Cart = () => {
         setCart(updatedCart);
         calculateTotal(updatedCart);
 
-        await fetch(/api/user/updateCart, {
+        await fetch("/api/user/updateCart", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -80,7 +80,7 @@ const Cart = () => {
         setCart(updatedCart);
         calculateTotal(updatedCart);
 
-        await fetch(/api/user/deleteCartItem, {
+        await fetch("/api/user/deleteCartItem", {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",

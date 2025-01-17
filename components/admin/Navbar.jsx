@@ -35,7 +35,7 @@ export default function Navbar() {
                     <ResponsiveImage src="/logo/KSXpress_monochrome.png" alt="KS Distributor" />
                 </div>
                 <div className="texl-xl col-start-6 flex justify-end ms-5">
-                    <ResponsiveButton placeholder={"Back to Homepage"} href={"/"} />
+                    <ResponsiveButton placeholder={"Logout"} href={"/logout"} />
                 </div>
                 <div className="texl-xl flex justify-center">
                     <Avatar
