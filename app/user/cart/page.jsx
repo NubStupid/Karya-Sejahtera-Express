@@ -62,7 +62,7 @@ const Cart = () => {
         setCart(updatedCart);
         calculateTotal(updatedCart);
 
-        await fetch(`/api/user/updateCart`, {
+        await fetch(/api/user/updateCart, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -80,7 +80,7 @@ const Cart = () => {
         setCart(updatedCart);
         calculateTotal(updatedCart);
 
-        await fetch(`/api/user/deleteCartItem`, {
+        await fetch(/api/user/deleteCartItem, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -118,18 +118,7 @@ const Cart = () => {
                     onSuccess: async (response) => {
                         console.log("Payment successful:", response);
                         alert("Pembayaran berhasil!");
-                        // const deleteCart = await fetch('/api/user/deleteCart', {
-                        //     method: 'DELETE',
-                        //     headers: {
-                        //         "Content-Type": "application/json",
-                        //     },
-                        //     body: JSON.stringify(data2),
-                        // });
-                        // if(deleteCart.status != 200){
-                        //     console.log('Gagal delete cart');
-                        //     console.log(deleteCart.data);
-                        //     return
-                        // }
+                        clearCartAndRedirect(auth.user.username);
                         console.log('Berhasil delete cart');
                         const dataTransaction = {
                             transId: result.id,
@@ -147,7 +136,6 @@ const Cart = () => {
                             body: JSON.stringify(dataTransaction)
                         })
                         console.log(addTransaction.data);
-                        // window.location.reload();
                     },
                     onPending: (response) => {
                         console.log("Payment pending:", response);
@@ -168,6 +156,30 @@ const Cart = () => {
             alert("Terjadi kesalahan saat proses checkout.");
         }
     };
+
+    const clearCartAndRedirect = async (username) => {
+        try {
+            const clearCartRes = await fetch("/api/user/clearCart", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ username }),
+            });
+    
+            if (clearCartRes.ok) {
+                console.log("Cart cleared successfully.");
+                window.location.href = "https://karyasejahteraexpress.my.id";
+            } else {
+                console.error("Failed to clear the cart.");
+                alert("Terjadi kesalahan saat menghapus cart. Silakan coba lagi.");
+            }
+        } catch (error) {
+            console.error("Error clearing cart:", error);
+            alert("Terjadi kesalahan. Silakan coba lagi.");
+        }
+    };
+    
 
     return (
         <>
